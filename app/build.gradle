@@ -10,7 +10,8 @@ android {
         versionCode 1
         versionName "1.0"
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+//            , 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,
@@ -20,7 +21,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -4,3 +4,15 @@
 2. JPush账号
 3559284834@qq.com
 withubccd7531
+
+3. JPush 使用 Jcenter 加载依赖，比较简便的方式。
+https://segmentfault.com/a/1190000007282811
+
+4. 签名
+password 都是 unicorn
+别名是 key0
+
+5. APK大小比较
+7so     2000KB
+3so     1800KB
+3so+混淆 1200KB
