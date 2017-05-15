@@ -15,6 +15,12 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url 'http://github.com/wada811/Android-Material-Design-Colors/raw/master/repository/' }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
