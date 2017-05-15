@@ -2,6 +2,8 @@ package com.unicorn.aems.app.dagger;
 
 import android.content.Context;
 
+import com.unicorn.aems.MainActivity;
+
 import dagger.Component;
 
 @App
@@ -20,7 +22,7 @@ public interface AppComponent {
 //    DensityHelper provideDensityHelper();
 //
 //    // main
-//    void inject(BackPressConsumer o);
+    void inject(MainActivity o);
 //
 //    // sidebar
 //    void inject(SidebarFra o);

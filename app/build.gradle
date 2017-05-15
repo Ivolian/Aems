@@ -10,6 +10,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "731aa89e4d7e7dbaa526145c",
+                JPUSH_CHANNEL: "developer-default",
+        ]
     }
     buildTypes {
         release {
@@ -23,4 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.dagger:dagger:2.11-rc2'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11-rc2'
+    compile 'cn.jiguang.sdk:jpush:3.0.6'
+    compile 'cn.jiguang.sdk:jcore:1.1.3'
 }
