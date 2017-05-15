@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.aems.push.Pusher;
+import com.unicorn.aems.push.PushUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
-
-import cn.jpush.android.api.TagAliasCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,21 +20,16 @@ public class MainActivity extends AppCompatActivity {
 
         AppComponentProvider.provide().inject(this);
 
-        setPushTags();
+        setTags();
     }
 
     @Inject
-    Pusher pusher;
+    PushUtils pushUtils;
 
-    private void setPushTags() {
+    private void setTags() {
         Set<String> tags = new HashSet<>();
-        tags.add("IIII");
-        pusher.setTags(tags, new TagAliasCallback() {
-            @Override
-            public void gotResult(int i, String s, Set<String> set) {
-                String tt = "";
-            }
-        });
+        tags.add("-----");
+        pushUtils.setTags(tags);
     }
 
 }
