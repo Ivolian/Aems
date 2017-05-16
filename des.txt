@@ -20,6 +20,6 @@ password 都是 unicorn
 6. 因为 JPush 使用多进程的关系，使用 JPush 时无法使用 instant run。
 
 7. ViewGroup setWillNotDraw
-http://blog.csdn.net/leehong2005/article/details/7299471
+http://blog.csdn.net/leehong2005/article/details/7299471。
 
-8. textCursorDrawable 华为6.0 无效。
+8. textCursorDrawable 华为6.0 无效，只能勉强把光标颜色设置为字体颜色。

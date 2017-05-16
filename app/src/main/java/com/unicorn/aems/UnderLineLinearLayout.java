@@ -57,4 +57,13 @@ public class UnderLineLinearLayout extends LinearLayout {
         paint.setColor(colorUnFocused);
         invalidate();
     }
+
+    public void changeFocus(boolean hasFocus) {
+        if (hasFocus) {
+            focus();
+        } else {
+            unFocus();
+        }
+    }
+
 }

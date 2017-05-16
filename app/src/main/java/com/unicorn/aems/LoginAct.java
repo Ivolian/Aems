@@ -22,9 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-/**
- * The type Login act.
- */
+
 public class LoginAct extends BaseAct {
 
     @Override
@@ -36,10 +34,12 @@ public class LoginAct extends BaseAct {
     protected void init(Bundle savedInstanceState) {
         AppComponentProvider.provide().inject(this);
         StatusBarUtil.setColor(this, Color.WHITE, 50);
-        s();
+        doSomeFocusWork();
+//        setCursorDrawableColor(etPwd, ContextCompat.getColor(this, R.color.colorPrimary));
         addShowHidePwdFunc();
         addClearPwdFunc();
     }
+
 
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
@@ -53,62 +53,19 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.etPwd)
     EditText etPwd;
 
-
-    private void s() {
-
-        llAccount.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-//                        etAccount.requestFocus();
-                        return true;
-                    case MotionEvent.ACTION_DOWN:
-                        etAccount.requestFocus();
-
-//                        llAccount.focus();
-//                        llAccount.requestFocus();
-                        return true;
-                }
-                return false;
-            }
-        });
-        llPwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-//                        llPwd.unFocus();
-                        return true;
-                    case MotionEvent.ACTION_DOWN:
-//                        llPwd.focus();
-                        etPwd.requestFocus();
-                        return true;
-                }
-                return false;
-            }
-        });
-        etAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    llAccount.focus();
-                } else {
-                    llAccount.unFocus();
-                }
-            }
-        });
-
-        etPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    llPwd.focus();
-                } else {
-                    llPwd.unFocus();
-                }
-            }
-        });
+    private void doSomeFocusWork() {
+        RxView.focusChanges(etAccount)
+                .subscribe(hasFocus -> llAccount.changeFocus(hasFocus));
+        RxView.touches(llAccount)
+                .map(MotionEvent::getAction)
+                .filter(action -> action == MotionEvent.ACTION_DOWN)
+                .subscribe(action -> etAccount.requestFocus());
+        RxView.focusChanges(etPwd)
+                .subscribe(hasFocus -> llPwd.changeFocus(hasFocus));
+        RxView.touches(llPwd)
+                .map(MotionEvent::getAction)
+                .filter(action -> action == MotionEvent.ACTION_DOWN)
+                .subscribe(action -> etPwd.requestFocus());
     }
 
     @Inject
