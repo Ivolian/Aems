@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.login;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.utils.DensityUtils;
 

@@ -3,6 +3,10 @@ package com.unicorn.aems.app;
 import android.app.Application;
 
 import com.unicorn.aems.app.dagger.AppComponentProvider;
+import com.unicorn.aems.login.DaoMaster;
+import com.unicorn.aems.login.DaoSession;
+
+import org.greenrobot.greendao.database.Database;
 
 
 public class App extends Application {
@@ -16,20 +20,11 @@ public class App extends Application {
     private void init() {
 //        JPushInterface.init(this);
 //        JPushInterface.setDebugMode(true);
-        AppComponentProvider.init(this);
-//        initARouter();
+        DaoSession daoSession = initDb();
+        AppComponentProvider.init(this, daoSession);
 //        initFragmentation();
-//        String tag = "QqReader";
-//        Logger.init(tag);
-//        initDb();
     }
 
-//    private void initARouter() {
-//        ARouter.openLog();
-//        // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-//        ARouter.openDebug();
-//        ARouter.init(this);
-//    }
 //
 //    private void initFragmentation() {
 //        Fragmentation.builder()
@@ -38,21 +33,10 @@ public class App extends Application {
 //                .install();
 //    }
 //
-//    private void initDb() {
-//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "QqReader-db");
-//        Database db = helper.getWritableDb();
-//        DaoSession daoSession = new DaoMaster(db).newSession();
-//
-////        List<Ad> adList = new Gson().fromJson(Delete.de(),
-////                new TypeToken<List<Ad>>() {
-////                }.getType());
-////
-////        daoSession.getAdDao().insertOrReplaceInTx(adList);
-////        for (Ad ad : adList) {
-////            if (ad.extInfo != null)
-////                daoSession.getExtInfoDao().insertOrReplace(ad.extInfo);
-////        }
-////        Logger.e("ss");
-//    }
+    private DaoSession initDb() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "aems-db");
+        Database db = helper.getWritableDb();
+        return new DaoMaster(db).newSession();
+    }
 
 }

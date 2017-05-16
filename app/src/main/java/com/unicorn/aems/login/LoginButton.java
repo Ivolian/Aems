@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.login;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.utils.DensityUtils;
 
@@ -59,7 +60,7 @@ public class LoginButton extends AppCompatTextView {
     }
 
     public void disable() {
-        setTextColor(colorUtils.getColor(R.color.md_grey_300));
+        setTextColor(colorUtils.getColor(R.color.colorAccent));
         setClickable(false);
     }
 

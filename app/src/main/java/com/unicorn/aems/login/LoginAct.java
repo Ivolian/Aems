@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.login;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
+import com.unicorn.aems.R;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -46,10 +47,9 @@ public class LoginAct extends BaseAct {
         StatusBarUtil.setColor(this, Color.WHITE, 50);
 
         copeAirport();
-
-        doSomeFocusWork();
-        addShowHidePwdFunc();
-        addClearFunc();
+        copeAccountAndPwd();
+        copeEye();
+        copeClear();
 
     }
 
@@ -94,35 +94,33 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.etPwd)
     EditText etPwd;
 
-    private void doSomeFocusWork() {
-        RxView.focusChanges(etAccount)
-                .subscribe(hasFocus -> {
-                    llAccount.changeFocus(hasFocus);
-                    iivClearPwd.setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
-                });
+    private void copeAccountAndPwd() {
+        RxView.focusChanges(etAccount).subscribe(hasFocus -> {
+            llAccount.changeFocus(hasFocus);
+            showOrHideClear(etAccount, iivClearAccount);
+        });
+        RxView.focusChanges(etPwd).subscribe(hasFocus -> {
+            llPwd.changeFocus(hasFocus);
+            showOrHideClear(etPwd, iivClearPwd);
+        });
+
         RxView.touches(llAccount)
                 .map(MotionEvent::getAction)
                 .filter(action -> action == MotionEvent.ACTION_DOWN)
                 .subscribe(action -> etAccount.requestFocus());
-
-
-        RxView.focusChanges(etPwd)
-                .subscribe(hasFocus -> {
-                    llPwd.changeFocus(hasFocus);
-                    iivClearAccount.setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
-                });
         RxView.touches(llPwd)
                 .map(MotionEvent::getAction)
                 .filter(action -> action == MotionEvent.ACTION_DOWN)
                 .subscribe(action -> etPwd.requestFocus());
     }
 
-    @Inject
-    ToastUtils toastUtils;
-
+    private void showOrHideClear(EditText editText, IconicsImageView iivClear) {
+        boolean visible = editText.isFocused() && !TextUtils.isEmpty(editText.getText());
+        iivClear.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
 
     /**
-     * 密码可见
+     * copeEye
      */
     @BindView(R.id.iivEye)
     IconicsImageView iivEye;
@@ -130,7 +128,7 @@ public class LoginAct extends BaseAct {
     private final int PWD_VISIBLE = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
     private final int PWD_INVISIBLE = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
-    private void addShowHidePwdFunc() {
+    private void copeEye() {
         hidePwd();
         RxView.clicks(iivEye).subscribe(aVoid -> {
             boolean visible = etPwd.getInputType() == PWD_VISIBLE;
@@ -157,7 +155,7 @@ public class LoginAct extends BaseAct {
     }
 
     /**
-     * 清除账户和密码
+     * copeClear
      */
     @BindView(R.id.iivClearAccount)
     IconicsImageView iivClearAccount;
@@ -166,30 +164,27 @@ public class LoginAct extends BaseAct {
     IconicsImageView iivClearPwd;
 
     @SuppressWarnings("ConstantConditions")
-    private void addClearFunc() {
-        RxTextView.afterTextChangeEvents(etAccount)
-                .subscribe(event -> {
-                    String text = event.editable().toString();
-                    boolean empty = TextUtils.isEmpty(text);
-                    iivClearAccount.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
-                    checkLoginBtnState();
-                });
+    private void copeClear() {
         RxView.clicks(iivClearAccount).subscribe(aVoid -> etAccount.setText(""));
-
-        RxTextView.afterTextChangeEvents(etPwd)
-                .subscribe(event -> {
-                    String text = event.editable().toString();
-                    boolean empty = TextUtils.isEmpty(text);
-                    iivClearPwd.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
-                    checkLoginBtnState();
-                });
         RxView.clicks(iivClearPwd).subscribe(aVoid -> etPwd.setText(""));
+
+        RxTextView.afterTextChangeEvents(etAccount).subscribe(event -> {
+            showOrHideClear(etAccount, iivClearAccount);
+            enableOrDisableLogin();
+        });
+        RxTextView.afterTextChangeEvents(etPwd).subscribe(event -> {
+            showOrHideClear(etPwd, iivClearPwd);
+            enableOrDisableLogin();
+        });
     }
 
+    /**
+     * enableOrDisableLogin
+     */
     @BindView(R.id.btnLogin)
     LoginButton btnLogin;
 
-    private void checkLoginBtnState() {
+    private void enableOrDisableLogin() {
         if (!TextUtils.isEmpty(etAccount.getText()) && !TextUtils.isEmpty(etPwd.getText())) {
             btnLogin.enable();
             RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
@@ -200,10 +195,28 @@ public class LoginAct extends BaseAct {
         }
     }
 
+    /**
+     * login
+     */
+    @Inject
+    ToastUtils toastUtils;
+
     private void login() {
+
         toastUtils.show("登录成功");
+
     }
 
+    @Inject
+    LoginInfoDao loginInfoDao;
+
+    private void saveLoginInfo() {
+        String airport = tvAirport.getText().toString().trim();
+        String account = etAccount.getText().toString().trim();
+        String pwd = etPwd.getText().toString().trim();
+        LoginInfo loginInfo = new LoginInfo(airport, account, pwd);
+        loginInfoDao.rx().insertOrReplace(loginInfo);
+    }
 
     //    @Inject
 //    PushUtils pushUtils;
