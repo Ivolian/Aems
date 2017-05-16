@@ -1,4 +1,4 @@
-package com.unicorn.aems.airport.entity;
+package com.unicorn.aems.airport.model;
 
 public class Airport {
 

@@ -18,7 +18,12 @@ public abstract class BaseAct extends SupportActivity {
         Dart.inject(this);
         setContentView(layoutResId());
         ButterKnife.bind(this);
+        inject();
         init(savedInstanceState);
+    }
+
+    protected void inject(){
+
     }
 
     protected void init(Bundle savedInstanceState) {

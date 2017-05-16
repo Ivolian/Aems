@@ -15,6 +15,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
+import com.unicorn.Constant;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -169,11 +170,20 @@ public class LoginAct extends BaseAct {
     private void s() {
         RxView.clicks(findViewById(R.id.llAirport)).subscribe(aVoid -> {
             Intent intent = new Intent(this, AirportAct.class);
-            startActivity(intent);
+            startActivityForResult(intent, Constant.AIRPORT_REQUEST_CODE);
         });
     }
 
-//    @Inject
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.AIRPORT_REQUEST_CODE) {
+            String airportName = data.getStringExtra(Constant.AIRPORT_NAME);
+            toastUtils.show(airportName);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //    @Inject
 //    PushUtils pushUtils;
 //
 //    private void setTags() {

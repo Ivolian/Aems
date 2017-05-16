@@ -1,7 +1,7 @@
 package com.unicorn.aems.airport;
 
-import com.unicorn.aems.airport.entity.Airport;
-import com.unicorn.aems.airport.entity.AirportSection;
+import com.unicorn.aems.airport.model.Airport;
+import com.unicorn.aems.airport.model.AirportSection;
 import com.unicorn.aems.app.dagger.App;
 
 import java.util.ArrayList;
@@ -10,10 +10,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 @App
-public class AirportSectionProvider {
+public class AirportProvider {
 
     @Inject
-    public AirportSectionProvider() {
+    public AirportProvider() {
     }
 
     public List<AirportSection> provide() {
