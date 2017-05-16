@@ -19,3 +19,5 @@ password 都是 unicorn
 
 6. 使用 R2
 Now make sure you use R2 instead of R inside all Butter Knife annotations.
+
+7. 因为 JPush 使用多进程的关系，使用 JPush 时无法使用 instant run。

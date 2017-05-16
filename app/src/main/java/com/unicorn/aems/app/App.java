@@ -4,8 +4,6 @@ import android.app.Application;
 
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 
-import cn.jpush.android.api.JPushInterface;
-
 
 public class App extends Application {
 
@@ -16,8 +14,8 @@ public class App extends Application {
     }
 
     private void init() {
-        JPushInterface.init(this);
-        JPushInterface.setDebugMode(true);
+//        JPushInterface.init(this);
+//        JPushInterface.setDebugMode(true);
         AppComponentProvider.init(this);
 //        initARouter();
 //        initFragmentation();

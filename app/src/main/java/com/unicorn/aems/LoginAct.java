@@ -1,9 +1,9 @@
 package com.unicorn.aems;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.unicorn.aems.app.dagger.AppComponentProvider;
+import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.push.PushUtils;
 
 import java.util.HashSet;
@@ -11,16 +11,17 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-public class LoginAct extends AppCompatActivity {
+public class LoginAct extends BaseAct {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int layoutResId() {
+        return R.layout.act_login;
+    }
 
+    @Override
+    protected void init(Bundle savedInstanceState) {
         AppComponentProvider.provide().inject(this);
-
-        setTags();
+//        setTags();
     }
 
     @Inject
