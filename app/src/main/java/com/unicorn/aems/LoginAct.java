@@ -107,15 +107,25 @@ public class LoginAct extends BaseAct {
         etPwd.setInputType(PWD_INVISIBLE);
     }
 
-
     /**
-     * 清除密码
+     * 清除账户和密码
      */
+    @BindView(R.id.iivClearAccount)
+    IconicsImageView iivClearAccount;
+
     @BindView(R.id.iivClearPwd)
     IconicsImageView iivClearPwd;
 
     @SuppressWarnings("ConstantConditions")
     private void addClearPwdFunc() {
+        RxTextView.afterTextChangeEvents(etAccount)
+                .subscribe(event -> {
+                    String text = event.editable().toString();
+                    boolean empty = TextUtils.isEmpty(text);
+                    iivClearAccount.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
+                });
+        RxView.clicks(iivClearAccount).subscribe(aVoid -> etAccount.setText(""));
+
         RxTextView.afterTextChangeEvents(etPwd)
                 .subscribe(event -> {
                     String text = event.editable().toString();

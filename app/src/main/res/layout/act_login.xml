@@ -40,14 +40,24 @@
 
         <EditText
             android:id="@+id/etAccount"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="48dp"
+            android:layout_weight="1"
             android:background="@null"
             android:hint="请输入用户账号"
             android:singleLine="true"
             android:textColorHint="@color/md_grey_400"
             android:textSize="17dp" />
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/iivClearAccount"
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="6dp"
+            app:iiv_color="@color/md_grey_300"
+            app:iiv_icon="ion-ios-close-empty" />
 
     </com.unicorn.aems.UnderLineLinearLayout>
 
