@@ -18,6 +18,8 @@ import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.utils.ToastUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -35,11 +37,9 @@ public class LoginAct extends BaseAct {
         AppComponentProvider.provide().inject(this);
         StatusBarUtil.setColor(this, Color.WHITE, 50);
         doSomeFocusWork();
-//        setCursorDrawableColor(etPwd, ContextCompat.getColor(this, R.color.colorPrimary));
         addShowHidePwdFunc();
-        addClearPwdFunc();
+        addClearFunc();
     }
-
 
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
@@ -55,13 +55,19 @@ public class LoginAct extends BaseAct {
 
     private void doSomeFocusWork() {
         RxView.focusChanges(etAccount)
-                .subscribe(hasFocus -> llAccount.changeFocus(hasFocus));
+                .subscribe(hasFocus -> {
+                    llAccount.changeFocus(hasFocus);
+                    iivClearPwd.setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
+                });
         RxView.touches(llAccount)
                 .map(MotionEvent::getAction)
                 .filter(action -> action == MotionEvent.ACTION_DOWN)
                 .subscribe(action -> etAccount.requestFocus());
         RxView.focusChanges(etPwd)
-                .subscribe(hasFocus -> llPwd.changeFocus(hasFocus));
+                .subscribe(hasFocus -> {
+                    llPwd.changeFocus(hasFocus);
+                    iivClearAccount.setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
+                });
         RxView.touches(llPwd)
                 .map(MotionEvent::getAction)
                 .filter(action -> action == MotionEvent.ACTION_DOWN)
@@ -117,12 +123,13 @@ public class LoginAct extends BaseAct {
     IconicsImageView iivClearPwd;
 
     @SuppressWarnings("ConstantConditions")
-    private void addClearPwdFunc() {
+    private void addClearFunc() {
         RxTextView.afterTextChangeEvents(etAccount)
                 .subscribe(event -> {
                     String text = event.editable().toString();
                     boolean empty = TextUtils.isEmpty(text);
                     iivClearAccount.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
+                    checkLoginBtnState();
                 });
         RxView.clicks(iivClearAccount).subscribe(aVoid -> etAccount.setText(""));
 
@@ -131,8 +138,27 @@ public class LoginAct extends BaseAct {
                     String text = event.editable().toString();
                     boolean empty = TextUtils.isEmpty(text);
                     iivClearPwd.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
+                    checkLoginBtnState();
                 });
         RxView.clicks(iivClearPwd).subscribe(aVoid -> etPwd.setText(""));
+    }
+
+    @BindView(R.id.btnLogin)
+    LoginButton btnLogin;
+
+    private void checkLoginBtnState() {
+        if (!TextUtils.isEmpty(etAccount.getText()) && !TextUtils.isEmpty(etPwd.getText())) {
+            btnLogin.enable();
+            RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
+                login();
+            });
+        } else {
+            btnLogin.disable();
+        }
+    }
+
+    private void login() {
+
     }
 
 //    @Inject
