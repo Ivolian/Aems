@@ -158,7 +158,7 @@ public class LoginAct extends BaseAct {
     }
 
     private void login() {
-
+        toastUtils.show("登录成功");
     }
 
 //    @Inject
