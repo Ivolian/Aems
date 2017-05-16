@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
@@ -36,15 +37,50 @@ public class LoginAct extends BaseAct {
     }
 
     @Override
-    protected void init(Bundle savedInstanceState) {
+    protected void inject() {
         AppComponentProvider.provide().inject(this);
+    }
+
+    @Override
+    protected void init(Bundle savedInstanceState) {
         StatusBarUtil.setColor(this, Color.WHITE, 50);
+
+        copeAirport();
+
         doSomeFocusWork();
         addShowHidePwdFunc();
         addClearFunc();
-        s();
 
     }
+
+    /**
+     * copeAirport
+     */
+    @BindView(R.id.llAirport)
+    UnderLineLinearLayout llAirport;
+
+    @BindView(R.id.tvAirport)
+    TextView tvAirport;
+
+    private void copeAirport() {
+        RxView.clicks(llAirport).subscribe(aVoid -> startAirportAct());
+    }
+
+    private void startAirportAct() {
+        Intent intent = new Intent(this, AirportAct.class);
+        startActivityForResult(intent, Constant.GENERAL_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.AIRPORT_RESULT_CODE) {
+            String airportName = data.getStringExtra(Constant.AIRPORT_NAME);
+            tvAirport.setText(airportName);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
@@ -68,6 +104,8 @@ public class LoginAct extends BaseAct {
                 .map(MotionEvent::getAction)
                 .filter(action -> action == MotionEvent.ACTION_DOWN)
                 .subscribe(action -> etAccount.requestFocus());
+
+
         RxView.focusChanges(etPwd)
                 .subscribe(hasFocus -> {
                     llPwd.changeFocus(hasFocus);
@@ -166,22 +204,6 @@ public class LoginAct extends BaseAct {
         toastUtils.show("登录成功");
     }
 
-
-    private void s() {
-        RxView.clicks(findViewById(R.id.llAirport)).subscribe(aVoid -> {
-            Intent intent = new Intent(this, AirportAct.class);
-            startActivityForResult(intent, Constant.AIRPORT_REQUEST_CODE);
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.AIRPORT_REQUEST_CODE) {
-            String airportName = data.getStringExtra(Constant.AIRPORT_NAME);
-            toastUtils.show(airportName);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     //    @Inject
 //    PushUtils pushUtils;

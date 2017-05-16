@@ -34,7 +34,7 @@ public class UnderLineLinearLayout extends LinearLayout {
     DensityUtils densityUtils;
 
     private void initPaint() {
-        paint.setStrokeWidth(densityUtils.dp2px(1.5f));
+        paint.setStrokeWidth(densityUtils.dp2px(2f));
         paint.setColor(colorUnFocused);
     }
 
