@@ -11,7 +11,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginAct extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

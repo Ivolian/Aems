@@ -13,6 +13,9 @@ password 都是 unicorn
 别名是 key0
 
 5. APK大小比较
-7so     2000KB
-3so     1800KB
-3so+混淆 1200KB
+7so             2000KB
+3so             1800KB
+3so + 混淆       1200KB
+
+6. 使用 R2
+Now make sure you use R2 instead of R inside all Butter Knife annotations.

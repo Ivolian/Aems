@@ -2,7 +2,7 @@ package com.unicorn.aems.app.dagger;
 
 import android.content.Context;
 
-import com.unicorn.aems.MainActivity;
+import com.unicorn.aems.LoginAct;
 
 import dagger.Component;
 
@@ -22,7 +22,7 @@ public interface AppComponent {
 //    DensityHelper provideDensityHelper();
 //
 //    // main
-    void inject(MainActivity o);
+    void inject(LoginAct o);
 //
 //    // sidebar
 //    void inject(SidebarFra o);
