@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.utils.DensityUtils;
+import com.unicorn.aems.utils.DensityUtils;
 
 import javax.inject.Inject;
 

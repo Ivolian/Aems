@@ -13,7 +13,7 @@ import android.view.Gravity;
 
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.utils.DensityUtils;
+import com.unicorn.aems.utils.DensityUtils;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,7 @@ public class LoginButton extends AppCompatTextView {
     }
 
     @Inject
-    com.unicorn.utils.ColorUtils colorUtils;
+    com.unicorn.aems.utils.ColorUtils colorUtils;
 
     @Inject
     DensityUtils densityUtils;

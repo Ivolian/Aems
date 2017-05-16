@@ -13,6 +13,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/tvFinger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -152,6 +153,14 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="24dp" />
+
+        <com.unicorn.aems.finger.FingerPrinterView
+            android:visibility="invisible"
+            android:id="@+id/fingerPrinterView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="48dp" />
 
     </LinearLayout>
 

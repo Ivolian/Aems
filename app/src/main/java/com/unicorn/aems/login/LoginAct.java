@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
@@ -21,13 +22,23 @@ import com.unicorn.aems.R;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
-import com.unicorn.utils.ToastUtils;
+import com.unicorn.aems.finger.FingerPrinterView;
+import com.unicorn.aems.push.PushUtils;
+import com.unicorn.aems.utils.ToastUtils;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+import zwh.com.lib.FPerException;
+import zwh.com.lib.RxFingerPrinter;
 
 
 public class LoginAct extends BaseAct {
@@ -50,7 +61,7 @@ public class LoginAct extends BaseAct {
         copeAccountAndPwd();
         copeEye();
         copeClear();
-
+        copeFinger();
     }
 
     /**
@@ -201,9 +212,31 @@ public class LoginAct extends BaseAct {
     @Inject
     ToastUtils toastUtils;
 
-    private void login() {
+    @Inject
+    PushUtils pushUtils;
 
-        toastUtils.show("登录成功");
+    private void login() {
+        KProgressHUD kProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("登录中")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
+        Set<String> tags = new HashSet<>();
+        tags.add(etAccount.getText().toString().trim());
+
+        Observable.just("").delay(2, TimeUnit.SECONDS).subscribe(ss -> {
+            pushUtils.setTags(tags, (i, s, set) -> {
+                kProgressHUD.dismiss();
+                if (i == 0) {
+                    toastUtils.show("登录成功");
+                    saveLoginInfo();
+                } else {
+                    toastUtils.show("登录失败，错误码:" + i);
+                }
+            });
+        });
 
     }
 
@@ -215,16 +248,109 @@ public class LoginAct extends BaseAct {
         String account = etAccount.getText().toString().trim();
         String pwd = etPwd.getText().toString().trim();
         LoginInfo loginInfo = new LoginInfo(airport, account, pwd);
-        loginInfoDao.rx().insertOrReplace(loginInfo);
+        loginInfoDao.rx().insertOrReplace(loginInfo).subscribe(new Observer<LoginInfo>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+                toastUtils.show("保存登录信息失败");
+            }
+
+            @Override
+            public void onNext(LoginInfo loginInfo) {
+                toastUtils.show("保存登录信息成功");
+            }
+        });
     }
 
-    //    @Inject
-//    PushUtils pushUtils;
-//
-//    private void setTags() {
-//        Set<String> tags = new HashSet<>();
-//        tags.add("-----");
-//        pushUtils.setTags(tags);
-//    }
+    //
+
+    @BindView(R.id.fingerPrinterView)
+    FingerPrinterView fingerPrinterView;
+
+    private int fingerErrorNum = 0; // 指纹错误次数
+
+    RxFingerPrinter rxfingerPrinter;
+
+    private void copeFinger() {
+        fingerPrinterView.setOnStateChangedListener(state -> {
+            if (state == FingerPrinterView.STATE_CORRECT_PWD) {
+                fingerErrorNum = 0;
+                toastUtils.show("指纹识别成功");
+            }
+            if (state == FingerPrinterView.STATE_WRONG_PWD) {
+                toastUtils.show("指纹识别失败，还剩" + (5 - fingerErrorNum) + "次机会");
+                fingerPrinterView.setState(FingerPrinterView.STATE_NO_SCANING);
+            }
+        });
+        RxView.clicks(findViewById(R.id.tvFinger)).subscribe(aVoid -> {
+            long count = loginInfoDao.count();
+            if (count == 1) {
+                startFinger();
+            } else {
+                toastUtils.show("至少使用密码登录一次");
+            }
+        });
+    }
+
+    private void startFinger() {
+        fingerPrinterView.setVisibility(View.VISIBLE);
+        if (rxfingerPrinter == null) {
+            rxfingerPrinter = new RxFingerPrinter(this);
+        }
+        fingerErrorNum = 0;
+        rxfingerPrinter.unSubscribe(this);
+        Subscription subscription = rxfingerPrinter.begin().subscribe(new Subscriber<Boolean>() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                if (fingerPrinterView.getState() == FingerPrinterView.STATE_SCANING) {
+                    return;
+                } else if (fingerPrinterView.getState() == FingerPrinterView.STATE_CORRECT_PWD
+                        || fingerPrinterView.getState() == FingerPrinterView.STATE_WRONG_PWD) {
+                    fingerPrinterView.setState(FingerPrinterView.STATE_NO_SCANING);
+                } else {
+                    fingerPrinterView.setState(FingerPrinterView.STATE_SCANING);
+                }
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (e instanceof FPerException) {
+                    toastUtils.show(((FPerException) e).getDisplayMessage());
+                }
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if (aBoolean) {
+                    fingerPrinterView.setState(FingerPrinterView.STATE_CORRECT_PWD);
+//                    fingerPrinterView.setVisibility(View.INVISIBLE);
+                } else {
+                    fingerErrorNum++;
+                    fingerPrinterView.setState(FingerPrinterView.STATE_WRONG_PWD);
+                }
+            }
+        });
+        rxfingerPrinter.addSubscription(this, subscription);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (rxfingerPrinter != null) {
+            rxfingerPrinter.unSubscribe(this);
+        }
+    }
+
 
 }

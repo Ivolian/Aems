@@ -8,6 +8,8 @@ import com.unicorn.aems.login.DaoSession;
 
 import org.greenrobot.greendao.database.Database;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 public class App extends Application {
 
@@ -18,7 +20,7 @@ public class App extends Application {
     }
 
     private void init() {
-//        JPushInterface.init(this);
+        JPushInterface.init(this);
 //        JPushInterface.setDebugMode(true);
         DaoSession daoSession = initDb();
         AppComponentProvider.init(this, daoSession);

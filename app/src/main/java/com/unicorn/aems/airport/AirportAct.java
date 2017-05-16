@@ -12,7 +12,7 @@ import com.unicorn.aems.R;
 import com.unicorn.aems.airport.model.AirportSection;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
-import com.unicorn.utils.ColorUtils;
+import com.unicorn.aems.utils.ColorUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import javax.inject.Inject;

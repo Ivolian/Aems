@@ -1,4 +1,4 @@
-package com.unicorn.utils;
+package com.unicorn.aems.utils;
 
 import android.content.Context;
 import android.view.Gravity;
