@@ -1,158 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_white">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="@dimen/titlebar_height"
+        android:background="@color/md_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/iivBack"
+            android:layout_width="@dimen/arrow_size"
+            android:layout_height="@dimen/arrow_size"
+            android:layout_marginLeft="@dimen/standard_padding"
+            app:iiv_color="@color/colorPrimary"
+            app:iiv_icon="ion-ios-arrow-left" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="@dimen/standard_padding"
+            android:background="@color/md_grey_300" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="指纹登录"
-            android:textColor="@color/colorPrimary"
-            android:textSize="17dp" />
-
-        <ImageView
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:layout_marginTop="24dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/logo" />
-
-        <com.unicorn.aems.UnderLineLinearLayout
-            android:id="@+id/llAirport"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="机场"
-                android:textColor="@color/md_black"
-                android:textSize="17dp" />
-
-            <TextView
-                android:id="@+id/tvAirport"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:singleLine="true"
-                android:text="北京朝阳机场"
-                android:textColor="@color/md_black"
-                android:textSize="17dp" />
-
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="6dp"
-                app:iiv_color="@color/md_grey_300"
-                app:iiv_icon="ion-ios-arrow-right" />
-
-        </com.unicorn.aems.UnderLineLinearLayout>
-
-        <com.unicorn.aems.UnderLineLinearLayout
-            android:id="@+id/llAccount"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="账号"
-                android:textColor="@color/md_black"
-                android:textSize="17dp" />
-
-            <EditText
-                android:id="@+id/etAccount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="请输入用户账号"
-                android:singleLine="true"
-                android:textColorHint="@color/md_grey_400"
-                android:textSize="17dp" />
-
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:id="@+id/iivClearAccount"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="6dp"
-                app:iiv_color="@color/md_grey_300"
-                app:iiv_icon="ion-ios-close-empty" />
-
-        </com.unicorn.aems.UnderLineLinearLayout>
-
-        <com.unicorn.aems.UnderLineLinearLayout
-            android:id="@+id/llPwd"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="密码"
-                android:textColor="@color/md_black"
-                android:textSize="17dp" />
-
-            <EditText
-                android:id="@+id/etPwd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="请输入登录密码"
-                android:singleLine="true"
-                android:textColorHint="@color/md_grey_400"
-                android:textSize="17dp" />
-
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:id="@+id/iivClearPwd"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="16dp"
-                app:iiv_color="@color/md_grey_300"
-                app:iiv_icon="ion-ios-close-empty" />
-
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:id="@+id/iivEye"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="12dp"
-                app:iiv_color="@color/colorPrimary"
-                app:iiv_icon="ion-eye" />
-
-        </com.unicorn.aems.UnderLineLinearLayout>
-
-        <com.unicorn.aems.LoginButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp" />
+            android:layout_marginLeft="16dp"
+            android:text="选择机场"
+            android:textColor="@color/md_black"
+            android:textSize="18dp" />
 
     </LinearLayout>
 
-</ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/md_grey_300" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
+

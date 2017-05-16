@@ -15,7 +15,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AirportAct" />
+        <activity android:name=".airport.AirportAct" />
 
         <!-- User defined. 用户自定义的广播接收器-->
         <receiver

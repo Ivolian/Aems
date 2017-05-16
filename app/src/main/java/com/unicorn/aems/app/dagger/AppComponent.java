@@ -5,6 +5,7 @@ import android.content.Context;
 import com.unicorn.aems.LoginAct;
 import com.unicorn.aems.LoginButton;
 import com.unicorn.aems.UnderLineLinearLayout;
+import com.unicorn.aems.airport.AirportAct;
 
 import dagger.Component;
 
@@ -26,6 +27,8 @@ public interface AppComponent {
     void inject(LoginAct o);
     void inject(UnderLineLinearLayout o);
     void inject(LoginButton o);
+
+    void inject(AirportAct o);
 
 
 }

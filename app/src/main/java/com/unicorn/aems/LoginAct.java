@@ -1,5 +1,6 @@
 package com.unicorn.aems;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
+import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.utils.ToastUtils;
@@ -39,6 +41,7 @@ public class LoginAct extends BaseAct {
         doSomeFocusWork();
         addShowHidePwdFunc();
         addClearFunc();
+        s();
 
     }
 
@@ -163,6 +166,12 @@ public class LoginAct extends BaseAct {
     }
 
 
+    private void s() {
+        RxView.clicks(findViewById(R.id.llAirport)).subscribe(aVoid -> {
+            Intent intent = new Intent(this, AirportAct.class);
+            startActivity(intent);
+        });
+    }
 
 //    @Inject
 //    PushUtils pushUtils;
