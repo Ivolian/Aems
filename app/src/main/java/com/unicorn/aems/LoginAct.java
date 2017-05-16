@@ -2,15 +2,27 @@ package com.unicorn.aems;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
 import com.jaeger.library.StatusBarUtil;
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.mikepenz.iconics.view.IconicsImageView;
+import com.unicorn.Constant;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
+import com.unicorn.utils.ToastUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class LoginAct extends BaseAct {
 
@@ -24,6 +36,7 @@ public class LoginAct extends BaseAct {
         AppComponentProvider.provide().inject(this);
         StatusBarUtil.setColor(this, Color.WHITE, 50);
         s();
+        addClearPwdFunc();
     }
 
     @BindView(R.id.llAccount)
@@ -98,6 +111,47 @@ public class LoginAct extends BaseAct {
                 }
             }
         });
+    }
+
+    @Inject
+    ToastUtils toastUtils;
+
+    @OnClick(R.id.iivEye)
+    public void eyeOnClick() {
+        boolean visible = etPwd.getInputType() == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+        if (visible) {
+            etPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        } else {
+            etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }
+    }
+
+    @BindView(R.id.iivEye)
+    IconicsImageView iivEye;
+
+    private void w() {
+        int showPassword = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+        int hidePassword = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
+        etPwd.setInputType(hidePassword);
+    }
+
+
+    /**
+     * 清除密码
+     */
+    @BindView(R.id.iivClearPwd)
+    IconicsImageView iivClearPwd;
+
+    private void addClearPwdFunc() {
+        RxTextView.afterTextChangeEvents(etPwd)
+                .subscribe(event -> {
+                    String text = event.editable().toString();
+                    boolean empty = TextUtils.isEmpty(text);
+                    iivClearPwd.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
+                });
+        RxView.clicks(iivClearPwd)
+                .throttleFirst(Constant.DEFAULT_WINDOW_DURATION, TimeUnit.SECONDS)
+                .subscribe(aVoid -> etPwd.setText(""));
     }
 
 //    @Inject

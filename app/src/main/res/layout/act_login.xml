@@ -16,7 +16,6 @@
         android:textColor="@color/colorPrimary"
         android:textSize="17dp" />
 
-
     <ImageView
         android:layout_width="72dp"
         android:layout_height="72dp"
@@ -46,6 +45,7 @@
             android:background="@null"
             android:hint="请输入用户账号"
             android:textColorHint="@color/md_grey_400"
+            android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="17dp" />
 
     </com.unicorn.aems.UnderLineLinearLayout>
@@ -73,14 +73,15 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="请输入登录密码"
-            android:inputType="textPassword"
             android:singleLine="true"
             android:textColorHint="@color/md_grey_400"
+            android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="17dp" />
 
         <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/iivClearPwd"
             android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             app:iiv_color="@color/md_grey_300"
             app:iiv_icon="ion-ios-close-empty" />
@@ -88,7 +89,7 @@
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/iivEye"
             android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="12dp"
             app:iiv_color="@color/colorPrimary"
             app:iiv_icon="ion-eye" />
