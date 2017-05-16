@@ -2,7 +2,7 @@ package com.unicorn.aems.push;
 
 import android.content.Context;
 
-import com.unicorn.aems.ToastUtils;
+import com.unicorn.utils.ToastUtils;
 import com.unicorn.aems.app.dagger.App;
 
 import java.util.Set;

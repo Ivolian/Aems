@@ -3,6 +3,7 @@ package com.unicorn.aems.app.dagger;
 import android.content.Context;
 
 import com.unicorn.aems.LoginAct;
+import com.unicorn.aems.UnderLineLinearLayout;
 
 import dagger.Component;
 
@@ -21,19 +22,8 @@ public interface AppComponent {
 //
 //    DensityHelper provideDensityHelper();
 //
-//    // main
     void inject(LoginAct o);
-//
-//    // sidebar
-//    void inject(SidebarFra o);
-//
-//    void inject(SidebarItemDecoration o);
-//
-//    void inject(SidebarAdapter o);
-//
-//    void inject(SidebarHeaderView o);
-//
-//    // ui
-//    void inject(HorseTabLayout o);
+    void inject(UnderLineLinearLayout o);
+
 
 }

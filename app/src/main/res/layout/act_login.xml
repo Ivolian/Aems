@@ -1,15 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_white"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="指纹登录"
+        android:textColor="@color/colorPrimary"
+        android:textSize="17dp" />
+
+
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/logo" />
 
+    <com.unicorn.aems.UnderLineLinearLayout
+        android:id="@+id/llAccount"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="账号"
+            android:textColor="@color/md_black"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/etAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:background="@null"
+            android:hint="请输入用户账号"
+            android:textColorHint="@color/md_grey_400"
+            android:textSize="17dp" />
+
+    </com.unicorn.aems.UnderLineLinearLayout>
+
+    <com.unicorn.aems.UnderLineLinearLayout
+        android:id="@+id/llPwd"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密码"
+            android:textColor="@color/md_black"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/etPwd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="请输入登录密码"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textColorHint="@color/md_grey_400"
+            android:textSize="17dp" />
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="16dp"
+            app:iiv_color="@color/md_grey_300"
+            app:iiv_icon="ion-ios-close-empty" />
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/iivEye"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="12dp"
+            app:iiv_color="@color/colorPrimary"
+            app:iiv_icon="ion-eye" />
+
+    </com.unicorn.aems.UnderLineLinearLayout>
 
 </LinearLayout>
