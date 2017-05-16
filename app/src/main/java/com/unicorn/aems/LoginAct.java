@@ -39,6 +39,7 @@ public class LoginAct extends BaseAct {
         doSomeFocusWork();
         addShowHidePwdFunc();
         addClearFunc();
+
     }
 
     @BindView(R.id.llAccount)
@@ -160,6 +161,8 @@ public class LoginAct extends BaseAct {
     private void login() {
         toastUtils.show("登录成功");
     }
+
+
 
 //    @Inject
 //    PushUtils pushUtils;

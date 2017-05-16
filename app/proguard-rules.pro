@@ -32,3 +32,4 @@
 
 -dontwarn cn.jiguang.**
 -keep class cn.jiguang.** { *; }
+
