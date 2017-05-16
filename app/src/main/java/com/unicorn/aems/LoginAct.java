@@ -2,6 +2,7 @@ package com.unicorn.aems;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -12,18 +13,18 @@ import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
-import com.unicorn.Constant;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.utils.ToastUtils;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
+/**
+ * The type Login act.
+ */
 public class LoginAct extends BaseAct {
 
     @Override
@@ -36,6 +37,7 @@ public class LoginAct extends BaseAct {
         AppComponentProvider.provide().inject(this);
         StatusBarUtil.setColor(this, Color.WHITE, 50);
         s();
+        addShowHidePwdFunc();
         addClearPwdFunc();
     }
 
@@ -54,8 +56,6 @@ public class LoginAct extends BaseAct {
 
     private void s() {
 
-//        llAccount.setFocusable(true);
-//        llAccount.setFocusableInTouchMode(true);
         llAccount.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -73,8 +73,6 @@ public class LoginAct extends BaseAct {
                 return false;
             }
         });
-//        llPwd.setFocusable(true);
-//        llPwd.setFocusableInTouchMode(true);
         llPwd.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -116,23 +114,40 @@ public class LoginAct extends BaseAct {
     @Inject
     ToastUtils toastUtils;
 
-    @OnClick(R.id.iivEye)
-    public void eyeOnClick() {
-        boolean visible = etPwd.getInputType() == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
-        if (visible) {
-            etPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        } else {
-            etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        }
-    }
 
+    /**
+     * 密码可见
+     */
     @BindView(R.id.iivEye)
     IconicsImageView iivEye;
 
-    private void w() {
-        int showPassword = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
-        int hidePassword = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-        etPwd.setInputType(hidePassword);
+    private final int PWD_VISIBLE = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+    private final int PWD_INVISIBLE = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
+
+    private void addShowHidePwdFunc() {
+        hidePwd();
+        RxView.clicks(iivEye).subscribe(aVoid -> {
+            boolean visible = etPwd.getInputType() == PWD_VISIBLE;
+            if (visible) {
+                hidePwd();
+            } else {
+                showPwd();
+            }
+            // 移动光标到末尾
+            etPwd.setSelection(etPwd.getText().length());
+        });
+    }
+
+    private void showPwd() {
+        iivEye.setIcon(Ionicons.Icon.ion_eye);
+        iivEye.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        etPwd.setInputType(PWD_VISIBLE);
+    }
+
+    private void hidePwd() {
+        iivEye.setIcon(Ionicons.Icon.ion_eye_disabled);
+        iivEye.setColor(ContextCompat.getColor(this, R.color.md_grey_300));
+        etPwd.setInputType(PWD_INVISIBLE);
     }
 
 
@@ -142,6 +157,7 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.iivClearPwd)
     IconicsImageView iivClearPwd;
 
+    @SuppressWarnings("ConstantConditions")
     private void addClearPwdFunc() {
         RxTextView.afterTextChangeEvents(etPwd)
                 .subscribe(event -> {
@@ -149,9 +165,7 @@ public class LoginAct extends BaseAct {
                     boolean empty = TextUtils.isEmpty(text);
                     iivClearPwd.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
                 });
-        RxView.clicks(iivClearPwd)
-                .throttleFirst(Constant.DEFAULT_WINDOW_DURATION, TimeUnit.SECONDS)
-                .subscribe(aVoid -> etPwd.setText(""));
+        RxView.clicks(iivClearPwd).subscribe(aVoid -> etPwd.setText(""));
     }
 
 //    @Inject
