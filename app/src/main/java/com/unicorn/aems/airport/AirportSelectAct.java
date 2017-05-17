@@ -82,7 +82,7 @@ public class AirportSelectAct extends BaseAct {
                 .icon(Ionicons.Icon.ion_ios_search)
                 .colorRes(R.color.colorPrimary)
                 .sizeDp(14);
-        etSearch.setCompoundDrawablePadding(densityUtils.dp2px(5));
+        etSearch.setCompoundDrawablePadding(densityUtils.dp2px(8));
         etSearch.setCompoundDrawables(left, null, null, null);
 
         // cope event

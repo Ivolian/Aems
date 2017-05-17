@@ -51,7 +51,7 @@ public class AirportSelectAdapter extends IndexableAdapter<Airport> {
         itemViewHolder.tvAirportName.setText(airport.getName());
     }
 
-    private class IndexViewHolder extends RecyclerView.ViewHolder {
+    public class IndexViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvIndex)
         TextView tvIndex;
@@ -63,7 +63,7 @@ public class AirportSelectAdapter extends IndexableAdapter<Airport> {
 
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvAirportName)
         TextView tvAirportName;
