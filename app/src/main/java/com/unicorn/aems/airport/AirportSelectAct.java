@@ -53,7 +53,9 @@ public class AirportSelectAct extends BaseAct {
         addItemDecoration();
         recyclerView.setAdapter(airportSelectAdapter);
         setOnItemClickListener();
-        airportSelectAdapter.setNewData(airportSectionProvider.provide());
+        airportSectionProvider.provide().subscribe(airportSections -> {
+            airportSelectAdapter.setNewData(airportSections);
+        });
     }
 
     /**
