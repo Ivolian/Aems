@@ -49,7 +49,7 @@ public class AppModule {
 //    @App
 //    @Provides
 //    BookCategoryService provideBookService(Retrofit retrofit) {
-//        return retrofit.create(BookCategoryService.class);
+//        return retrofit.fetchData(BookCategoryService.class);
 //    }
 
 }

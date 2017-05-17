@@ -33,10 +33,5 @@ public abstract class BaseAct extends SupportActivity {
         //
     }
 
-    protected void addBackListener(int backViewId) {
-        RxView.clicks(findViewById(backViewId))
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> finish());
-    }
 
 }

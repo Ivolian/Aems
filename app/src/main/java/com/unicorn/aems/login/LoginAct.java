@@ -214,7 +214,7 @@ public class LoginAct extends BaseAct {
     PushUtils pushUtils;
 
     private void login() {
-//        KProgressHUD kProgressHUD = KProgressHUD.create(this)
+//        KProgressHUD kProgressHUD = KProgressHUD.fetchData(this)
 //                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
 //                .setLabel("登录中")
 //                .setCancellable(true)

@@ -1,9 +1,7 @@
 package com.unicorn.aems.airport;
 
 import com.unicorn.aems.airport.model.Airport;
-import com.unicorn.aems.airport.model.AirportSection;
 import com.unicorn.aems.app.dagger.App;
-import com.unicorn.aems.utils.PinYinUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,32 +12,21 @@ import javax.inject.Inject;
 import rx.Observable;
 
 @App
-public class AirportSectionProvider {
-
-    PinYinUtils pinYinUtils;
+public class AirportDataProvider {
 
     @Inject
-    public AirportSectionProvider(PinYinUtils pinYinUtils) {
-        this.pinYinUtils = pinYinUtils;
+    public AirportDataProvider() {
     }
 
-
-    public Observable<List<AirportSection>> provide() {
+    public Observable<List<Airport>> fetchData() {
         return Observable.just(AIRPORT_NAME_STR)
                 .map(airportNameStr -> Arrays.asList(airportNameStr.split("机场")))
                 .map(airportNames -> {
-                    List<AirportSection> airportSections = new ArrayList<>();
-                    String initialPrevious = "";
+                    List<Airport> airports = new ArrayList<>();
                     for (String airportName : airportNames) {
-                        String initial = pinYinUtils.getInitial(airportName);
-                        // 不同则添加 section header
-                        if (!initial.equals(initialPrevious)) {
-                            airportSections.add(new AirportSection(true, initial));
-                        }
-                        airportSections.add(new AirportSection(new Airport(airportName + "机场")));
-                        initialPrevious = initial;
+                        airports.add(new Airport(airportName + "机场"));
                     }
-                    return airportSections;
+                    return airports;
                 });
     }
 

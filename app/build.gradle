@@ -64,7 +64,7 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.zwh:RxFingerPrinter:1.0.1'
     compile 'com.kaopiz:kprogresshud:1.0.5'
-    compile 'com.belerweb:pinyin4j:2.5.0'
-    compile 'com.oushangfeng:PinnedSectionItemDecoration:1.2.4'
+    compile(name: 'indexablerecyclerview', ext: 'aar')
+
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
 }

@@ -1,23 +1,26 @@
 package com.unicorn.aems.airport;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
-import com.unicorn.aems.airport.model.AirportSection;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.utils.ColorUtils;
-import com.unicorn.aems.utils.DensityUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.yokeyword.indexablerv.IndexableLayout;
 
 public class AirportSelectAct extends BaseAct {
 
@@ -33,30 +36,43 @@ public class AirportSelectAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        addBackListener(R.id.iivBack);
-        initRecycleView();
+        addBackListener();
+        initIndexableLayout();
+    }
+
+    private void addBackListener() {
+        RxView.clicks(findViewById(R.id.flBack))
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(aVoid -> finish());
     }
 
     /**
-     * initRecycleView
+     * initIndexableLayout
      */
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.indexableLayout)
+    IndexableLayout indexableLayout;
 
     @Inject
     AirportSelectAdapter airportSelectAdapter;
 
     @Inject
-    AirportSectionProvider airportSectionProvider;
+    AirportDataProvider airportDataProvider;
 
-    private void initRecycleView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void initIndexableLayout() {
+        indexableLayout.setLayoutManager(new LinearLayoutManager(this));
+        indexableLayout.setCompareMode(IndexableLayout.MODE_ALL_LETTERS);
+        setCenterOverlay();
+        indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
-        recyclerView.setAdapter(airportSelectAdapter);
-        setOnItemClickListener();
-        airportSectionProvider.provide().subscribe(airportSections -> {
-            airportSelectAdapter.setNewData(airportSections);
-        });
+        setOnItemContentClickListener();
+        airportDataProvider.fetchData().subscribe(airports -> airportSelectAdapter.setDatas(airports));
+    }
+
+    private void setCenterOverlay() {
+        indexableLayout.setOverlayStyle_Center();
+        indexableLayout.getmCenterOverlay().setBackgroundColor(Color.TRANSPARENT);
+        indexableLayout.getmCenterOverlay().setTextColor(colorUtils.getColor(R.color.colorPrimary));
+        indexableLayout.getmCenterOverlay().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 48);
     }
 
     /**
@@ -65,27 +81,21 @@ public class AirportSelectAct extends BaseAct {
     @Inject
     ColorUtils colorUtils;
 
-    @Inject
-    DensityUtils densityUtils;
-
     private void addItemDecoration() {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        final int dividerWidthPx = 1;
-        paint.setStrokeWidth(dividerWidthPx);
-        paint.setColor(colorUtils.getColor(R.color.md_grey_400));
+        paint.setStrokeWidth(1);
+        paint.setColor(colorUtils.getColor(R.color.md_grey_300));
         HorizontalDividerItemDecoration itemDecoration = new HorizontalDividerItemDecoration.Builder(this).paint(paint).build();
-        recyclerView.addItemDecoration(itemDecoration);
+        indexableLayout.getRecyclerView().addItemDecoration(itemDecoration);
     }
 
     /**
-     * setOnItemClickListener.
+     * setOnItemContentClickListener.
      */
-    private void setOnItemClickListener() {
-        airportSelectAdapter.setOnItemClickListener((adapter, view, position) -> {
-            AirportSection airportSection = (AirportSection) adapter.getItem(position);
-            if (airportSection != null && !airportSection.isHeader) {
-                String airportName = airportSection.t.getName();
-                finishAfterSetResult(airportName);
+    private void setOnItemContentClickListener() {
+        airportSelectAdapter.setOnItemContentClickListener((v, originalPosition, currentPosition, entity) -> {
+            if (originalPosition >= 0) {
+                finishAfterSetResult(entity.getName());
             }
         });
     }

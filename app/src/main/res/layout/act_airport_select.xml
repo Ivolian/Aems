@@ -12,24 +12,26 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/iivBack"
-            android:layout_width="@dimen/arrow_size"
-            android:layout_height="@dimen/arrow_size"
-            android:layout_marginLeft="@dimen/standard_padding"
-            app:iiv_color="@color/colorPrimary"
-            app:iiv_icon="ion-ios-arrow-left" />
+        <FrameLayout
+            android:id="@+id/flBack"
+            android:layout_width="@dimen/titlebar_height"
+            android:layout_height="@dimen/titlebar_height">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="@dimen/standard_padding"
-            android:background="@color/md_grey_300" />
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:layout_width="@dimen/arrow_size"
+                android:layout_height="@dimen/arrow_size"
+                android:layout_gravity="center"
+                app:iiv_color="@color/colorPrimary"
+                app:iiv_icon="ion-ios-arrow-left" />
+
+        </FrameLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="32dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="选择机场"
             android:textColor="@color/md_black"
             android:textSize="18dp" />
@@ -41,11 +43,17 @@
         android:layout_height="1px"
         android:background="@color/md_grey_300" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <me.yokeyword.indexablerv.IndexableLayout
+        android:id="@+id/indexableLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        app:indexBar_background="@android:color/transparent"
+        app:indexBar_layout_width="24dp"
+        app:indexBar_selectedTextColor="@color/md_blue_300"
+        app:indexBar_textColor="@color/colorPrimary"
+        app:indexBar_textSize="13dp"
+        app:indexBar_textSpace="8dp" />
 
 </LinearLayout>
 
