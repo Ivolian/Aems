@@ -26,4 +26,16 @@ public class AirportSelectAdapter extends BaseSectionQuickAdapter<AirportSection
         helper.setText(R.id.tvAirportName, airportSection.t.getName());
     }
 
+//    @Override
+//    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+//        super.onAttachedToRecyclerView(recyclerView);
+//        FullSpanUtil.onAttachedToRecyclerView(recyclerView, this, StockEntity.StockInfo.TYPE_HEADER);
+//    }
+//
+//    @Override
+//    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+//        super.onViewAttachedToWindow(holder);
+//        FullSpanUtil.onViewAttachedToWindow(holder, this, StockEntity.StockInfo.TYPE_HEADER);
+//    }
+
 }

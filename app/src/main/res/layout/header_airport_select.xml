@@ -3,9 +3,9 @@
     android:id="@+id/tvHeaderName"
     android:layout_width="match_parent"
     android:layout_height="28dp"
-    android:background="@color/md_grey_200"
+    android:background="@color/md_grey_100"
     android:gravity="center_vertical"
     android:paddingLeft="@dimen/standard_padding"
     android:textColor="@color/md_black"
-    android:textSize="14dp" />
+    android:textSize="15dp" />
 

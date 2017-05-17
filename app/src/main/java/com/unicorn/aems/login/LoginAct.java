@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
@@ -33,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
@@ -216,27 +214,27 @@ public class LoginAct extends BaseAct {
     PushUtils pushUtils;
 
     private void login() {
-        KProgressHUD kProgressHUD = KProgressHUD.create(this)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("登录中")
-                .setCancellable(true)
-                .setAnimationSpeed(2)
-                .setDimAmount(0.5f)
-                .show();
+//        KProgressHUD kProgressHUD = KProgressHUD.create(this)
+//                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+//                .setLabel("登录中")
+//                .setCancellable(true)
+//                .setAnimationSpeed(2)
+//                .setDimAmount(0.5f)
+//                .show();
         Set<String> tags = new HashSet<>();
         tags.add(etAccount.getText().toString().trim());
 
-        Observable.just("").delay(1, TimeUnit.SECONDS).subscribe(ss -> {
-            pushUtils.setTags(tags, (i, s, set) -> {
-                kProgressHUD.dismiss();
-                if (i == 0) {
-                    toastUtils.show("登录成功");
-                    saveLoginInfo();
-                } else {
-                    toastUtils.show("登录失败，错误码:" + i);
-                }
-            });
-        });
+//        Observable.just("").delay(1, TimeUnit.SECONDS).subscribe(ss -> {
+//            pushUtils.setTags(tags, (i, s, set) -> {
+//                kProgressHUD.dismiss();
+//                if (i == 0) {
+//                    toastUtils.show("登录成功");
+//                    saveLoginInfo();
+//                } else {
+//                    toastUtils.show("登录失败，错误码:" + i);
+//                }
+//            });
+//        });
 
     }
 

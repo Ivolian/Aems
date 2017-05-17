@@ -12,6 +12,7 @@ import com.unicorn.aems.airport.model.AirportSection;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.utils.ColorUtils;
+import com.unicorn.aems.utils.DensityUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import javax.inject.Inject;
@@ -63,6 +64,9 @@ public class AirportSelectAct extends BaseAct {
      */
     @Inject
     ColorUtils colorUtils;
+
+    @Inject
+    DensityUtils densityUtils;
 
     private void addItemDecoration() {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
