@@ -38,7 +38,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+greendao {
+    schemaVersion 3
+}
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -65,6 +67,6 @@ dependencies {
     compile 'com.zwh:RxFingerPrinter:1.0.1'
     compile 'com.kaopiz:kprogresshud:1.0.5'
     compile(name: 'indexablerecyclerview', ext: 'aar')
-
+    debugCompile 'im.dino:dbinspector:3.4.1@aar'
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
 }

@@ -3,11 +3,16 @@ package com.unicorn.aems.airport;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
+import android.view.MotionEvent;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
@@ -21,6 +26,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.yokeyword.indexablerv.IndexableLayout;
+import rx.functions.Action1;
 
 public class AirportSelectAct extends BaseAct {
 
@@ -37,6 +43,7 @@ public class AirportSelectAct extends BaseAct {
     @Override
     protected void init(Bundle savedInstanceState) {
         addBackListener();
+        s();
         initIndexableLayout();
     }
 
@@ -45,6 +52,35 @@ public class AirportSelectAct extends BaseAct {
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> finish());
     }
+
+    @BindView(R.id.llSearch)
+    LinearLayout llSearch;
+
+    @BindView(R.id.etSearch)
+    EditText etSearch;
+
+    private void s() {
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setCornerRadius(20);
+        gradientDrawable.setColor(colorUtils.getColor(R.color.md_grey_200));
+        llSearch.setBackground(gradientDrawable);
+
+
+        RxView.touches(llSearch)
+                .map(MotionEvent::getAction)
+                .filter(action -> action == MotionEvent.ACTION_DOWN)
+                .subscribe(action -> etSearch.requestFocus());
+
+        RxTextView.afterTextChangeEvents(etSearch)
+                .map(event -> etSearch.toString().trim())
+                .subscribe(keyword -> {
+                    airportResitory.getAirportsByKeyword(keyword).subscribe(airports -> {
+                        if (airports.size() != 0)
+                            airportSelectAdapter.setDatas(airports);
+                    });
+                });
+    }
+
 
     /**
      * initIndexableLayout
@@ -56,7 +92,7 @@ public class AirportSelectAct extends BaseAct {
     AirportSelectAdapter airportSelectAdapter;
 
     @Inject
-    AirportDataProvider airportDataProvider;
+    AirportRepository airportResitory;
 
     private void initIndexableLayout() {
         indexableLayout.setLayoutManager(new LinearLayoutManager(this));
@@ -65,7 +101,7 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportDataProvider.fetchData().subscribe(airports -> airportSelectAdapter.setDatas(airports));
+        airportResitory.getAirports().subscribe(airports -> airportSelectAdapter.setDatas(airports));
     }
 
     private void setCenterOverlay() {

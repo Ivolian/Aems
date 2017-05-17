@@ -3,6 +3,7 @@ package com.unicorn.aems.app.dagger;
 import android.app.Application;
 import android.content.Context;
 
+import com.unicorn.aems.airport.model.AirportDao;
 import com.unicorn.aems.login.DaoSession;
 import com.unicorn.aems.login.LoginInfoDao;
 
@@ -38,6 +39,12 @@ public class AppModule {
     @Provides
     LoginInfoDao provideLoginInfoDao(DaoSession daoSession) {
         return daoSession.getLoginInfoDao();
+    }
+
+    @App
+    @Provides
+    AirportDao provideAirportDao(DaoSession daoSession) {
+        return daoSession.getAirportDao();
     }
 
 //    @App
