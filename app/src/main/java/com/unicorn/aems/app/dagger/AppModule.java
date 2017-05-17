@@ -3,7 +3,7 @@ package com.unicorn.aems.app.dagger;
 import android.app.Application;
 import android.content.Context;
 
-import com.unicorn.aems.airport.model.AirportDao;
+import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.respository.AirportRepository;
 import com.unicorn.aems.airport.respository.AirportRepositoryImpl;
 import com.unicorn.aems.login.DaoSession;

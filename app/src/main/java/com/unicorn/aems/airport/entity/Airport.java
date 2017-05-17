@@ -1,4 +1,4 @@
-package com.unicorn.aems.airport.model;
+package com.unicorn.aems.airport.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

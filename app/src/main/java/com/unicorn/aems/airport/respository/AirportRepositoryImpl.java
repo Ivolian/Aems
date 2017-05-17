@@ -1,7 +1,7 @@
 package com.unicorn.aems.airport.respository;
 
-import com.unicorn.aems.airport.model.Airport;
-import com.unicorn.aems.airport.model.AirportDao;
+import com.unicorn.aems.airport.entity.Airport;
+import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.app.dagger.App;
 
 import java.util.ArrayList;
