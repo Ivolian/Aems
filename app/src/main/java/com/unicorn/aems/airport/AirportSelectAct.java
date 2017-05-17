@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.model.AirportSection;
@@ -19,11 +18,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class AirportAct extends BaseAct {
+public class AirportSelectAct extends BaseAct {
 
     @Override
     protected int layoutResId() {
-        return R.layout.act_airport;
+        return R.layout.act_airport_select;
     }
 
     @Override
@@ -33,8 +32,8 @@ public class AirportAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        addBackListener(R.id.iivBack);
         initRecycleView();
-        RxView.clicks(findViewById(R.id.iivBack)).subscribe(aVoid -> finish());
     }
 
     /**
@@ -43,18 +42,18 @@ public class AirportAct extends BaseAct {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    AirportAdapter airportAdapter;
+    @Inject
+    AirportSelectAdapter airportSelectAdapter;
 
     @Inject
-    AirportProvider airportProvider;
+    AirportSectionProvider airportSectionProvider;
 
     private void initRecycleView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration();
-        airportAdapter = new AirportAdapter(R.layout.item_airport, R.layout.header_airport, null);
-        recyclerView.setAdapter(airportAdapter);
+        recyclerView.setAdapter(airportSelectAdapter);
         setOnItemClickListener();
-        airportAdapter.setNewData(airportProvider.provide());
+        airportSelectAdapter.setNewData(airportSectionProvider.provide());
     }
 
     /**
@@ -76,7 +75,7 @@ public class AirportAct extends BaseAct {
      * setOnItemClickListener.
      */
     private void setOnItemClickListener() {
-        airportAdapter.setOnItemClickListener((adapter, view, position) -> {
+        airportSelectAdapter.setOnItemClickListener((adapter, view, position) -> {
             AirportSection airportSection = (AirportSection) adapter.getItem(position);
             if (airportSection != null && !airportSection.isHeader) {
                 String airportName = airportSection.t.getName();

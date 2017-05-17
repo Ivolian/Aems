@@ -19,7 +19,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
-import com.unicorn.aems.airport.AirportAct;
+import com.unicorn.aems.airport.AirportSelectAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
@@ -78,7 +78,7 @@ public class LoginAct extends BaseAct {
     }
 
     private void startAirportAct() {
-        Intent intent = new Intent(this, AirportAct.class);
+        Intent intent = new Intent(this, AirportSelectAct.class);
         startActivityForResult(intent, Constant.GENERAL_REQUEST_CODE);
     }
 
@@ -226,7 +226,7 @@ public class LoginAct extends BaseAct {
         Set<String> tags = new HashSet<>();
         tags.add(etAccount.getText().toString().trim());
 
-        Observable.just("").delay(2, TimeUnit.SECONDS).subscribe(ss -> {
+        Observable.just("").delay(1, TimeUnit.SECONDS).subscribe(ss -> {
             pushUtils.setTags(tags, (i, s, set) -> {
                 kProgressHUD.dismiss();
                 if (i == 0) {
@@ -281,6 +281,7 @@ public class LoginAct extends BaseAct {
             if (state == FingerPrinterView.STATE_CORRECT_PWD) {
                 fingerErrorNum = 0;
                 toastUtils.show("指纹识别成功");
+                login();
             }
             if (state == FingerPrinterView.STATE_WRONG_PWD) {
                 toastUtils.show("指纹识别失败，还剩" + (5 - fingerErrorNum) + "次机会");
@@ -289,7 +290,7 @@ public class LoginAct extends BaseAct {
         });
         RxView.clicks(findViewById(R.id.tvFinger)).subscribe(aVoid -> {
             long count = loginInfoDao.count();
-            if (count == 1) {
+            if (count != 0) {
                 startFinger();
             } else {
                 toastUtils.show("至少使用密码登录一次");

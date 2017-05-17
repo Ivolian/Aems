@@ -2,10 +2,10 @@ package com.unicorn.aems.app.dagger;
 
 import android.content.Context;
 
+import com.unicorn.aems.airport.AirportSelectAct;
 import com.unicorn.aems.login.LoginAct;
 import com.unicorn.aems.login.LoginButton;
 import com.unicorn.aems.login.UnderLineLinearLayout;
-import com.unicorn.aems.airport.AirportAct;
 
 import dagger.Component;
 
@@ -28,7 +28,7 @@ public interface AppComponent {
     void inject(UnderLineLinearLayout o);
     void inject(LoginButton o);
 
-    void inject(AirportAct o);
+    void inject(AirportSelectAct o);
 
 
 }

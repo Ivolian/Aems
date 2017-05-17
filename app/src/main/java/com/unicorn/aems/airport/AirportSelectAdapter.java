@@ -4,13 +4,16 @@ import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.model.AirportSection;
+import com.unicorn.aems.app.dagger.App;
 
-import java.util.List;
+import javax.inject.Inject;
 
-public class AirportAdapter extends BaseSectionQuickAdapter<AirportSection, BaseViewHolder> {
+@App
+public class AirportSelectAdapter extends BaseSectionQuickAdapter<AirportSection, BaseViewHolder> {
 
-    public AirportAdapter(int layoutResId, int sectionHeadResId, List data) {
-        super(layoutResId, sectionHeadResId, data);
+    @Inject
+    public AirportSelectAdapter() {
+        super(R.layout.item_airport_select, R.layout.header_airport_select, null);
     }
 
     @Override

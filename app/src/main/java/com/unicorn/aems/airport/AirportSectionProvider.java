@@ -10,10 +10,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 @App
-public class AirportProvider {
+public class AirportSectionProvider {
 
     @Inject
-    public AirportProvider() {
+    public AirportSectionProvider() {
     }
 
     public List<AirportSection> provide() {

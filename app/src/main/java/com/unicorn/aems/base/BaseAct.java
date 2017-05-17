@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.f2prateek.dart.Dart;
+import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import me.yokeyword.fragmentation.SupportActivity;
@@ -22,12 +25,18 @@ public abstract class BaseAct extends SupportActivity {
         init(savedInstanceState);
     }
 
-    protected void inject(){
-
+    protected void inject() {
+        // 依赖注入
     }
 
     protected void init(Bundle savedInstanceState) {
+        //
+    }
 
+    protected void addBackListener(int backViewId) {
+        RxView.clicks(findViewById(backViewId))
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(aVoid -> finish());
     }
 
 }
