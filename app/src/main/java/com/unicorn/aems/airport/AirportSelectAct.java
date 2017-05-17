@@ -16,6 +16,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
+import com.unicorn.aems.airport.respository.AirportRepository;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.utils.ColorUtils;
@@ -66,26 +67,31 @@ public class AirportSelectAct extends BaseAct {
     @Inject
     DensityUtils densityUtils;
 
+    @Inject
+    AirportRepository airportRepository;
+
     private void copeSearch() {
+        // cope bg
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setCornerRadius(densityUtils.dp2px(4));
         gradientDrawable.setColor(colorUtils.getColor(R.color.md_grey_200));
         etSearch.setBackground(gradientDrawable);
-        Drawable drawable = new IconicsDrawable(this)
+
+        // cope left drawable
+        Drawable left = new IconicsDrawable(this)
                 .icon(Ionicons.Icon.ion_ios_search)
                 .colorRes(R.color.colorPrimary)
                 .sizeDp(14);
+        etSearch.setCompoundDrawablePadding(densityUtils.dp2px(5));
+        etSearch.setCompoundDrawables(left, null, null, null);
 
-        etSearch.setCompoundDrawablePadding(20);
-        etSearch.setCompoundDrawables(drawable, null, null, null);
-
+        // cope event
         RxTextView.afterTextChangeEvents(etSearch)
                 .map(event -> event.editable().toString().trim())
                 .flatMap(keyword -> airportRepository.getAirports(keyword))
                 .filter(airports -> airports.size() != 0)
                 .subscribe(airports -> airportSelectAdapter.setDatas(airports));
     }
-
 
     /**
      * initIndexableLayout
@@ -95,9 +101,6 @@ public class AirportSelectAct extends BaseAct {
 
     @Inject
     AirportSelectAdapter airportSelectAdapter;
-
-    @Inject
-    AirportRepository airportRepository;
 
     private void initIndexableLayout() {
         indexableLayout.setLayoutManager(new LinearLayoutManager(this));

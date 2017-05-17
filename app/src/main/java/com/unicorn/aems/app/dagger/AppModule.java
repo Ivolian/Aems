@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.unicorn.aems.airport.model.AirportDao;
+import com.unicorn.aems.airport.respository.AirportRepository;
+import com.unicorn.aems.airport.respository.AirportRepositoryImpl;
 import com.unicorn.aems.login.DaoSession;
 import com.unicorn.aems.login.LoginInfoDao;
 
@@ -45,6 +47,12 @@ public class AppModule {
     @Provides
     AirportDao provideAirportDao(DaoSession daoSession) {
         return daoSession.getAirportDao();
+    }
+
+    @App
+    @Provides
+    AirportRepository provideAirportRepository(AirportRepositoryImpl airportRepositoryImpl) {
+        return airportRepositoryImpl;
     }
 
 //    @App

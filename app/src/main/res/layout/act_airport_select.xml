@@ -48,7 +48,7 @@
         android:layout_marginLeft="@dimen/standard_padding"
         android:layout_marginRight="@dimen/standard_padding"
         android:background="@null"
-        android:hint="输入机场名或拼音"
+        android:hint="输入机场名称或拼音"
         android:paddingLeft="16dp"
         android:singleLine="true"
         android:textColor="@color/md_black"

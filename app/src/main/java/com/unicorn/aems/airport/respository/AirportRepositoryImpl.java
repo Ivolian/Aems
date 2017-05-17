@@ -1,11 +1,8 @@
-package com.unicorn.aems.airport;
+package com.unicorn.aems.airport.respository;
 
 import com.unicorn.aems.airport.model.Airport;
 import com.unicorn.aems.airport.model.AirportDao;
 import com.unicorn.aems.app.dagger.App;
-
-import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +11,14 @@ import javax.inject.Inject;
 
 import me.yokeyword.indexablerv.PinyinUtil;
 import rx.Observable;
-import rx.functions.Action1;
 
 @App
-public class AirportRepository {
+public class AirportRepositoryImpl implements AirportRepository {
 
     private AirportDao airportDao;
 
     @Inject
-    public AirportRepository(AirportDao airportDao) {
+    public AirportRepositoryImpl(AirportDao airportDao) {
         this.airportDao = airportDao;
     }
 
@@ -43,6 +39,7 @@ public class AirportRepository {
     }
 
     private Observable<List<Airport>> network() {
+        // 模拟下 network
         return Observable.just(AIRPORT_NAME_STR)
                 .map(airportNameStr -> airportNameStr.split("机场"))
                 .map(airportNames -> {
@@ -53,23 +50,16 @@ public class AirportRepository {
                     }
                     return airports;
                 })
-                .doOnNext(
-                        airports -> airportDao.rx().insertOrReplaceInTx(airports).subscribe(new Action1<Iterable<Airport>>() {
-                            @Override
-                            public void call(Iterable<Airport> airports) {
-
-                            }
-                        }));
+                .flatMap(airports -> airportDao.rx().insertOrReplaceInTx(airports))
+                .map(airports -> (List<Airport>) airports);
     }
 
     public Observable<List<Airport>> getAirports(String keyword) {
         if (isLocalAvailable()) {
-            QueryBuilder queryBuilder = airportDao.queryBuilder();
-            WhereCondition condition = queryBuilder.or(AirportDao.Properties.Pinyin.like("%" + keyword + "%"),
-                    AirportDao.Properties.Name.like("%" + keyword + "%"));
-            return airportDao.queryBuilder()
-                    .where(condition)
-                    .rx().list();
+            return airportDao.queryBuilder().whereOr(
+                    AirportDao.Properties.Name.like("%" + keyword + "%"),
+                    AirportDao.Properties.Pinyin.like("%" + keyword.toLowerCase() + "%")
+            ).rx().list();
         } else {
             return getAirports();
         }
