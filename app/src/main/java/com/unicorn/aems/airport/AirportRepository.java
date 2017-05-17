@@ -4,6 +4,7 @@ import com.unicorn.aems.airport.model.Airport;
 import com.unicorn.aems.airport.model.AirportDao;
 import com.unicorn.aems.app.dagger.App;
 
+import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
@@ -61,10 +62,14 @@ public class AirportRepository {
                         }));
     }
 
-    public Observable<List<Airport>> getAirportsByKeyword(String keyword) {
+    public Observable<List<Airport>> getAirports(String keyword) {
         if (isLocalAvailable()) {
-            WhereCondition or = airportDao.queryBuilder().or(AirportDao.Properties.Pinyin.like("%" + keyword + "%"), AirportDao.Properties.Name.like("%" + keyword + "%"));
-            return airportDao.queryBuilder().where(or).rx().list();
+            QueryBuilder queryBuilder = airportDao.queryBuilder();
+            WhereCondition condition = queryBuilder.or(AirportDao.Properties.Pinyin.like("%" + keyword + "%"),
+                    AirportDao.Properties.Name.like("%" + keyword + "%"));
+            return airportDao.queryBuilder()
+                    .where(condition)
+                    .rx().list();
         } else {
             return getAirports();
         }

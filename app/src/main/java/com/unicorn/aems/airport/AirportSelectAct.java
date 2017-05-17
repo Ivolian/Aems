@@ -3,21 +3,23 @@ package com.unicorn.aems.airport;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.utils.ColorUtils;
+import com.unicorn.aems.utils.DensityUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.concurrent.TimeUnit;
@@ -26,7 +28,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.yokeyword.indexablerv.IndexableLayout;
-import rx.functions.Action1;
 
 public class AirportSelectAct extends BaseAct {
 
@@ -42,43 +43,47 @@ public class AirportSelectAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        addBackListener();
-        s();
+        copeBack();
+        copeSearch();
         initIndexableLayout();
     }
 
-    private void addBackListener() {
+    /**
+     * 处理回退
+     */
+    private void copeBack() {
         RxView.clicks(findViewById(R.id.flBack))
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> finish());
     }
 
-    @BindView(R.id.llSearch)
-    LinearLayout llSearch;
-
+    /**
+     * 按名称或拼音查询机场
+     */
     @BindView(R.id.etSearch)
     EditText etSearch;
 
-    private void s() {
+    @Inject
+    DensityUtils densityUtils;
+
+    private void copeSearch() {
         GradientDrawable gradientDrawable = new GradientDrawable();
-        gradientDrawable.setCornerRadius(20);
+        gradientDrawable.setCornerRadius(densityUtils.dp2px(4));
         gradientDrawable.setColor(colorUtils.getColor(R.color.md_grey_200));
-        llSearch.setBackground(gradientDrawable);
+        etSearch.setBackground(gradientDrawable);
+        Drawable drawable = new IconicsDrawable(this)
+                .icon(Ionicons.Icon.ion_ios_search)
+                .colorRes(R.color.colorPrimary)
+                .sizeDp(14);
 
-
-        RxView.touches(llSearch)
-                .map(MotionEvent::getAction)
-                .filter(action -> action == MotionEvent.ACTION_DOWN)
-                .subscribe(action -> etSearch.requestFocus());
+        etSearch.setCompoundDrawablePadding(20);
+        etSearch.setCompoundDrawables(drawable, null, null, null);
 
         RxTextView.afterTextChangeEvents(etSearch)
-                .map(event -> etSearch.toString().trim())
-                .subscribe(keyword -> {
-                    airportResitory.getAirportsByKeyword(keyword).subscribe(airports -> {
-                        if (airports.size() != 0)
-                            airportSelectAdapter.setDatas(airports);
-                    });
-                });
+                .map(event -> event.editable().toString().trim())
+                .flatMap(keyword -> airportRepository.getAirports(keyword))
+                .filter(airports -> airports.size() != 0)
+                .subscribe(airports -> airportSelectAdapter.setDatas(airports));
     }
 
 
@@ -92,7 +97,7 @@ public class AirportSelectAct extends BaseAct {
     AirportSelectAdapter airportSelectAdapter;
 
     @Inject
-    AirportRepository airportResitory;
+    AirportRepository airportRepository;
 
     private void initIndexableLayout() {
         indexableLayout.setLayoutManager(new LinearLayoutManager(this));
@@ -101,7 +106,7 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportResitory.getAirports().subscribe(airports -> airportSelectAdapter.setDatas(airports));
+        airportRepository.getAirports().subscribe(airports -> airportSelectAdapter.setDatas(airports));
     }
 
     private void setCenterOverlay() {
