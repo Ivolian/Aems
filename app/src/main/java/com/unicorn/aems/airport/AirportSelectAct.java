@@ -16,6 +16,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
+import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.respository.AirportRepository;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -23,6 +24,7 @@ import com.unicorn.aems.utils.ColorUtils;
 import com.unicorn.aems.utils.DensityUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -109,7 +111,9 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportRepository.getAirports().subscribe(airports -> airportSelectAdapter.setDatas(airports));
+        airportRepository.getAirports().subscribe((List<Airport> airports) -> {
+            airportSelectAdapter.setDatas(airports);
+        });
     }
 
     private void setCenterOverlay() {
