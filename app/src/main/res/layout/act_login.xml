@@ -155,11 +155,17 @@
             android:layout_marginTop="24dp" />
 
         <com.unicorn.aems.finger.FingerPrinterView
-            android:visibility="invisible"
             android:id="@+id/fingerPrinterView"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
+            android:layout_marginTop="48dp"
+            android:visibility="invisible" />
+
+        <com.mattprecious.swirl.SwirlView
+            android:id="@+id/swirlView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="48dp" />
 
     </LinearLayout>

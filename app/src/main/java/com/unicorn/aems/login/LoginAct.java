@@ -11,21 +11,28 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
 import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.AirportAct;
+import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
 import com.unicorn.aems.push.PushUtils;
 import com.unicorn.aems.utils.ToastUtils;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +54,11 @@ public class LoginAct extends BaseAct {
     }
 
     @Override
+    protected boolean useRxBus() {
+        return true;
+    }
+
+    @Override
     protected void inject() {
         AppComponentProvider.provide().inject(this);
     }
@@ -60,6 +72,13 @@ public class LoginAct extends BaseAct {
         copeEye();
         copeClear();
         copeFinger();
+
+        List<SwirlView.State> states = Arrays.asList(SwirlView.State.ON, SwirlView.State.ERROR, SwirlView.State.OFF);
+
+        RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
+            swirlView.setState(states.get(new Random().nextInt(3)));
+//                login();
+        });
     }
 
     /**
@@ -71,25 +90,23 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.tvAirport)
     TextView tvAirport;
 
+    @Subscribe(tags = {@Tag(Constant.SELECT_AIRPORT)})
+    public void subscribeAirport(Airport airport) {
+        tvAirport.setText(airport.getName());
+    }
+
+
     private void copeAirport() {
-        RxView.clicks(llAirport).subscribe(aVoid -> startAirportAct());
+        RxView.clicks(llAirport).subscribe(aVoid -> selectAirport());
     }
 
-    private void startAirportAct() {
-        Intent intent = new Intent(this, AirportAct.class);
-        startActivityForResult(intent, Constant.GENERAL_REQUEST_CODE);
+    private void selectAirport() {
+        startActivity(new Intent(this, AirportAct.class));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Constant.AIRPORT_RESULT_CODE) {
-            String airportName = data.getStringExtra(Constant.AIRPORT_NAME);
-            tvAirport.setText(airportName);
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
+    @BindView(R.id.swirlView)
+    SwirlView swirlView;
 
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
@@ -196,9 +213,7 @@ public class LoginAct extends BaseAct {
     private void enableOrDisableLogin() {
         if (!TextUtils.isEmpty(etAccount.getText()) && !TextUtils.isEmpty(etPwd.getText())) {
             btnLogin.enable();
-            RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
-                login();
-            });
+
         } else {
             btnLogin.disable();
         }

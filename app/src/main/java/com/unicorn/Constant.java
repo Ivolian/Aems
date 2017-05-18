@@ -8,4 +8,6 @@ public class Constant {
 
     public static final String AIRPORT_NAME = "AIRPORT_NAME";
 
+    public static final String SELECT_AIRPORT = "SELECT_AIRPORT";
+
 }

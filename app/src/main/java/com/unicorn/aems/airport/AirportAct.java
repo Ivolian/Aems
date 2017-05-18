@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.widget.EditText;
 
+import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -153,18 +154,12 @@ public class AirportAct extends BaseAct {
      * setOnItemContentClickListener.
      */
     private void setOnItemContentClickListener() {
-        airportAdapter.setOnItemContentClickListener((v, originalPosition, currentPosition, entity) -> {
+        airportAdapter.setOnItemContentClickListener((v, originalPosition, currentPosition, airport) -> {
             if (originalPosition >= 0) {
-                finishAfterSetResult(entity.getName());
+                RxBus.get().post(Constant.SELECT_AIRPORT, airport);
+                finish();
             }
         });
-    }
-
-    private void finishAfterSetResult(String airportName) {
-        Intent intent = new Intent();
-        intent.putExtra(Constant.AIRPORT_NAME, airportName);
-        setResult(Constant.AIRPORT_RESULT_CODE, intent);
-        finish();
     }
 
 }
