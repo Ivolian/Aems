@@ -2,7 +2,7 @@ package com.unicorn.aems.app.dagger;
 
 import android.app.Application;
 
-import com.unicorn.aems.login.DaoSession;
+import com.unicorn.aems.airport.entity.DaoSession;
 
 import dagger.internal.Preconditions;
 

@@ -3,7 +3,7 @@
     android:id="@+id/tvIndex"
     android:layout_width="match_parent"
     android:layout_height="28dp"
-    android:background="@color/md_grey_100"
+    android:background="@color/md_grey_50"
     android:gravity="center_vertical"
     android:paddingLeft="@dimen/standard_padding"
     android:textColor="@color/md_black"

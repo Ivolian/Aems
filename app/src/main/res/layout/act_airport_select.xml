@@ -4,73 +4,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_white"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/titlebar_height"
+        android:layout_height="@dimen/search_bar_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <FrameLayout
-            android:id="@+id/flBack"
-            android:layout_width="@dimen/titlebar_height"
-            android:layout_height="@dimen/titlebar_height">
-
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:layout_width="@dimen/arrow_size"
-                android:layout_height="@dimen/arrow_size"
-                android:layout_gravity="center"
-                app:iiv_color="@color/colorPrimary"
-                app:iiv_icon="ion-ios-arrow-left" />
-
-        </FrameLayout>
-
-        <TextView
+        <EditText
+            android:id="@+id/etSearch"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="32dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="选择机场"
+            android:hint="机场名称或拼音"
+            android:paddingLeft="16dp"
+            android:singleLine="true"
             android:textColor="@color/md_black"
-            android:textSize="18dp" />
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="取消"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp" />
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/etSearch"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginBottom="@dimen/standard_padding"
-        android:layout_marginLeft="@dimen/standard_padding"
-        android:layout_marginRight="@dimen/standard_padding"
-        android:background="@null"
-        android:hint="输入机场名称或拼音"
-        android:paddingLeft="16dp"
-        android:singleLine="true"
-        android:textColor="@color/md_black"
-        android:textColorHint="@color/md_grey_500"
-        android:textSize="14dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/md_grey_300" />
 
-    <me.yokeyword.indexablerv.IndexableLayout
-        android:id="@+id/indexableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:indexBar_background="@android:color/transparent"
-        app:indexBar_layout_width="24dp"
-        app:indexBar_selectedTextColor="@color/md_blue_300"
-        app:indexBar_textColor="@color/colorPrimary"
-        app:indexBar_textSize="13dp"
-        app:indexBar_textSpace="8dp" />
+
+
+
+
+        <me.yokeyword.indexablerv.IndexableLayout
+            android:id="@+id/indexableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:indexBar_background="@android:color/transparent"
+            app:indexBar_layout_width="24dp"
+            app:indexBar_selectedTextColor="@color/colorPrimary"
+            app:indexBar_textColor="@color/colorPrimary"
+            app:indexBar_textSize="13dp"
+            app:indexBar_textSpace="8dp" />
+
 
 </LinearLayout>
 

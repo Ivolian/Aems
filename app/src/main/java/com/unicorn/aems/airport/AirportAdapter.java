@@ -18,12 +18,12 @@ import butterknife.ButterKnife;
 import me.yokeyword.indexablerv.IndexableAdapter;
 
 @App
-public class AirportSelectAdapter extends IndexableAdapter<Airport> {
+public class AirportAdapter extends IndexableAdapter<Airport> {
 
     private LayoutInflater layoutInflater;
 
     @Inject
-    public AirportSelectAdapter(Context context) {
+    public AirportAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
     }
 

@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.widget.EditText;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
@@ -31,8 +30,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.yokeyword.indexablerv.IndexableLayout;
+import rx.Subscriber;
 
-public class AirportSelectAct extends BaseAct {
+public class AirportAct extends BaseAct {
 
     @Override
     protected int layoutResId() {
@@ -46,7 +46,7 @@ public class AirportSelectAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        copeBack();
+//        copeBack();
         copeSearch();
         initIndexableLayout();
     }
@@ -55,9 +55,9 @@ public class AirportSelectAct extends BaseAct {
      * 处理回退
      */
     private void copeBack() {
-        RxView.clicks(findViewById(R.id.flBack))
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> finish());
+//        RxView.clicks(findViewById(R.id.flBack))
+//                .throttleFirst(2, TimeUnit.SECONDS)
+//                .subscribe(aVoid -> finish());
     }
 
     /**
@@ -75,15 +75,18 @@ public class AirportSelectAct extends BaseAct {
     private void copeSearch() {
         // cope bg
         GradientDrawable gradientDrawable = new GradientDrawable();
-        gradientDrawable.setCornerRadius(densityUtils.dp2px(4));
-        gradientDrawable.setColor(colorUtils.getColor(R.color.md_grey_200));
+        gradientDrawable.setCornerRadius(densityUtils.dp2px(5));
+        gradientDrawable.setStroke(1, colorUtils.getColor(R.color.md_grey_300));
+        gradientDrawable.setColor(
+                colorUtils.getColor(R.color.md_grey_50)
+        );
         etSearch.setBackground(gradientDrawable);
-
+        etSearch.setHintTextColor(colorUtils.getColor(R.color.md_grey_400));
         // cope left drawable
         Drawable left = new IconicsDrawable(this)
                 .icon(Ionicons.Icon.ion_ios_search)
                 .colorRes(R.color.colorPrimary)
-                .sizeDp(14);
+                .sizeDp(17);
         etSearch.setCompoundDrawablePadding(densityUtils.dp2px(8));
         etSearch.setCompoundDrawables(left, null, null, null);
 
@@ -100,8 +103,9 @@ public class AirportSelectAct extends BaseAct {
     @BindView(R.id.indexableLayout)
     IndexableLayout indexableLayout;
 
+
     @Inject
-    AirportSelectAdapter airportSelectAdapter;
+    AirportAdapter airportSelectAdapter;
 
     private void initIndexableLayout() {
         indexableLayout.setLayoutManager(new LinearLayoutManager(this));
@@ -110,9 +114,33 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportService.get().subscribe((List<Airport> airports) -> {
-            airportSelectAdapter.setDatas(airports);
-        });
+
+//        Dialog dialog = new AlertDialog.Builder(this)
+//                .setTitle("查询数据中")
+//                .setCancelable(false)
+//                .show();
+
+        airportService.get()
+                .delay(3, TimeUnit.SECONDS)
+                .subscribe(new Subscriber<List<Airport>>() {
+                    @Override
+                    public void onCompleted() {
+
+//                        spinKitView.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        e.getCause();
+                    }
+
+                    @Override
+                    public void onNext(List<Airport> airports) {
+//                        airportSelectAdapter.notifyDataSetChanged();
+                        airportSelectAdapter.setDatas(airports);
+                    }
+                });
     }
 
     private void setCenterOverlay() {

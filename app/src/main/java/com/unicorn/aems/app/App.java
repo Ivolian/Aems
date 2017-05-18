@@ -2,9 +2,9 @@ package com.unicorn.aems.app;
 
 import android.app.Application;
 
+import com.unicorn.aems.airport.entity.DaoMaster;
+import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.aems.login.DaoMaster;
-import com.unicorn.aems.login.DaoSession;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -19,7 +19,7 @@ public class App extends Application {
 
     private void init() {
 //        JPushInterface.init(this);
-        DaoSession daoSession = initDb();
+        DaoSession daoSession = initDaoSession();
         AppComponentProvider.init(this, daoSession);
 //        initFragmentation();
     }
@@ -32,7 +32,7 @@ public class App extends Application {
 //                .install();
 //    }
 //
-    private DaoSession initDb() {
+    private DaoSession initDaoSession() {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "aems-db");
         Database db = helper.getWritableDb();
         return new DaoMaster(db).newSession();

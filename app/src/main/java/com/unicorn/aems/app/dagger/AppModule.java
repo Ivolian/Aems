@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.unicorn.aems.airport.entity.AirportDao;
-import com.unicorn.aems.airport.respository.AirportRepository;
-import com.unicorn.aems.login.DaoSession;
+import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.login.LoginInfoDao;
 
 import dagger.Module;

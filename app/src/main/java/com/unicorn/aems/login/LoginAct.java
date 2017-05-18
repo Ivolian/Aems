@@ -18,7 +18,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
-import com.unicorn.aems.airport.AirportSelectAct;
+import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
@@ -76,7 +76,7 @@ public class LoginAct extends BaseAct {
     }
 
     private void startAirportAct() {
-        Intent intent = new Intent(this, AirportSelectAct.class);
+        Intent intent = new Intent(this, AirportAct.class);
         startActivityForResult(intent, Constant.GENERAL_REQUEST_CODE);
     }
 
