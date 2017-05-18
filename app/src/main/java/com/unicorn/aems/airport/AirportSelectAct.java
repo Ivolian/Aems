@@ -17,7 +17,7 @@ import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
-import com.unicorn.aems.airport.respository.AirportRepository;
+import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.utils.ColorUtils;
@@ -70,7 +70,7 @@ public class AirportSelectAct extends BaseAct {
     DensityUtils densityUtils;
 
     @Inject
-    AirportRepository airportRepository;
+    AirportService airportService;
 
     private void copeSearch() {
         // cope bg
@@ -90,8 +90,7 @@ public class AirportSelectAct extends BaseAct {
         // cope event
         RxTextView.afterTextChangeEvents(etSearch)
                 .map(event -> event.editable().toString().trim())
-                .flatMap(keyword -> airportRepository.getAirports(keyword))
-                .filter(airports -> airports.size() != 0)
+                .flatMap(keyword -> airportService.getByNameOrPinyin(keyword))
                 .subscribe(airports -> airportSelectAdapter.setDatas(airports));
     }
 
@@ -111,7 +110,7 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportRepository.getAirports().subscribe((List<Airport> airports) -> {
+        airportService.getAll().subscribe((List<Airport> airports) -> {
             airportSelectAdapter.setDatas(airports);
         });
     }
