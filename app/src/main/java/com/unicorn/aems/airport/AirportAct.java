@@ -91,7 +91,7 @@ public class AirportAct extends BaseAct {
         etSearch.setCompoundDrawablePadding(densityUtils.dp2px(8));
         etSearch.setCompoundDrawables(left, null, null, null);
 
-        // 事件
+        // 查询
         RxTextView.afterTextChangeEvents(etSearch)
                 .map(event -> event.editable().toString().trim())
                 .flatMap(keyword -> airportService.getByNameOrPinyin(keyword))
