@@ -15,7 +15,7 @@ import rx.Observable;
 @App
 public class AirportRepository {
 
-    private AirportDao airportDao;
+    private final AirportDao airportDao;
 
     @Inject
     public AirportRepository(AirportDao airportDao) {

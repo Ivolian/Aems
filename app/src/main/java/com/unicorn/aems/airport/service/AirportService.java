@@ -16,7 +16,7 @@ import rx.Observable;
 @App
 public class AirportService implements Service<Airport> {
 
-    private AirportRepository airportRepository;
+    private final AirportRepository airportRepository;
 
     @Inject
     public AirportService(AirportRepository airportRepository) {

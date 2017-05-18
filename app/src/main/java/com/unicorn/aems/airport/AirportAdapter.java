@@ -20,7 +20,7 @@ import me.yokeyword.indexablerv.IndexableAdapter;
 @App
 public class AirportAdapter extends IndexableAdapter<Airport> {
 
-    private LayoutInflater layoutInflater;
+    private final LayoutInflater layoutInflater;
 
     @Inject
     public AirportAdapter(Context context) {
