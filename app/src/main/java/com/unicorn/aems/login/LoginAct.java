@@ -67,7 +67,7 @@ public class LoginAct extends BaseAct {
     protected void init(Bundle savedInstanceState) {
         StatusBarUtil.setColor(this, Color.WHITE, 50);
 
-        copeAirport();
+        initLlAirport();
         copeAccountAndPwd();
         copeEye();
         copeClear();
@@ -81,23 +81,22 @@ public class LoginAct extends BaseAct {
         });
     }
 
-    /**
-     * copeAirport
-     */
+
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
 
     @BindView(R.id.tvAirport)
     TextView tvAirport;
 
-    @Subscribe(tags = {@Tag(Constant.SELECT_AIRPORT)})
-    public void subscribeAirport(Airport airport) {
+    @Subscribe(tags = {@Tag(Constant.AIRPORT_SELECTED)})
+    public void airportOnSelected(Airport airport) {
         tvAirport.setText(airport.getName());
     }
 
 
-    private void copeAirport() {
-        RxView.clicks(llAirport).subscribe(aVoid -> selectAirport());
+    private void initLlAirport() {
+        RxView.clicks(llAirport)
+                .subscribe(aVoid -> toastUtils.show("s"));
     }
 
     private void selectAirport() {

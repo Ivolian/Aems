@@ -1,6 +1,5 @@
 package com.unicorn.aems.airport;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -156,7 +155,7 @@ public class AirportAct extends BaseAct {
     private void setOnItemContentClickListener() {
         airportAdapter.setOnItemContentClickListener((v, originalPosition, currentPosition, airport) -> {
             if (originalPosition >= 0) {
-                RxBus.get().post(Constant.SELECT_AIRPORT, airport);
+                RxBus.get().post(Constant.AIRPORT_SELECTED, airport);
                 finish();
             }
         });
