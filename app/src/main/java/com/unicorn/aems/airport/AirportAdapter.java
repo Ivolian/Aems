@@ -29,13 +29,13 @@ public class AirportAdapter extends IndexableAdapter<Airport> {
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
-        View view = layoutInflater.inflate(R.layout.index_airport_select, parent, false);
+        View view = layoutInflater.inflate(R.layout.index_airport, parent, false);
         return new IndexViewHolder(view);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateContentViewHolder(ViewGroup parent) {
-        View view = layoutInflater.inflate(R.layout.item_airport_select, parent, false);
+        View view = layoutInflater.inflate(R.layout.item_airport, parent, false);
         return new ItemViewHolder(view);
     }
 

@@ -69,7 +69,7 @@ dependencies {
     compile(name: 'indexablerecyclerview', ext: 'aar')
     debugCompile 'im.dino:dbinspector:3.4.1@aar'
     compile 'com.github.promeg:tinypinyin:2.0.3'
-    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    compile 'com.orhanobut:logger:1.15'
 //    compile 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
 
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
