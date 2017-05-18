@@ -6,6 +6,6 @@ import rx.Observable;
 
 public interface Service<T> {
 
-    Observable<List<T>> getAll();
+    Observable<List<T>> get();
 
 }

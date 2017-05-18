@@ -32,10 +32,9 @@ public class AirportRepository {
         return airportDao.queryBuilder().whereOr(conditionName, conditionPinyin).rx().list();
     }
 
-    public Observable<List<Airport>> insertOrReplace(List<Airport> airports) {
-        return airportDao.rx()
-                .insertOrReplaceInTx(airports)
-                .map(airports1 -> (List<Airport>) airports1);
+    public Observable<List<Airport>> insertOrReplace(List<Airport> list) {
+        return airportDao.rx().insertOrReplaceInTx(list)
+                .map(airports -> (List<Airport>) airports);
     }
 
 }

@@ -110,7 +110,7 @@ public class AirportSelectAct extends BaseAct {
         indexableLayout.setAdapter(airportSelectAdapter);
         addItemDecoration();
         setOnItemContentClickListener();
-        airportService.getAll().subscribe((List<Airport> airports) -> {
+        airportService.get().subscribe((List<Airport> airports) -> {
             airportSelectAdapter.setDatas(airports);
         });
     }
