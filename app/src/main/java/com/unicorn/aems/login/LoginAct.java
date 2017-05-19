@@ -1,5 +1,6 @@
 package com.unicorn.aems.login;
 
+import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.FileUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.jaeger.library.StatusBarUtil;
@@ -18,10 +20,13 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
+import com.orhanobut.logger.Logger;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.unicorn.Constant;
 import com.unicorn.MenuService;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
+import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
@@ -31,6 +36,7 @@ import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
 import com.unicorn.aems.utils.ToastUtils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -73,13 +79,29 @@ public class LoginAct extends BaseAct {
         copeEye();
         copeClear();
         copeFinger();
-
+ requestRx();
         List<SwirlView.State> states = Arrays.asList(SwirlView.State.ON, SwirlView.State.ERROR, SwirlView.State.OFF);
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
 //            swirlView.setState(states.get(new Random().nextInt(3)));
                 login();
         });
+    }
+
+    private void requestRx(){
+        RxPermissions rxPermissions = new RxPermissions(this); // where this is an Activity instance
+
+        rxPermissions
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(granted -> {
+                    if (granted) { // Always true pre-M
+                        toastUtils.show("cool");
+                        s();
+                        // I can control the camera now
+                    } else {
+                        // Oups permission denied
+                    }
+                });
     }
 
     /**
@@ -427,7 +449,12 @@ public class LoginAct extends BaseAct {
     }
 
     private void s (){
-//        FileUtils.copyDir(        getDatabasePath("notes-db-encrypted"), )
+        boolean result = FileUtils.copyFile(
+                getDatabasePath("aems-db"),
+                new File(App.baseDir(), "aems-db")
+        );
+
+        Logger.d(result);
     }
 
 

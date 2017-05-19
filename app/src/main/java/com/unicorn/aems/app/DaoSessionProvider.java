@@ -4,17 +4,26 @@ import android.app.Application;
 
 import com.unicorn.aems.airport.entity.DaoMaster;
 import com.unicorn.aems.airport.entity.DaoSession;
+import com.unicorn.aems.base.BaseProvider;
 
 import org.greenrobot.greendao.database.Database;
 
-public class DaoSessionProvider {
+/**
+ * 数据库的初始化
+ */
+public class DaoSessionProvider implements BaseProvider<DaoSession> {
 
-    public  final boolean ENCRYPTED = false;
+    private final DaoMaster daoMaster;
 
-    public DaoSession provide(Application application) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(application.getApplicationContext(), ENCRYPTED ? "notes-db-encrypted" : "notes-db");
-        Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
-        return new DaoMaster(db).newSession();
+    public DaoSessionProvider(Application application, String dbName, boolean encrypted, String dbPwd) {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(application.getApplicationContext(), dbName);
+        Database db = encrypted ? helper.getEncryptedWritableDb(dbPwd) : helper.getWritableDb();
+        daoMaster = new DaoMaster(db);
+    }
+
+    @Override
+    public DaoSession provide() {
+        return daoMaster.newSession();
     }
 
 }

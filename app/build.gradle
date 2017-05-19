@@ -80,5 +80,6 @@ dependencies {
     compile 'com.blankj:utilcode:1.5.1'
     compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
 }

@@ -3,6 +3,8 @@
     package="com.unicorn.aems">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER"/>
     <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"/>

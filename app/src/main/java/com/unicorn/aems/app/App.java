@@ -1,8 +1,10 @@
 package com.unicorn.aems.app;
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
@@ -24,7 +26,7 @@ public class App extends Application {
 //        }
         Utils.init(this);
         ARouter.init(this);
-        DaoSession daoSession = new DaoSessionProvider().provide(this);
+        DaoSession daoSession = initDb();
         AppComponentProvider.init(this, daoSession);
 //        Stetho.initializeWithDefaults(this);
 //        initFragmentation();
@@ -39,5 +41,13 @@ public class App extends Application {
 //    }
 //
 
+    private DaoSession initDb() {
+        String dbPwd = DeviceUtils.getAndroidID();
+        return new DaoSessionProvider(this, "aems-db", true, dbPwd).provide();
+    }
+
+    public static String baseDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+    }
 
 }
