@@ -4,7 +4,7 @@ import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.respository.AirportLocalRepository;
 import com.unicorn.aems.airport.respository.AirportNetworkRepository;
 import com.unicorn.aems.app.dagger.App;
-import com.unicorn.aems.base.Service;
+import com.unicorn.aems.base.BaseService;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ import javax.inject.Inject;
 import rx.Observable;
 
 @App
-public class AirportService implements Service<Airport> {
+public class AirportBaseService implements BaseService<Airport> {
 
     private final AirportLocalRepository localRepository;
 
     private final AirportNetworkRepository networkRepository;
 
     @Inject
-    public AirportService(AirportLocalRepository localRepository, AirportNetworkRepository networkRepository) {
+    public AirportBaseService(AirportLocalRepository localRepository, AirportNetworkRepository networkRepository) {
         this.localRepository = localRepository;
         this.networkRepository = networkRepository;
     }
@@ -41,7 +41,8 @@ public class AirportService implements Service<Airport> {
     }
 
     private Observable<List<Airport>> network() {
-        return networkRepository.list().flatMap(localRepository::insertOrReplace);
+        return networkRepository.list().flatMap(
+                localRepository::insertOrReplace);
     }
 
 }

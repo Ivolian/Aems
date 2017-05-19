@@ -77,7 +77,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
-
-
+    compile 'com.blankj:utilcode:1.5.1'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
 }

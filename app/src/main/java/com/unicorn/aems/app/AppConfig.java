@@ -6,8 +6,8 @@ public final class AppConfig {
     private AppConfig() {
     }
 
-    public static final String BASE_REQUEST_URL = "http://android.reader.qq.com/v6_3_9/";
+    public static final String BASE_REQUEST_URL = "http://192.168.7.71:8008/aems/";
 
-    public static final String BASE_COVER_URL = "http://wfqqreader.3g.qq.com/cover/";
+//    public static final String BASE_COVER_URL = "http://wfqqreader.3g.qq.com/cover/";
 
 }

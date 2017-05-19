@@ -4,7 +4,7 @@ import java.util.List;
 
 import rx.Observable;
 
-public interface Service<T> {
+public interface BaseService<T> {
 
     Observable<List<T>> get();
 

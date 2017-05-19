@@ -3,10 +3,12 @@ package com.unicorn.aems.app.dagger;
 import android.app.Application;
 import android.content.Context;
 
+import com.unicorn.MenuService;
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.RetrofitProvider;
 import com.unicorn.aems.login.LoginInfoDao;
+import com.unicorn.aems.login.LoginService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -56,10 +58,16 @@ public class AppModule {
         return retrofitProvider.provide();
     }
 
-//    @App
-//    @Provides
-//    BookCategoryService provideBookService(Retrofit retrofit) {
-//        return retrofit.fetchData(BookCategoryService.class);
-//    }
+    @App
+    @Provides
+    LoginService provideLoginService(Retrofit retrofit) {
+        return retrofit.create(LoginService.class);
+    }
+
+    @App
+    @Provides
+    MenuService provideMenuService(Retrofit retrofit) {
+        return retrofit.create(MenuService.class);
+    }
 
 }

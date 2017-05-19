@@ -19,21 +19,20 @@ import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
+import com.unicorn.MenuService;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
+import com.unicorn.aems.login.entity.Menu;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
 import com.unicorn.aems.utils.ToastUtils;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -42,6 +41,8 @@ import butterknife.BindView;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import zwh.com.lib.FPerException;
 import zwh.com.lib.RxFingerPrinter;
 
@@ -76,8 +77,8 @@ public class LoginAct extends BaseAct {
         List<SwirlView.State> states = Arrays.asList(SwirlView.State.ON, SwirlView.State.ERROR, SwirlView.State.OFF);
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
-            swirlView.setState(states.get(new Random().nextInt(3)));
-//                login();
+//            swirlView.setState(states.get(new Random().nextInt(3)));
+                login();
         });
     }
 
@@ -228,7 +229,66 @@ public class LoginAct extends BaseAct {
     @Inject
     PushUtils pushUtils;
 
+    @Inject
+    LoginService loginService;
+
+    @Inject
+    MenuService menuService;
+
+    private void getMenu(SessionInfo sessionInfo){
+        String cookie = "JSESSIONID=" +sessionInfo.getJsessionid();
+        String userId = sessionInfo.getCurrentUser().getUserId();
+        menuService.getMenu(cookie,userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Menu>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                toastUtils.show(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<Menu> menus) {
+                        toastUtils.show("");
+
+                    }
+                });
+
+    }
+
     private void login() {
+
+
+        loginService.login("admin","123456")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SessionInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                        toastUtils.show("com");
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        toastUtils.show("err");
+                    }
+
+                    @Override
+                    public void onNext(SessionInfo sessionInfo) {
+                        getMenu(sessionInfo);
+//                        Object currentUser =map.get("currentUser");
+//                        Map m  = (Map)currentUser;8
+                    }
+                });
+
 //        KProgressHUD kProgressHUD = KProgressHUD.fetchData(this)
 //                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
 //                .setLabel("登录中")
@@ -236,8 +296,8 @@ public class LoginAct extends BaseAct {
 //                .setAnimationSpeed(2)
 //                .setDimAmount(0.5f)
 //                .show();
-        Set<String> tags = new HashSet<>();
-        tags.add(etAccount.getText().toString().trim());
+//        Set<String> tags = new HashSet<>();
+//        tags.add(etAccount.getText().toString().trim());
 
 //        Observable.just("").delay(1, TimeUnit.SECONDS).subscribe(ss -> {
 //            pushUtils.setTags(tags, (i, s, set) -> {
@@ -364,6 +424,10 @@ public class LoginAct extends BaseAct {
         if (rxfingerPrinter != null) {
             rxfingerPrinter.unSubscribe(this);
         }
+    }
+
+    private void s (){
+//        FileUtils.copyDir(        getDatabasePath("notes-db-encrypted"), )
     }
 
 
