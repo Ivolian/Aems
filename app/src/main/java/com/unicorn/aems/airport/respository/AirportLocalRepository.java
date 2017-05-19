@@ -13,12 +13,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 @App
-public class AirportRepository {
+public class AirportLocalRepository {
 
     private final AirportDao airportDao;
 
     @Inject
-    public AirportRepository(AirportDao airportDao) {
+    public AirportLocalRepository(AirportDao airportDao) {
         this.airportDao = airportDao;
     }
 
