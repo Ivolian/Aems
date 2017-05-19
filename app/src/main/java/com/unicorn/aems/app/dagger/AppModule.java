@@ -5,10 +5,12 @@ import android.content.Context;
 
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
+import com.unicorn.aems.app.RetrofitProvider;
 import com.unicorn.aems.login.LoginInfoDao;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 
 @Module
@@ -48,12 +50,12 @@ public class AppModule {
     }
 
 
-//    @App
-//    @Provides
-//    Retrofit provideRetrofit(RetrofitProvider retrofitProvider) {
-//        return retrofitProvider.provide();
-//    }
-//
+    @App
+    @Provides
+    Retrofit provideRetrofit(RetrofitProvider retrofitProvider) {
+        return retrofitProvider.provide();
+    }
+
 //    @App
 //    @Provides
 //    BookCategoryService provideBookService(Retrofit retrofit) {

@@ -74,7 +74,10 @@ dependencies {
     compile 'com.hwangjr.rxbus:rxbus:1.0.5'
     compile 'com.alibaba:arouter-api:1.2.1.1'
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.2.1'
-//    compile 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+
 
     //    compile 'com.wei.android.lib:fingerprintidentify:1.1.2'
 }
