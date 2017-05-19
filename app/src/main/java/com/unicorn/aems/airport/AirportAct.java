@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.widget.EditText;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -16,6 +17,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
+import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -31,6 +33,7 @@ import butterknife.BindView;
 import me.yokeyword.indexablerv.IndexableLayout;
 import rx.android.schedulers.AndroidSchedulers;
 
+@Route(path = RoutePath.AIRPORT)
 public class AirportAct extends BaseAct {
 
     @Override

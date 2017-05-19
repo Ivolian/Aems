@@ -1,6 +1,5 @@
 package com.unicorn.aems.login;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -21,11 +20,12 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
-import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
+import com.unicorn.aems.navigate.Navigator;
+import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
 import com.unicorn.aems.utils.ToastUtils;
 
@@ -81,9 +81,20 @@ public class LoginAct extends BaseAct {
         });
     }
 
-
+    /**
+     * 机场
+     */
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
+
+    @Inject
+    Navigator navigator;
+
+    private void initLlAirport() {
+        RxView.clicks(llAirport)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(aVoid -> navigator.navigateTo(RoutePath.AIRPORT));
+    }
 
     @BindView(R.id.tvAirport)
     TextView tvAirport;
@@ -91,16 +102,6 @@ public class LoginAct extends BaseAct {
     @Subscribe(tags = {@Tag(Constant.AIRPORT_SELECTED)})
     public void airportOnSelected(Airport airport) {
         tvAirport.setText(airport.getName());
-    }
-
-
-    private void initLlAirport() {
-        RxView.clicks(llAirport)
-                .subscribe(aVoid -> toastUtils.show("s"));
-    }
-
-    private void selectAirport() {
-        startActivity(new Intent(this, AirportAct.class));
     }
 
 

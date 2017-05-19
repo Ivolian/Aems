@@ -47,3 +47,9 @@ public static java.lang.String TABLENAME;
 -keep class **.R$* {
     <fields>;
 }
+
+-keep public class com.alibaba.android.arouter.routes.**{*;}
+-keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
+
+
+-ignorewarnings
