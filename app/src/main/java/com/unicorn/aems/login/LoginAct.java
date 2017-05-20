@@ -21,11 +21,11 @@ import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.unicorn.Constant;
+import com.unicorn.RxBusTag;
 import com.unicorn.MenuService;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
-import com.unicorn.aems.airport.respository.AirportLocalRepository;
+import com.unicorn.aems.airport.respository.AirportRepository;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.login.entity.LoginInfo;
@@ -78,7 +78,7 @@ public class LoginAct extends BaseAct {
 
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
-//            swirlView.setState(states.get(new Random().nextInt(3)));
+//            swirlView.setState(states.list(new Random().nextInt(3)));
                 login();
         });
     }
@@ -122,7 +122,7 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.tvAirport)
     TextView tvAirport;
 
-    @Subscribe(tags = {@Tag(Constant.AIRPORT_SELECTED)})
+    @Subscribe(tags = {@Tag(RxBusTag.AIRPORT_SELECTED)})
     public void airportOnSelected(Airport airport) {
         tvAirport.setText(airport.getName());
     }
@@ -319,7 +319,7 @@ public class LoginAct extends BaseAct {
                     @Override
                     public void onNext(SessionInfo sessionInfo) {
 //                        getMenu(sessionInfo);
-//                        Object currentUser =map.get("currentUser");
+//                        Object currentUser =map.list("currentUser");
 //                        Map m  = (Map)currentUser;8
                     }
                 });
@@ -349,14 +349,14 @@ public class LoginAct extends BaseAct {
     }
 
     @Inject
-    AirportLocalRepository airportLocalRepository;
+    AirportRepository airportRepository;
 
     private void onLoginSuccess(SessionInfo sessionInfo) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setAccount(etAccount.getText().toString().trim());
         loginInfo.setAccount(etPwd.getText().toString().trim());
         String airportName = tvAirport.getText().toString().trim();
-        airportLocalRepository.getByName(airportName)
+        airportRepository.uniqueByName(airportName)
                 .subscribe(airport -> {
                     loginInfo.setAirport(airport);
                     userService.saveLoginInfo(loginInfo);

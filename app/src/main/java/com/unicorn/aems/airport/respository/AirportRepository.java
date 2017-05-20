@@ -13,12 +13,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 @App
-public class AirportLocalRepository {
+public class AirportRepository {
 
     private final AirportDao airportDao;
 
     @Inject
-    public AirportLocalRepository(AirportDao airportDao) {
+    public AirportRepository(AirportDao airportDao) {
         this.airportDao = airportDao;
     }
 
@@ -26,21 +26,20 @@ public class AirportLocalRepository {
         return airportDao.queryBuilder().rx().list();
     }
 
-    public Observable<List<Airport>> listByNameOrPinyin(String keyword) {
-        WhereCondition conditionName = AirportDao.Properties.Name.like("%" + keyword + "%");
-        WhereCondition conditionPinyin = AirportDao.Properties.Pinyin.like("%" + keyword.toLowerCase() + "%");
-        return airportDao.queryBuilder().whereOr(conditionName, conditionPinyin).rx().list();
+    public Observable<List<Airport>> listByNameOrPinyin(String query) {
+        WhereCondition con1 = AirportDao.Properties.Name.like("%" + query + "%");
+        WhereCondition con2 = AirportDao.Properties.Pinyin.like("%" + query.toLowerCase() + "%");
+        return airportDao.queryBuilder().whereOr(con1, con2).rx().list();
+    }
+
+    public Observable<Airport> uniqueByName(String query) {
+        WhereCondition con = AirportDao.Properties.Name.eq(query);
+        return airportDao.queryBuilder().where(con).rx().unique();
     }
 
     public Observable<List<Airport>> insertOrReplace(List<Airport> list) {
         return airportDao.rx().insertOrReplaceInTx(list)
                 .map(airports -> (List<Airport>) airports);
-    }
-
-    public Observable<Airport> getByName(String name) {
-        return airportDao.queryBuilder()
-                .where(AirportDao.Properties.Name.eq(name))
-                .rx().unique();
     }
 
 }

@@ -15,7 +15,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
-import com.unicorn.Constant;
+import com.unicorn.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.navigate.RoutePath;
@@ -97,7 +97,7 @@ public class AirportAct extends BaseAct {
         // 查询
         RxTextView.afterTextChangeEvents(etSearch)
                 .map(event -> event.editable().toString().trim())
-                .flatMap(keyword -> airportService.getByNameOrPinyin(keyword))
+                .flatMap(query -> airportService.listByNameOrPinyin(query))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> airportAdapter.setDatas(airports));
     }
@@ -123,7 +123,7 @@ public class AirportAct extends BaseAct {
         setOnItemContentClickListener();
 
         // 加载列表
-        airportService.get().observeOn(AndroidSchedulers.mainThread())
+        airportService.list().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> airportAdapter.setDatas(airports));
     }
 
@@ -158,7 +158,7 @@ public class AirportAct extends BaseAct {
     private void setOnItemContentClickListener() {
         airportAdapter.setOnItemContentClickListener((v, originalPosition, currentPosition, airport) -> {
             if (originalPosition >= 0) {
-                RxBus.get().post(Constant.AIRPORT_SELECTED, airport);
+                RxBus.get().post(RxBusTag.AIRPORT_SELECTED, airport);
                 finish();
             }
         });
