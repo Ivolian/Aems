@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.blankj.utilcode.util.ConvertUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -18,10 +19,9 @@ import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.service.AirportService;
-import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
-import com.unicorn.aems.utils.DensityUtils;
+import com.unicorn.aems.navigate.RoutePath;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.concurrent.TimeUnit;
@@ -60,13 +60,10 @@ public class AirportAct extends BaseAct {
     }
 
     /**
-     * 按名称或拼音查询
+     * 按名称或拼音查询机场
      */
     @BindView(R.id.etSearch)
     EditText etSearch;
-
-    @Inject
-    DensityUtils densityUtils;
 
     @BindColor(R.color.md_grey_50)
     int grey50;
@@ -80,7 +77,7 @@ public class AirportAct extends BaseAct {
     private void initEtSearch() {
         // 背景
         GradientDrawable etSearchBg = new GradientDrawable();
-        etSearchBg.setCornerRadius(densityUtils.dp2px(5));
+        etSearchBg.setCornerRadius(ConvertUtils.dp2px(5));
         etSearchBg.setStroke(1, grey300);
         etSearchBg.setColor(grey50);
         etSearch.setBackground(etSearchBg);
@@ -91,13 +88,15 @@ public class AirportAct extends BaseAct {
                 .icon(Ionicons.Icon.ion_ios_search)
                 .colorRes(R.color.colorPrimary)
                 .sizeDp(17);
-        etSearch.setCompoundDrawablePadding(densityUtils.dp2px(8));
+        etSearch.setCompoundDrawablePadding(ConvertUtils.dp2px(8));
         etSearch.setCompoundDrawables(left, null, null, null);
 
         // 查询
         RxTextView.afterTextChangeEvents(etSearch)
                 .map(event -> event.editable().toString().trim())
                 .flatMap(query -> airportService.listByNameOrPinyin(query))
+                // indexableAdapter 有个 bug 不得不过滤下
+                .filter(airports -> airports.size() != 0)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> airportAdapter.setDatas(airports));
     }
@@ -123,8 +122,13 @@ public class AirportAct extends BaseAct {
         setOnItemContentClickListener();
 
         // 加载列表
-        airportService.list().observeOn(AndroidSchedulers.mainThread())
-                .subscribe(airports -> airportAdapter.setDatas(airports));
+        airportService.list()
+                // indexableAdapter 有个 bug 不得不过滤下
+                .filter(airports -> airports.size() != 0)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(airports -> airportAdapter.setDatas(airports)
+                );
+
     }
 
 
@@ -138,7 +142,7 @@ public class AirportAct extends BaseAct {
         indexableLayout.setOverlayStyle_Center();
         indexableLayout.getmCenterOverlay().setBackgroundColor(Color.TRANSPARENT);
         indexableLayout.getmCenterOverlay().setTextColor(colorPrimary);
-        indexableLayout.getmCenterOverlay().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 48);
+        indexableLayout.getmCenterOverlay().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
     }
 
     /**

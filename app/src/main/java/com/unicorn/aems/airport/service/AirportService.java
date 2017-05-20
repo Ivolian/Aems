@@ -26,8 +26,7 @@ public class AirportService {
     }
 
     public Observable<List<Airport>> listByNameOrPinyin(String keyword) {
-        return airportRepository.listByNameOrPinyin(keyword)
-                .filter(list -> list.size() != 0);
+        return airportRepository.listByNameOrPinyin(keyword);
     }
 
     public Observable<List<Airport>> initAirports() {
