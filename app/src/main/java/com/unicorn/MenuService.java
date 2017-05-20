@@ -1,6 +1,6 @@
 package com.unicorn;
 
-import com.unicorn.aems.login.entity.Menu;
+import com.unicorn.aems.Menu;
 
 import java.util.List;
 

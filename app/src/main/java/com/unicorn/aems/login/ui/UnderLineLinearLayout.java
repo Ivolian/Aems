@@ -1,4 +1,4 @@
-package com.unicorn.aems.login;
+package com.unicorn.aems.login.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;

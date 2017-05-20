@@ -1,4 +1,4 @@
-package com.unicorn.aems.user;
+package com.unicorn.aems.login;
 
 import com.unicorn.aems.app.dagger.App;
 import com.unicorn.aems.login.entity.LoginInfo;

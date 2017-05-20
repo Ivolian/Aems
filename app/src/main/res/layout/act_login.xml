@@ -28,7 +28,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/logo" />
 
-        <com.unicorn.aems.login.UnderLineLinearLayout
+        <com.unicorn.aems.login.ui.UnderLineLinearLayout
             android:id="@+id/llAirport"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -62,9 +62,9 @@
                 app:iiv_color="@color/md_grey_300"
                 app:iiv_icon="ion-ios-arrow-right" />
 
-        </com.unicorn.aems.login.UnderLineLinearLayout>
+        </com.unicorn.aems.login.ui.UnderLineLinearLayout>
 
-        <com.unicorn.aems.login.UnderLineLinearLayout
+        <com.unicorn.aems.login.ui.UnderLineLinearLayout
             android:id="@+id/llAccount"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -101,9 +101,9 @@
                 app:iiv_color="@color/md_grey_300"
                 app:iiv_icon="ion-ios-close-empty" />
 
-        </com.unicorn.aems.login.UnderLineLinearLayout>
+        </com.unicorn.aems.login.ui.UnderLineLinearLayout>
 
-        <com.unicorn.aems.login.UnderLineLinearLayout
+        <com.unicorn.aems.login.ui.UnderLineLinearLayout
             android:id="@+id/llPwd"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -147,9 +147,9 @@
                 app:iiv_color="@color/colorPrimary"
                 app:iiv_icon="ion-eye" />
 
-        </com.unicorn.aems.login.UnderLineLinearLayout>
+        </com.unicorn.aems.login.ui.UnderLineLinearLayout>
 
-        <com.unicorn.aems.login.LoginButton
+        <com.unicorn.aems.login.ui.LoginButton
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="48dp"

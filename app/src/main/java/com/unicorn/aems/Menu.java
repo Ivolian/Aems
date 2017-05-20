@@ -1,4 +1,4 @@
-package com.unicorn.aems.login.entity;
+package com.unicorn.aems;
 
 import java.util.List;
 

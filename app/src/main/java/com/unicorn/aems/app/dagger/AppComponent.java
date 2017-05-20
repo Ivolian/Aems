@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
-import com.unicorn.aems.login.LoginButton;
-import com.unicorn.aems.login.UnderLineLinearLayout;
+import com.unicorn.aems.login.ui.LoginButton;
+import com.unicorn.aems.login.ui.UnderLineLinearLayout;
 import com.unicorn.aems.splash.SplashAct;
 
 import dagger.Component;

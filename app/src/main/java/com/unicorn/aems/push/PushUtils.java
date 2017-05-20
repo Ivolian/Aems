@@ -3,7 +3,6 @@ package com.unicorn.aems.push;
 import android.content.Context;
 
 import com.unicorn.aems.app.dagger.App;
-import com.unicorn.aems.utils.ToastUtils;
 
 import java.util.Set;
 
@@ -13,12 +12,10 @@ import javax.inject.Inject;
 public class PushUtils {
 
     private Context context;
-    private ToastUtils toastUtils;
 
     @Inject
-    public PushUtils(Context context, ToastUtils toastUtils) {
+    public PushUtils(Context context) {
         this.context = context;
-        this.toastUtils = toastUtils;
     }
 
     public void setTags(Set<String> tags) {
