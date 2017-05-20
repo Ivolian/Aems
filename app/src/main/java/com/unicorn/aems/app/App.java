@@ -43,7 +43,7 @@ public class App extends Application {
 
     private DaoSession initDb() {
         String dbPwd = DeviceUtils.getAndroidID();
-        return new DaoSessionProvider(this, "aems-db", true, dbPwd).provide();
+        return new DaoSessionProvider(this, "aems-db", false, dbPwd).provide();
     }
 
     public static String baseDir() {

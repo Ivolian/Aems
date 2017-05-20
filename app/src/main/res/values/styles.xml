@@ -11,4 +11,10 @@
             <item name="swirl_errorColor">?android:attr/colorAccent</item>
     </style>
 
+
+    <style name="Splash" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
 </resources>

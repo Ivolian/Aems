@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.blankj.utilcode.util.FileUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -53,6 +54,7 @@ import zwh.com.lib.FPerException;
 import zwh.com.lib.RxFingerPrinter;
 
 
+@Route(path = RoutePath.LOGIN)
 public class LoginAct extends BaseAct {
 
     @Override
@@ -79,29 +81,12 @@ public class LoginAct extends BaseAct {
         copeEye();
         copeClear();
         copeFinger();
- requestRx();
         List<SwirlView.State> states = Arrays.asList(SwirlView.State.ON, SwirlView.State.ERROR, SwirlView.State.OFF);
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
 //            swirlView.setState(states.get(new Random().nextInt(3)));
                 login();
         });
-    }
-
-    private void requestRx(){
-        RxPermissions rxPermissions = new RxPermissions(this); // where this is an Activity instance
-
-        rxPermissions
-                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(granted -> {
-                    if (granted) { // Always true pre-M
-                        toastUtils.show("cool");
-                        s();
-                        // I can control the camera now
-                    } else {
-                        // Oups permission denied
-                    }
-                });
     }
 
     /**

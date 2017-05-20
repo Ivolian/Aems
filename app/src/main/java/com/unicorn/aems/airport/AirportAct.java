@@ -17,7 +17,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.unicorn.Constant;
 import com.unicorn.aems.R;
-import com.unicorn.aems.airport.service.AirportBaseService;
+import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -109,7 +109,7 @@ public class AirportAct extends BaseAct {
     IndexableLayout indexableLayout;
 
     @Inject
-    AirportBaseService airportService;
+    AirportService airportService;
 
     @Inject
     AirportAdapter airportAdapter;

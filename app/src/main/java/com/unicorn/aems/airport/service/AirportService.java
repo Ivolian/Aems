@@ -13,14 +13,14 @@ import javax.inject.Inject;
 import rx.Observable;
 
 @App
-public class AirportBaseService implements BaseService<Airport> {
+public class AirportService implements BaseService<Airport> {
 
     private final AirportLocalRepository localRepository;
 
     private final AirportNetworkRepository networkRepository;
 
     @Inject
-    public AirportBaseService(AirportLocalRepository localRepository, AirportNetworkRepository networkRepository) {
+    public AirportService(AirportLocalRepository localRepository, AirportNetworkRepository networkRepository) {
         this.localRepository = localRepository;
         this.networkRepository = networkRepository;
     }
@@ -40,9 +40,10 @@ public class AirportBaseService implements BaseService<Airport> {
         return localRepository.list();
     }
 
-    private Observable<List<Airport>> network() {
+    public Observable<List<Airport>> network() {
         return networkRepository.list().flatMap(
                 localRepository::insertOrReplace);
     }
+
 
 }

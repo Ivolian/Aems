@@ -6,6 +6,7 @@ import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
 import com.unicorn.aems.login.LoginButton;
 import com.unicorn.aems.login.UnderLineLinearLayout;
+import com.unicorn.aems.splash.SplashAct;
 
 import dagger.Component;
 
@@ -23,7 +24,9 @@ public interface AppComponent {
 //    ToastHelper provideToastHelper();
 //
 //    DensityHelper provideDensityHelper();
-//
+
+    void inject(SplashAct o);
+    //
     void inject(LoginAct o);
     void inject(UnderLineLinearLayout o);
     void inject(LoginButton o);
