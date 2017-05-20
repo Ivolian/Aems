@@ -1,6 +1,5 @@
 package com.unicorn.aems.login;
 
-import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -22,7 +21,6 @@ import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.tbruyelle.rxpermissions.RxPermissions;
 import com.unicorn.Constant;
 import com.unicorn.MenuService;
 import com.unicorn.aems.R;
@@ -31,6 +29,7 @@ import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.finger.FingerPrinterView;
+import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.Menu;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;

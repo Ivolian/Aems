@@ -60,9 +60,9 @@ public class AirportService implements BaseService<Airport> {
 
     private List<Airport> generateAirports() {
         return Arrays.asList(
-                new Airport("北京机场", "PEK", "http://192.168.7.71:8008/aems/"),
-                new Airport("长春机场", "CGQ", "http://172.31.129.140:8080/aems/"),
-                new Airport("测试机场", "TEST", "http://172.16.29.203:8008/aems/")
+                new Airport("1", "北京机场", "PEK", "http://192.168.7.71:8008/aems/"),
+                new Airport("2", "长春机场", "CGQ", "http://172.31.129.140:8080/aems/"),
+                new Airport("3", "测试机场", "TEST", "http://172.16.29.203:8008/aems/")
         );
     }
 

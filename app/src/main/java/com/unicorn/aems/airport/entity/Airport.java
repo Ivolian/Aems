@@ -4,28 +4,35 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Unique;
 
 import me.yokeyword.indexablerv.IndexableEntity;
 import me.yokeyword.indexablerv.PinyinUtil;
 
+
 @Entity
 public class Airport implements IndexableEntity {
 
     @Id
+    private String id;
+
+    @Unique
     private String name;
 
     @Unique
     private String code;
 
-    @Unique
+    @NotNull
     private String requestUrl;
 
-    @Unique
+    @NotNull
     private String pinyin;
 
-    @Generated(hash = 1613158860)
-    public Airport(String name, String code, String requestUrl, String pinyin) {
+    @Generated(hash = 1627687154)
+    public Airport(String id, String name, String code, @NotNull String requestUrl,
+            @NotNull String pinyin) {
+        this.id = id;
         this.name = name;
         this.code = code;
         this.requestUrl = requestUrl;
@@ -33,7 +40,8 @@ public class Airport implements IndexableEntity {
     }
 
     @Keep
-    public Airport(String name, String code, String requestUrl) {
+    public Airport(String id, String name, String code, String requestUrl) {
+        this.id = id;
         this.name = name;
         this.code = code;
         this.requestUrl = requestUrl;
@@ -89,6 +97,14 @@ public class Airport implements IndexableEntity {
 
     public void setRequestUrl(String requestUrl) {
         this.requestUrl = requestUrl;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

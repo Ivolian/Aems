@@ -12,6 +12,8 @@ import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -50,6 +52,7 @@ public class SplashAct extends BaseAct {
     private void initAirports() {
         Logger.d("机场数据初始化");
         airportService.initAirports()
+                .delay(2, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> {
                     boolean success = airports.size() != 0;
