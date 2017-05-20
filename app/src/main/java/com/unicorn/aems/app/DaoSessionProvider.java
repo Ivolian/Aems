@@ -8,9 +8,6 @@ import com.unicorn.aems.base.BaseProvider;
 
 import org.greenrobot.greendao.database.Database;
 
-/**
- * 数据库的初始化
- */
 public class DaoSessionProvider implements BaseProvider<DaoSession> {
 
     private final DaoMaster daoMaster;

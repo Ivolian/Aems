@@ -11,7 +11,7 @@ import me.yokeyword.fragmentation.SupportActivity;
 
 public abstract class BaseAct extends SupportActivity {
 
-    protected abstract int layoutResId();
+    protected  int layoutResId() {return -1;};
 
     protected boolean useRxBus() {
         return false;
@@ -21,7 +21,9 @@ public abstract class BaseAct extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Dart.inject(this);
-        setContentView(layoutResId());
+        if (layoutResId() != -1) {
+            setContentView(layoutResId());
+        }
         ButterKnife.bind(this);
         inject();
         if (useRxBus()) {
