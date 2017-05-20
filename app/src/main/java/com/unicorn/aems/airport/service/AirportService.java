@@ -33,6 +33,10 @@ public class AirportService {
         return airportRepository.uniqueByName(name);
     }
 
+    public Observable<Airport> defaultAirport() {
+        return airportRepository.first();
+    }
+
     public Observable<List<Airport>> initAirports() {
         List<Airport> airports = generateAirports();
         return airportRepository.insertOrReplace(airports);

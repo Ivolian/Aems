@@ -43,7 +43,11 @@ public class AirportRepository {
     }
 
     public Observable<Airport> first() {
-        return airportDao.queryBuilder().orderAsc(AirportDao.Properties.Name).rx().unique();
+        return airportDao.queryBuilder()
+                .orderAsc(AirportDao.Properties.Name)
+                .limit(1)
+                .rx()
+                .unique();
     }
 
 }

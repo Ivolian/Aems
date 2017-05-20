@@ -2,7 +2,6 @@ package com.unicorn.aems.login;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -19,7 +18,6 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.unicorn.MenuService;
 import com.unicorn.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
@@ -27,24 +25,23 @@ import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.login.entity.LoginInfo;
-import com.unicorn.aems.login.entity.Menu;
 import com.unicorn.aems.login.entity.SessionInfo;
 import com.unicorn.aems.login.entity.UserInfo;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
 import com.unicorn.aems.user.UserService;
-import com.unicorn.aems.utils.ToastUtils;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 @Route(path = RoutePath.LOGIN)
 public class LoginAct extends BaseAct {
@@ -86,6 +83,8 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
 
+    Airport airportSelected;
+
     @Inject
     Navigator navigator;
 
@@ -100,6 +99,7 @@ public class LoginAct extends BaseAct {
 
     @Subscribe(tags = {@Tag(RxBusTag.AIRPORT_SELECTED)})
     public void airportOnSelected(Airport airport) {
+        airportSelected = airport;
         tvAirportName.setText(airport.getName());
     }
 
@@ -225,18 +225,27 @@ public class LoginAct extends BaseAct {
     private void getLoginInfo() {
         Logger.d("获取本地登录信息");
         userService.getLoginInfo()
-                .subscribe(loginInfo -> {
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(loginInfo -> {
                     boolean success = (loginInfo != null);
                     Logger.d("获取本地登录信息" + (success ? "成功" : "失败"));
                     if (success) {
-                        renderLoginInfo(loginInfo);
+                        this.loginInfo = loginInfo;
+                        renderLoginInfo();
+                        return Observable.never();
                     } else {
-                        // todo
+                        return airportService.defaultAirport();
                     }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(airport -> airport != null)
+                .subscribe(airport -> {
+                    airportSelected = airport;
+                    tvAirportName.setText(airport.getName());
                 });
     }
 
-    private void renderLoginInfo(@NonNull LoginInfo loginInfo) {
+    private void renderLoginInfo() {
         tvAirportName.setText(loginInfo.getAirport().getName());
         etAccount.setText(loginInfo.getAccount());
         etPwd.setText(loginInfo.getPwd());
@@ -246,8 +255,6 @@ public class LoginAct extends BaseAct {
     /**
      * login
      */
-    @Inject
-    ToastUtils toastUtils;
 
     @Inject
     PushUtils pushUtils;
@@ -255,73 +262,29 @@ public class LoginAct extends BaseAct {
     @Inject
     LoginService loginService;
 
-    @Inject
-    MenuService menuService;
+    LoginInfo loginInfo;
 
-    private void getMenu(SessionInfo sessionInfo) {
-        String cookie = "JSESSIONID=" + sessionInfo.getJsessionid();
-        String userId = sessionInfo.getCurrentUser().getUserId();
-        menuService.getMenu(cookie, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Menu>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        toastUtils.show(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(List<Menu> menus) {
-                        toastUtils.show("");
-
-                    }
-                });
-
-    }
-
-    private SessionInfo generateSessionInfo() {
-        UserInfo currentUser = new UserInfo();
-        currentUser.setRoleId("");
-        currentUser.setUserId("");
-        currentUser.setUsername("");
-        SessionInfo sessionInfo = new SessionInfo();
-        sessionInfo.setCurrentUser(currentUser);
-        sessionInfo.setJsessionid("");
-        sessionInfo.setSuccess(true);
-        return sessionInfo;
-    }
+    SessionInfo sessionInfo;
 
     private void login() {
-
-
+        Logger.d("登录");
         loginService.login("admin", "123456")
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SessionInfo>() {
                     @Override
                     public void onCompleted() {
 
-                        toastUtils.show("com");
-
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        SessionInfo sessionInfo = generateSessionInfo();
-                        onLoginSuccess(sessionInfo);
+                        sessionInfo = createSessionInfo();
+                        onLoginSuccess();
                     }
 
                     @Override
                     public void onNext(SessionInfo sessionInfo) {
-//                        getMenu(sessionInfo);
-//                        Object currentUser =map.list("currentUser");
-//                        Map m  = (Map)currentUser;8
+
                     }
                 });
 
@@ -352,17 +315,53 @@ public class LoginAct extends BaseAct {
     @Inject
     AirportService airportService;
 
-    private void onLoginSuccess(SessionInfo sessionInfo) {
+    private void onLoginSuccess() {
+        Logger.d("登录成功");
+        saveLoginInfo();
+        setTags();
+
+//        navigator.navigateTo(RoutePath.);
+    }
+
+    private void saveLoginInfo() {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setAccount(etAccount.getText().toString().trim());
-        loginInfo.setAccount(etPwd.getText().toString().trim());
-        String airportName = tvAirportName.getText().toString().trim();
-        airportService.uniqueByName(airportName)
-                .subscribe(airport -> {
-                    loginInfo.setAirport(airport);
-                    userService.saveLoginInfo(loginInfo);
-                });
+        loginInfo.setPwd(etPwd.getText().toString().trim());
+        loginInfo.setAirport(airportSelected);
+        userService.saveLoginInfo(loginInfo).subscribe(loginInfo1 -> {
+            Logger.d("保存登录信息成功");
+        });
     }
+
+    private void setTags() {
+        Set<String> tags = new HashSet<>();
+        tags.add("aems");
+        String airportCode = loginInfo.getAirport().getCode();
+        tags.add(airportCode);
+        UserInfo userInfo = sessionInfo.getCurrentUser();
+        tags.add(airportCode + idToTag(userInfo.getUserId()));
+        tags.add(airportCode + idToTag(userInfo.getRoleId()));
+        pushUtils.setTags(tags);
+    }
+
+    private String idToTag(String id) {
+        return id.replace("-", "_");
+    }
+
+
+    private SessionInfo createSessionInfo() {
+        UserInfo currentUser = new UserInfo();
+        currentUser.setRoleId("");
+        currentUser.setUserId("");
+        currentUser.setUsername("");
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setCurrentUser(currentUser);
+        sessionInfo.setJsessionid("");
+        sessionInfo.setSuccess(true);
+        return sessionInfo;
+    }
+
+
 
 
 }
