@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.jakewharton.rxbinding.view.RxView;
@@ -151,9 +152,7 @@ public class LoginAct extends BaseAct {
 
     private void clickEye() {
         hidePwd();
-        RxView.clicks(iivEye)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> {
+        RxView.clicks(iivEye).subscribe(aVoid -> {
                     if (etPwd.getInputType() == PWD_VISIBLE) {
                         hidePwd();
                     } else {
@@ -191,9 +190,7 @@ public class LoginAct extends BaseAct {
     }
 
     private void clickClear(EditText editText, View clear) {
-        RxView.clicks(clear)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> editText.setText(""));
+        RxView.clicks(clear).subscribe(aVoid -> editText.setText(""));
     }
 
 
@@ -211,16 +208,18 @@ public class LoginAct extends BaseAct {
     }
 
     private void enableOrDisableLogin() {
-        if (!TextUtils.isEmpty(etAccount.getText()) && !TextUtils.isEmpty(etPwd.getText())) {
+        if (!StringUtils.isEmpty(getAccount()) && !StringUtils.isEmpty(getPwd())) {
             btnLogin.enable();
         } else {
             btnLogin.disable();
         }
     }
 
-
     @Inject
     UserService userService;
+
+    @Inject
+    AirportService airportService;
 
     private void getLoginInfo() {
         Logger.d("获取本地登录信息");
@@ -268,7 +267,7 @@ public class LoginAct extends BaseAct {
 
     private void login() {
         Logger.d("登录");
-        loginService.login("admin", "123456")
+        loginService.login(getAccount(), getPwd())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SessionInfo>() {
                     @Override
@@ -278,8 +277,11 @@ public class LoginAct extends BaseAct {
 
                     @Override
                     public void onError(Throwable e) {
+                        Logger.d("登录成功");
                         sessionInfo = createSessionInfo();
-                        onLoginSuccess();
+                        saveLoginInfo();
+                        setTags();
+                        // todo
                     }
 
                     @Override
@@ -295,42 +297,15 @@ public class LoginAct extends BaseAct {
 //                .setAnimationSpeed(2)
 //                .setDimAmount(0.5f)
 //                .show();
-//        Set<String> tags = new HashSet<>();
-//        tags.add(etAccount.getText().toString().trim());
 
-//        Observable.just("").delay(1, TimeUnit.SECONDS).subscribe(ss -> {
-//            pushUtils.setTags(tags, (i, s, set) -> {
-//                kProgressHUD.dismiss();
-//                if (i == 0) {
-//                    toastUtils.show("登录成功");
-//                    saveLoginInfo();
-//                } else {
-//                    toastUtils.show("登录失败，错误码:" + i);
-//                }
-//            });
-//        });
 
     }
 
-    @Inject
-    AirportService airportService;
 
-    private void onLoginSuccess() {
-        Logger.d("登录成功");
-        saveLoginInfo();
-        setTags();
-
-//        navigator.navigateTo(RoutePath.);
-    }
 
     private void saveLoginInfo() {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setAccount(etAccount.getText().toString().trim());
-        loginInfo.setPwd(etPwd.getText().toString().trim());
-        loginInfo.setAirport(airportSelected);
-        userService.saveLoginInfo(loginInfo).subscribe(loginInfo1 -> {
-            Logger.d("保存登录信息成功");
-        });
+        LoginInfo loginInfo = new LoginInfo(getAccount(), getPwd(), airportSelected.getId());
+        userService.saveLoginInfo(loginInfo).subscribe(o -> Logger.d("保存登录信息成功"));
     }
 
     private void setTags() {
@@ -348,7 +323,6 @@ public class LoginAct extends BaseAct {
         return id.replace("-", "_");
     }
 
-
     private SessionInfo createSessionInfo() {
         UserInfo currentUser = new UserInfo();
         currentUser.setRoleId("");
@@ -361,7 +335,13 @@ public class LoginAct extends BaseAct {
         return sessionInfo;
     }
 
+    private String getAccount() {
+        return etAccount.getText().toString().trim();
+    }
 
+    private String getPwd() {
+        return etPwd.getText().toString().trim();
+    }
 
 
 }
