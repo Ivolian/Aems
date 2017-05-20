@@ -67,15 +67,14 @@ public class LoginAct extends BaseAct {
     @Override
     protected void init(Bundle savedInstanceState) {
         BarUtils.setColor(this, Color.WHITE,50);
-        getLoginInfo();
         clicksAirport();
-        copeAccountAndPwd();
-        copeEye();
-        copeClear();
+        focusOrTextChanges();
+        clicksEye();
+        clicksClear();
 
+        getLoginInfo();
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
-//            swirlView.setState(states.list(new Random().nextInt(3)));
                 login();
         });
     }
@@ -124,9 +123,9 @@ public class LoginAct extends BaseAct {
         tvAirportName.setText(airport.getName());
     }
 
-
-
-
+    /**
+     * 用户名密码
+     */
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
 
@@ -139,33 +138,30 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.etPwd)
     EditText etPwd;
 
-    private void copeAccountAndPwd() {
-        RxView.focusChanges(etAccount).subscribe(hasFocus -> {
-            llAccount.changeFocus(hasFocus);
-            showOrHideClear(etAccount, iivClearAccount);
-        });
-        RxView.focusChanges(etPwd).subscribe(hasFocus -> {
-            llPwd.changeFocus(hasFocus);
-            showOrHideClear(etPwd, iivClearPwd);
-        });
-
-//        RxView.touches(llAccount)
-//                .map(MotionEvent::getAction)
-//                .filter(action -> action == MotionEvent.ACTION_DOWN)
-//                .subscribe(action -> etAccount.requestFocus());
-//        RxView.touches(llPwd)
-//                .map(MotionEvent::getAction)
-//                .filter(action -> action == MotionEvent.ACTION_DOWN)
-//                .subscribe(action -> etPwd.requestFocus());
+    private void focusOrTextChanges() {
+        focusOrTextChange(etAccount, llAccount, iivClearAccount);
+        focusOrTextChange(etPwd, llPwd, iivClearPwd);
     }
 
-    private void showOrHideClear(EditText editText, IconicsImageView iivClear) {
-        boolean visible = editText.isFocused() && !TextUtils.isEmpty(editText.getText());
-        iivClear.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    private void focusOrTextChange(EditText editText, UnderLineLinearLayout underLineLinearLayout, View clear) {
+        RxView.focusChanges(editText).subscribe(hasFocus -> {
+            underLineLinearLayout.onFocusChange(hasFocus);
+            showClear(editText, clear);
+        });
+        RxTextView.afterTextChangeEvents(editText).subscribe(event -> {
+            showClear(editText, clear);
+            enableOrDisableLogin();
+        });
     }
+
+    private void showClear(EditText editText, View clear) {
+        boolean showClear = editText.isFocused() && !TextUtils.isEmpty(editText.getText());
+        clear.setVisibility(showClear ? View.VISIBLE : View.GONE);
+    }
+
 
     /**
-     * copeEye
+     * 密码可见
      */
     @BindView(R.id.iivEye)
     IconicsImageView iivEye;
@@ -173,7 +169,7 @@ public class LoginAct extends BaseAct {
     private final int PWD_VISIBLE = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
     private final int PWD_INVISIBLE = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
-    private void copeEye() {
+    private void clicksEye() {
         hidePwd();
         RxView.clicks(iivEye).subscribe(aVoid -> {
             boolean visible = etPwd.getInputType() == PWD_VISIBLE;
@@ -200,7 +196,7 @@ public class LoginAct extends BaseAct {
     }
 
     /**
-     * copeClear
+     * clickClear
      */
     @BindView(R.id.iivClearAccount)
     IconicsImageView iivClearAccount;
@@ -208,19 +204,15 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.iivClearPwd)
     IconicsImageView iivClearPwd;
 
-    private void copeClear() {
-        RxView.clicks(iivClearAccount).subscribe(aVoid -> etAccount.setText(""));
-        RxView.clicks(iivClearPwd).subscribe(aVoid -> etPwd.setText(""));
-
-        RxTextView.afterTextChangeEvents(etAccount).subscribe(event -> {
-            showOrHideClear(etAccount, iivClearAccount);
-            enableOrDisableLogin();
-        });
-        RxTextView.afterTextChangeEvents(etPwd).subscribe(event -> {
-            showOrHideClear(etPwd, iivClearPwd);
-            enableOrDisableLogin();
-        });
+    private void clicksClear() {
+        clickClear(etAccount, iivClearAccount);
+        clickClear(etPwd, iivClearPwd);
     }
+
+    private void clickClear(EditText editText, View clear) {
+        RxView.clicks(clear).subscribe(aVoid -> editText.setText(""));
+    }
+
 
     /**
      * enableOrDisableLogin

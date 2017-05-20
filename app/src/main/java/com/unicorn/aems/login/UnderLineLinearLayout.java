@@ -59,7 +59,7 @@ public class UnderLineLinearLayout extends LinearLayout {
         invalidate();
     }
 
-    public void changeFocus(boolean hasFocus) {
+    public void onFocusChange(boolean hasFocus) {
         if (hasFocus) {
             focus();
         } else {
