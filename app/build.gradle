@@ -39,7 +39,7 @@ android {
     }
 }
 greendao {
-    schemaVersion 3
+    schemaVersion 4
 }
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'

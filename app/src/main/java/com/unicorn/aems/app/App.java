@@ -6,6 +6,7 @@ import android.os.Environment;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
+import com.orhanobut.logger.Logger;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 
@@ -28,6 +29,7 @@ public class App extends Application {
         ARouter.init(this);
         DaoSession daoSession = initDb();
         AppComponentProvider.init(this, daoSession);
+        Logger.init("AEMS_LOG");
 //        Stetho.initializeWithDefaults(this);
 //        initFragmentation();
     }
