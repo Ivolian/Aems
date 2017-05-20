@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -67,10 +66,9 @@ public class LoginAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-//        StatusBarUtil.setColor(this, Color.WHITE, 50);
         BarUtils.setColor(this, Color.WHITE,50);
         getLoginInfo();
-        initLlAirport();
+        clicksAirport();
         copeAccountAndPwd();
         copeEye();
         copeClear();
@@ -112,7 +110,7 @@ public class LoginAct extends BaseAct {
     @Inject
     Navigator navigator;
 
-    private void initLlAirport() {
+    private void clicksAirport() {
         RxView.clicks(llAirport)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> navigator.navigateTo(RoutePath.AIRPORT));
@@ -151,14 +149,14 @@ public class LoginAct extends BaseAct {
             showOrHideClear(etPwd, iivClearPwd);
         });
 
-        RxView.touches(llAccount)
-                .map(MotionEvent::getAction)
-                .filter(action -> action == MotionEvent.ACTION_DOWN)
-                .subscribe(action -> etAccount.requestFocus());
-        RxView.touches(llPwd)
-                .map(MotionEvent::getAction)
-                .filter(action -> action == MotionEvent.ACTION_DOWN)
-                .subscribe(action -> etPwd.requestFocus());
+//        RxView.touches(llAccount)
+//                .map(MotionEvent::getAction)
+//                .filter(action -> action == MotionEvent.ACTION_DOWN)
+//                .subscribe(action -> etAccount.requestFocus());
+//        RxView.touches(llPwd)
+//                .map(MotionEvent::getAction)
+//                .filter(action -> action == MotionEvent.ACTION_DOWN)
+//                .subscribe(action -> etPwd.requestFocus());
     }
 
     private void showOrHideClear(EditText editText, IconicsImageView iivClear) {
