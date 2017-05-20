@@ -25,8 +25,12 @@ public class AirportService {
         return airportRepository.list();
     }
 
-    public Observable<List<Airport>> listByNameOrPinyin(String keyword) {
-        return airportRepository.listByNameOrPinyin(keyword);
+    public Observable<List<Airport>> listByNameOrPinyin(String query) {
+        return airportRepository.listByNameOrPinyin(query);
+    }
+
+    public Observable<Airport> uniqueByName(String name) {
+        return airportRepository.uniqueByName(name);
     }
 
     public Observable<List<Airport>> initAirports() {

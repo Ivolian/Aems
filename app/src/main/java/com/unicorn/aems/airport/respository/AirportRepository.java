@@ -42,4 +42,8 @@ public class AirportRepository {
                 .map(airports -> (List<Airport>) airports);
     }
 
+    public Observable<Airport> first() {
+        return airportDao.queryBuilder().orderAsc(AirportDao.Properties.Name).rx().unique();
+    }
+
 }
