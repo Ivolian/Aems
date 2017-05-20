@@ -44,7 +44,7 @@
                 android:textSize="17dp" />
 
             <TextView
-                android:id="@+id/tvAirport"
+                android:id="@+id/tvAirportName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="48dp"
@@ -153,20 +153,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="24dp" />
-
-        <com.unicorn.aems.finger.FingerPrinterView
-            android:id="@+id/fingerPrinterView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="48dp"
-            android:visibility="invisible" />
-
-        <com.mattprecious.swirl.SwirlView
-            android:id="@+id/swirlView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="48dp" />
 
     </LinearLayout>
 

@@ -12,17 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.blankj.utilcode.util.BarUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
-import com.jaeger.library.StatusBarUtil;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.mattprecious.swirl.SwirlView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.unicorn.RxBusTag;
 import com.unicorn.MenuService;
+import com.unicorn.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.respository.AirportRepository;
@@ -68,8 +67,8 @@ public class LoginAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        StatusBarUtil.setColor(this, Color.WHITE, 50);
-
+//        StatusBarUtil.setColor(this, Color.WHITE, 50);
+        BarUtils.setColor(this, Color.WHITE,50);
         getLoginInfo();
         initLlAirport();
         copeAccountAndPwd();
@@ -99,13 +98,13 @@ public class LoginAct extends BaseAct {
     }
 
     private void renderLoginInfo(@NonNull LoginInfo loginInfo) {
-        tvAirport.setText(loginInfo.getAirport().getName());
+        tvAirportName.setText(loginInfo.getAirport().getName());
         etAccount.setText(loginInfo.getAccount());
         etPwd.setText(loginInfo.getPwd());
     }
 
     /**
-     * 机场
+     * 选择机场
      */
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
@@ -119,17 +118,16 @@ public class LoginAct extends BaseAct {
                 .subscribe(aVoid -> navigator.navigateTo(RoutePath.AIRPORT));
     }
 
-    @BindView(R.id.tvAirport)
-    TextView tvAirport;
+    @BindView(R.id.tvAirportName)
+    TextView tvAirportName;
 
     @Subscribe(tags = {@Tag(RxBusTag.AIRPORT_SELECTED)})
     public void airportOnSelected(Airport airport) {
-        tvAirport.setText(airport.getName());
+        tvAirportName.setText(airport.getName());
     }
 
 
-    @BindView(R.id.swirlView)
-    SwirlView swirlView;
+
 
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
@@ -212,7 +210,6 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.iivClearPwd)
     IconicsImageView iivClearPwd;
 
-    @SuppressWarnings("ConstantConditions")
     private void copeClear() {
         RxView.clicks(iivClearAccount).subscribe(aVoid -> etAccount.setText(""));
         RxView.clicks(iivClearPwd).subscribe(aVoid -> etPwd.setText(""));
@@ -355,7 +352,7 @@ public class LoginAct extends BaseAct {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setAccount(etAccount.getText().toString().trim());
         loginInfo.setAccount(etPwd.getText().toString().trim());
-        String airportName = tvAirport.getText().toString().trim();
+        String airportName = tvAirportName.getText().toString().trim();
         airportRepository.uniqueByName(airportName)
                 .subscribe(airport -> {
                     loginInfo.setAirport(airport);
