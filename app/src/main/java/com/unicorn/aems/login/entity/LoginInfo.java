@@ -3,7 +3,6 @@ package com.unicorn.aems.login.entity;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
-import com.unicorn.aems.login.LoginInfoDao;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
@@ -149,5 +148,7 @@ public class LoginInfo {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getLoginInfoDao() : null;
     }
+
+
 
 }

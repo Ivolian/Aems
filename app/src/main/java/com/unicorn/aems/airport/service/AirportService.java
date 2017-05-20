@@ -20,6 +20,8 @@ public class AirportService implements BaseService<Airport> {
 //    private final AirportNetworkRepository networkRepository;
 
 
+
+
     @Inject
     public AirportService(AirportLocalRepository localRepository) {
         this.localRepository = localRepository;

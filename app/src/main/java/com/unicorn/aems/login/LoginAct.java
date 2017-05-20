@@ -2,6 +2,7 @@ package com.unicorn.aems.login;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.blankj.utilcode.util.FileUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.jaeger.library.StatusBarUtil;
@@ -25,33 +25,28 @@ import com.unicorn.Constant;
 import com.unicorn.MenuService;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
-import com.unicorn.aems.app.App;
+import com.unicorn.aems.airport.respository.AirportLocalRepository;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
-import com.unicorn.aems.finger.FingerPrinterView;
 import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.Menu;
+import com.unicorn.aems.login.entity.SessionInfo;
+import com.unicorn.aems.login.entity.UserInfo;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
+import com.unicorn.aems.user.UserService;
 import com.unicorn.aems.utils.ToastUtils;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import zwh.com.lib.FPerException;
-import zwh.com.lib.RxFingerPrinter;
-
 
 @Route(path = RoutePath.LOGIN)
 public class LoginAct extends BaseAct {
@@ -75,17 +70,38 @@ public class LoginAct extends BaseAct {
     protected void init(Bundle savedInstanceState) {
         StatusBarUtil.setColor(this, Color.WHITE, 50);
 
+        getLoginInfo();
         initLlAirport();
         copeAccountAndPwd();
         copeEye();
         copeClear();
-        copeFinger();
-        List<SwirlView.State> states = Arrays.asList(SwirlView.State.ON, SwirlView.State.ERROR, SwirlView.State.OFF);
+
 
         RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
 //            swirlView.setState(states.get(new Random().nextInt(3)));
                 login();
         });
+    }
+
+    @Inject
+    UserService userService;
+
+    private void getLoginInfo() {
+        Logger.d("获取登录信息");
+        userService.getLoginInfo()
+                .subscribe(loginInfo -> {
+                    boolean success = (loginInfo != null);
+                    Logger.d("获取登录信息" + (success ? "成功" : "失败"));
+                    if (success) {
+                        renderLoginInfo(loginInfo);
+                    }
+                });
+    }
+
+    private void renderLoginInfo(@NonNull LoginInfo loginInfo) {
+        tvAirport.setText(loginInfo.getAirport().getName());
+        etAccount.setText(loginInfo.getAccount());
+        etPwd.setText(loginInfo.getPwd());
     }
 
     /**
@@ -219,10 +235,10 @@ public class LoginAct extends BaseAct {
 
     private void enableOrDisableLogin() {
         if (!TextUtils.isEmpty(etAccount.getText()) && !TextUtils.isEmpty(etPwd.getText())) {
-            btnLogin.enable();
+//            btnLogin.enable();
 
         } else {
-            btnLogin.disable();
+//            btnLogin.disable();
         }
     }
 
@@ -242,7 +258,7 @@ public class LoginAct extends BaseAct {
     MenuService menuService;
 
     private void getMenu(SessionInfo sessionInfo){
-        String cookie = "JSESSIONID=" +sessionInfo.getJsessionid();
+        String cookie = "JSESSIONID=" + sessionInfo.getJsessionid();
         String userId = sessionInfo.getCurrentUser().getUserId();
         menuService.getMenu(cookie,userId)
                 .subscribeOn(Schedulers.io())
@@ -267,6 +283,18 @@ public class LoginAct extends BaseAct {
 
     }
 
+    private SessionInfo generateSessionInfo() {
+        UserInfo currentUser = new UserInfo();
+        currentUser.setRoleId("");
+        currentUser.setUserId("");
+        currentUser.setUsername("");
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setCurrentUser(currentUser);
+        sessionInfo.setJsessionid("");
+        sessionInfo.setSuccess(true);
+        return sessionInfo;
+    }
+
     private void login() {
 
 
@@ -284,12 +312,13 @@ public class LoginAct extends BaseAct {
 
                     @Override
                     public void onError(Throwable e) {
-                        toastUtils.show("err");
+                        SessionInfo sessionInfo = generateSessionInfo();
+                        onLoginSuccess(sessionInfo);
                     }
 
                     @Override
                     public void onNext(SessionInfo sessionInfo) {
-                        getMenu(sessionInfo);
+//                        getMenu(sessionInfo);
 //                        Object currentUser =map.get("currentUser");
 //                        Map m  = (Map)currentUser;8
                     }
@@ -320,126 +349,22 @@ public class LoginAct extends BaseAct {
     }
 
     @Inject
-    LoginInfoDao loginInfoDao;
+    AirportLocalRepository airportLocalRepository;
 
-    private void saveLoginInfo() {
-        String airport = tvAirport.getText().toString().trim();
-        String account = etAccount.getText().toString().trim();
-        String pwd = etPwd.getText().toString().trim();
-        LoginInfo loginInfo = new LoginInfo(airport, account, pwd);
-        loginInfoDao.rx().insertOrReplace(loginInfo).subscribe(new Observer<LoginInfo>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-                toastUtils.show("保存登录信息失败");
-            }
-
-            @Override
-            public void onNext(LoginInfo loginInfo) {
-                toastUtils.show("保存登录信息成功");
-            }
-        });
+    private void onLoginSuccess(SessionInfo sessionInfo) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setAccount(etAccount.getText().toString().trim());
+        loginInfo.setAccount(etPwd.getText().toString().trim());
+        String airportName = tvAirport.getText().toString().trim();
+        airportLocalRepository.getByName(airportName)
+                .subscribe(airport -> {
+                    loginInfo.setAirport(airport);
+                    userService.saveLoginInfo(loginInfo);
+                });
     }
 
-    //
 
-    @BindView(R.id.fingerPrinterView)
-    FingerPrinterView fingerPrinterView;
 
-    private int fingerErrorNum = 0; // 指纹错误次数
-
-    RxFingerPrinter rxfingerPrinter;
-
-    private void copeFinger() {
-        fingerPrinterView.setOnStateChangedListener(state -> {
-            if (state == FingerPrinterView.STATE_CORRECT_PWD) {
-                fingerErrorNum = 0;
-                toastUtils.show("指纹识别成功");
-                login();
-            }
-            if (state == FingerPrinterView.STATE_WRONG_PWD) {
-                toastUtils.show("指纹识别失败，还剩" + (5 - fingerErrorNum) + "次机会");
-                fingerPrinterView.setState(FingerPrinterView.STATE_NO_SCANING);
-            }
-        });
-        RxView.clicks(findViewById(R.id.tvFinger)).subscribe(aVoid -> {
-            long count = loginInfoDao.count();
-            if (count != 0) {
-                startFinger();
-            } else {
-                toastUtils.show("至少使用密码登录一次");
-            }
-        });
-    }
-
-    private void startFinger() {
-        fingerPrinterView.setVisibility(View.VISIBLE);
-        if (rxfingerPrinter == null) {
-            rxfingerPrinter = new RxFingerPrinter(this);
-        }
-        fingerErrorNum = 0;
-        rxfingerPrinter.unSubscribe(this);
-        Subscription subscription = rxfingerPrinter.begin().subscribe(new Subscriber<Boolean>() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                if (fingerPrinterView.getState() == FingerPrinterView.STATE_SCANING) {
-                    return;
-                } else if (fingerPrinterView.getState() == FingerPrinterView.STATE_CORRECT_PWD
-                        || fingerPrinterView.getState() == FingerPrinterView.STATE_WRONG_PWD) {
-                    fingerPrinterView.setState(FingerPrinterView.STATE_NO_SCANING);
-                } else {
-                    fingerPrinterView.setState(FingerPrinterView.STATE_SCANING);
-                }
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (e instanceof FPerException) {
-                    toastUtils.show(((FPerException) e).getDisplayMessage());
-                }
-            }
-
-            @Override
-            public void onNext(Boolean aBoolean) {
-                if (aBoolean) {
-                    fingerPrinterView.setState(FingerPrinterView.STATE_CORRECT_PWD);
-//                    fingerPrinterView.setVisibility(View.INVISIBLE);
-                } else {
-                    fingerErrorNum++;
-                    fingerPrinterView.setState(FingerPrinterView.STATE_WRONG_PWD);
-                }
-            }
-        });
-        rxfingerPrinter.addSubscription(this, subscription);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (rxfingerPrinter != null) {
-            rxfingerPrinter.unSubscribe(this);
-        }
-    }
-
-    private void s (){
-        boolean result = FileUtils.copyFile(
-                getDatabasePath("aems-db"),
-                new File(App.baseDir(), "aems-db")
-        );
-
-        Logger.d(result);
-    }
 
 
 }

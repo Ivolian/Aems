@@ -7,8 +7,8 @@ import com.unicorn.MenuService;
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.RetrofitProvider;
-import com.unicorn.aems.login.LoginInfoDao;
 import com.unicorn.aems.login.LoginService;
+import com.unicorn.aems.login.entity.LoginInfoDao;
 
 import dagger.Module;
 import dagger.Provides;
@@ -41,12 +41,6 @@ public class AppModule {
 
     @App
     @Provides
-    LoginInfoDao provideLoginInfoDao(DaoSession daoSession) {
-        return daoSession.getLoginInfoDao();
-    }
-
-    @App
-    @Provides
     AirportDao provideAirportDao(DaoSession daoSession) {
         return daoSession.getAirportDao();
     }
@@ -69,5 +63,12 @@ public class AppModule {
     MenuService provideMenuService(Retrofit retrofit) {
         return retrofit.create(MenuService.class);
     }
+
+    @App
+    @Provides
+    LoginInfoDao provideLoginInfoDao(DaoSession daoSession) {
+        return daoSession.getLoginInfoDao();
+    }
+
 
 }

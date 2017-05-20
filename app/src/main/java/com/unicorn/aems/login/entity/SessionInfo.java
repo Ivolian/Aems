@@ -1,6 +1,4 @@
-package com.unicorn.aems.login;
-
-import com.unicorn.aems.login.entity.UserInfo;
+package com.unicorn.aems.login.entity;
 
 public class SessionInfo {
 

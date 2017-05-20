@@ -37,4 +37,10 @@ public class AirportLocalRepository {
                 .map(airports -> (List<Airport>) airports);
     }
 
+    public Observable<Airport> getByName(String name) {
+        return airportDao.queryBuilder()
+                .where(AirportDao.Properties.Name.eq(name))
+                .rx().unique();
+    }
+
 }

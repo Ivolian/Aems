@@ -1,5 +1,7 @@
 package com.unicorn.aems.login;
 
+import com.unicorn.aems.login.entity.SessionInfo;
+
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
