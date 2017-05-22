@@ -19,12 +19,12 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.unicorn.aems.constant.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
+import com.unicorn.aems.constant.RxBusTag;
 import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.SessionInfo;
 import com.unicorn.aems.login.entity.UserInfo;
@@ -34,8 +34,6 @@ import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -100,15 +98,14 @@ public class LoginAct extends BaseAct {
     TextView tvAirport;
 
     @Subscribe(tags = {@Tag(RxBusTag.AIRPORT_SELECTED)})
-    public void airportOnSelected(Airport airport) {
+    public void onAirportSelect(Airport airport) {
         airportSelected = airport;
         tvAirport.setText(airport.getName());
     }
 
 
-    /**
-     * 用户名密码
-     */
+    // ======================== 用户名 & 密码 ========================
+
     @BindView(R.id.llAccount)
     UnderLineLinearLayout llAccount;
 
@@ -143,9 +140,8 @@ public class LoginAct extends BaseAct {
     }
 
 
-    /**
-     * 密码可见
-     */
+    // ======================== 密码可见 ========================
+
     @BindView(R.id.iivEye)
     IconicsImageView iivEye;
 
@@ -153,16 +149,17 @@ public class LoginAct extends BaseAct {
     private final int PWD_INVISIBLE = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
     private void clickEye() {
+        // 默认密码不可见
         hidePwd();
         RxView.clicks(iivEye).subscribe(aVoid -> {
-                    if (etPwd.getInputType() == PWD_VISIBLE) {
-                        hidePwd();
-                    } else {
-                        showPwd();
-                    }
-                    // 移动光标到末尾
-                    etPwd.setSelection(etPwd.getText().length());
-                });
+            if (etPwd.getInputType() == PWD_VISIBLE) {
+                hidePwd();
+            } else {
+                showPwd();
+            }
+            // 移动光标到末尾
+            etPwd.setSelection(etPwd.getText().length());
+        });
     }
 
     private void showPwd() {
@@ -177,9 +174,9 @@ public class LoginAct extends BaseAct {
         etPwd.setInputType(PWD_INVISIBLE);
     }
 
-    /**
-     * 清除输入
-     */
+
+    // ======================== 清除输入 ========================
+
     @BindView(R.id.iivClearAccount)
     IconicsImageView iivClearAccount;
 
@@ -196,9 +193,8 @@ public class LoginAct extends BaseAct {
     }
 
 
-    /**
-     * clickLogin
-     */
+    // ======================== 登录按钮 ========================
+
     @BindView(R.id.btnLogin)
     LoginButton btnLogin;
 
@@ -206,6 +202,7 @@ public class LoginAct extends BaseAct {
         RxView.clicks(btnLogin)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> login());
+        // 默认不可点击
         btnLogin.disable();
     }
 
@@ -217,59 +214,56 @@ public class LoginAct extends BaseAct {
         }
     }
 
+
+    // ======================== 获取本地登录信息 ========================
+
     @Inject
     UserService userService;
 
     @Inject
     AirportService airportService;
 
+    LoginInfo mLoginInfo;
+
     private void getLoginInfo() {
-        Logger.d("获取本地登录信息");
         userService.getLoginInfo()
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(loginInfo -> {
-                    boolean success = (loginInfo != null);
-                    Logger.d("获取本地登录信息" + (success ? "成功" : "失败"));
-                    if (success) {
-                        this.loginInfo = loginInfo;
-                        renderLoginInfo();
+                    if (loginInfo != null) {
+                        Logger.d("获取本地登录信息成功");
+                        mLoginInfo = loginInfo;
+
+                        // render loginInfo
+                        onAirportSelect(mLoginInfo.getAirport());
+                        etAccount.setText(mLoginInfo.getAccount());
+                        etPwd.setText(mLoginInfo.getPwd());
+
+                        // 事件不往下走了
                         return Observable.never();
                     } else {
-                        return airportService.defaultAirportSelected();
+                        Logger.d("无本地登录信息");
+
+                        // 获取默认机场
+                        return airportService.getDefaultAirport();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(airport -> airport != null)
-                .subscribe(airport -> {
-                    airportSelected = airport;
-                    tvAirport.setText(airport.getName());
-                });
-    }
-
-    private void renderLoginInfo() {
-        airportSelected = loginInfo.getAirport();
-        tvAirport.setText(loginInfo.getAirport().getName());
-        etAccount.setText(loginInfo.getAccount());
-        etPwd.setText(loginInfo.getPwd());
+                .subscribe(this::onAirportSelect);
     }
 
 
-    /**
-     * login
-     */
-
-    @Inject
-    PushUtils pushUtils;
+    // ======================== 登录 ========================
 
     @Inject
     LoginService loginService;
 
-    LoginInfo loginInfo;
+    @Inject
+    PushUtils pushUtils;
 
-    SessionInfo sessionInfo;
+    SessionInfo mSessionInfo;
 
     private void login() {
-        Logger.d("登录");
         loginService.login(getAccount(), getPwd())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -282,9 +276,9 @@ public class LoginAct extends BaseAct {
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("登录成功");
-                        sessionInfo = createSessionInfo();
+                        mSessionInfo = createSessionInfo();
+                        pushUtils.setTags(mLoginInfo, mSessionInfo);
                         saveLoginInfo();
-                        setTags();
                         navigator.navigateTo(RoutePath.MAIN);
                         finish();
                     }
@@ -294,55 +288,18 @@ public class LoginAct extends BaseAct {
 
                     }
                 });
-
-//        KProgressHUD kProgressHUD = KProgressHUD.fetchData(this)
-//                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-//                .setLabel("登录中")
-//                .setCancellable(true)
-//                .setAnimationSpeed(2)
-//                .setDimAmount(0.5f)
-//                .show();
-
-
     }
 
 
+    // ======================== 保存用户登录信息 ========================
 
     private void saveLoginInfo() {
-        LoginInfo loginInfo = new LoginInfo(getAccount(), getPwd(), airportSelected.getId());
-        userService.saveLoginInfo(loginInfo).subscribe(new Subscriber<LoginInfo>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Logger.d("");
-            }
-
-            @Override
-            public void onNext(LoginInfo loginInfo) {
-                Logger.d("");
-
-            }
-        });
+        userService.saveLoginInfo(getAccount(), getPwd(), airportSelected)
+                .subscribe(loginInfo -> Logger.d("保存登录信息成功"));
     }
 
-    private void setTags() {
-        Set<String> tags = new HashSet<>();
-        tags.add("aems");
-        String airportCode = loginInfo.getAirport().getCode();
-        tags.add(airportCode);
-        UserInfo userInfo = sessionInfo.getCurrentUser();
-        tags.add(airportCode + idToTag(userInfo.getUserId()));
-        tags.add(airportCode + idToTag(userInfo.getRoleId()));
-        pushUtils.setTags(tags);
-    }
 
-    private String idToTag(String id) {
-        return id.replace("-", "_");
-    }
+    // ======================== 其他 ========================
 
     private SessionInfo createSessionInfo() {
         UserInfo currentUser = new UserInfo();

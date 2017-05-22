@@ -29,7 +29,7 @@ public class AirportService {
         return airportRepository.listByNameOrPinyin(query);
     }
 
-    public Observable<Airport> defaultAirportSelected() {
+    public Observable<Airport> getDefaultAirport() {
         return airportRepository.firstOrderByName();
     }
 
