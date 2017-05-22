@@ -1,4 +1,4 @@
-package com.unicorn.main;
+package com.unicorn.aems.main;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;

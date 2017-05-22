@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.main;
 
 import java.util.List;
 

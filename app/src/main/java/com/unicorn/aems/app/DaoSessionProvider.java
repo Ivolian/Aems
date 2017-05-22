@@ -4,11 +4,11 @@ import android.app.Application;
 
 import com.unicorn.aems.airport.entity.DaoMaster;
 import com.unicorn.aems.airport.entity.DaoSession;
-import com.unicorn.aems.base.BaseProvider;
+import com.unicorn.aems.base.Provider;
 
 import org.greenrobot.greendao.database.Database;
 
-public class DaoSessionProvider implements BaseProvider<DaoSession> {
+public class DaoSessionProvider implements Provider<DaoSession> {
 
     private final DaoMaster daoMaster;
 

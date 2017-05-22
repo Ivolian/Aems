@@ -1,7 +1,7 @@
 package com.unicorn.aems.app;
 
 
-import com.unicorn.aems.base.BaseProvider;
+import com.unicorn.aems.base.Provider;
 
 import javax.inject.Inject;
 
@@ -11,7 +11,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @com.unicorn.aems.app.dagger.App
-public class RetrofitProvider implements BaseProvider<Retrofit> {
+public class RetrofitProvider implements Provider<Retrofit> {
 
     private final String BASE_REQUEST_URL;
 

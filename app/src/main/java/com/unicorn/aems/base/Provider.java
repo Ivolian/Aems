@@ -1,6 +1,6 @@
 package com.unicorn.aems.base;
 
-public interface BaseProvider<T> {
+public interface Provider<T> {
 
     T provide();
 

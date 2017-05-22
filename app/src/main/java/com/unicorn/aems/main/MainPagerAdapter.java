@@ -1,10 +1,8 @@
-package com.unicorn.main;
+package com.unicorn.aems.main;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.unicorn.aems.SimpleFra;
 
 class MainPagerAdapter extends FragmentPagerAdapter {
 

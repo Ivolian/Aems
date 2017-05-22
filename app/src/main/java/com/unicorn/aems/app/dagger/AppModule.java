@@ -3,7 +3,7 @@ package com.unicorn.aems.app.dagger;
 import android.app.Application;
 import android.content.Context;
 
-import com.unicorn.MenuService;
+import com.unicorn.aems.main.MenuService;
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.RetrofitProvider;
