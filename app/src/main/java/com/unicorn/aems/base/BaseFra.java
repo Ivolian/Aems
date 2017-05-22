@@ -27,11 +27,16 @@ public abstract class BaseFra extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(layoutResId(), container, false);
         unbinder = ButterKnife.bind(this, view);
-        init();
         if (useRxBus()) {
             RxBus.get().register(this);
         }
+        inject();
+        init();
         return view;
+    }
+
+    protected void inject() {
+        // 依赖注入
     }
 
     @Override

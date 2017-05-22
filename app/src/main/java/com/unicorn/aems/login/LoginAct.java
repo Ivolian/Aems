@@ -22,6 +22,7 @@ import com.orhanobut.logger.Logger;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.service.AirportService;
+import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.constant.RxBusTag;
@@ -247,8 +248,8 @@ public class LoginAct extends BaseAct {
                         return airportService.getDefaultAirport();
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
                 .filter(airport -> airport != null)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onAirportSelect);
     }
 
@@ -261,7 +262,6 @@ public class LoginAct extends BaseAct {
     @Inject
     PushUtils pushUtils;
 
-    SessionInfo mSessionInfo;
 
     private void login() {
         loginService.login(getAccount(), getPwd())
@@ -276,8 +276,8 @@ public class LoginAct extends BaseAct {
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("登录成功");
-                        mSessionInfo = createSessionInfo();
-                        pushUtils.setTags(mLoginInfo, mSessionInfo);
+                        App.sessionInfo = createSessionInfo();
+                        pushUtils.setTags(mLoginInfo,App.sessionInfo);
                         saveLoginInfo();
                         navigator.navigateTo(RoutePath.MAIN);
                         finish();

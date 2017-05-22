@@ -1,6 +1,8 @@
 package com.unicorn.aems.login.entity;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo  implements Serializable {
 
     private String roleId;
     private String userId;

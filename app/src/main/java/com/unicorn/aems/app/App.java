@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.Utils;
 import com.orhanobut.logger.Logger;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
+import com.unicorn.aems.login.entity.SessionInfo;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -32,7 +33,6 @@ public class App extends Application {
         DaoSession daoSession = initDb();
         AppComponentProvider.init(this, daoSession);
         Logger.init("AEMS_LOG");
-//        Stetho.initializeWithDefaults(this);
 //        initFragmentation();
     }
 
@@ -53,5 +53,7 @@ public class App extends Application {
     public static String baseDir() {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
     }
+
+    public static SessionInfo sessionInfo;
 
 }

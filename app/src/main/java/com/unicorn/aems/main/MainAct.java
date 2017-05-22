@@ -40,9 +40,9 @@ public class MainAct extends BaseAct {
     private void initMainTab() {
         NavigationController navigationController = mainTab.material()
                 .addItem(android.R.drawable.ic_menu_camera, "首页")
-                .addItem(android.R.drawable.ic_menu_compass, "功能")
-                .addItem(android.R.drawable.ic_menu_search, "策略")
-                .addItem(android.R.drawable.ic_menu_help, "更多")
+//                .addItem(android.R.drawable.ic_menu_compass, "功能")
+//                .addItem(android.R.drawable.ic_menu_search, "策略")
+//                .addItem(android.R.drawable.ic_menu_help, "更多")
                 .build();
         navigationController.setupWithViewPager(viewPager);
     }

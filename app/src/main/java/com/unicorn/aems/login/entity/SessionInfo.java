@@ -1,6 +1,8 @@
 package com.unicorn.aems.login.entity;
 
-public class SessionInfo {
+import java.io.Serializable;
+
+public class SessionInfo implements Serializable{
 
     private UserInfo currentUser;
     private String jsessionid;

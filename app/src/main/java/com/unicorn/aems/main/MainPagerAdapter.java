@@ -12,7 +12,7 @@ class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new SimpleFra();
+        return new FuncFra();
     }
 
     @Override

@@ -29,28 +29,6 @@ http://blog.csdn.net/leehong2005/article/details/7299471。
   @Inject
     MenuService menuService;
 
-    private void getMenu(SessionInfo sessionInfo) {
-        String cookie = "JSESSIONID=" + sessionInfo.getJsessionid();
-        String userId = sessionInfo.getCurrentUser().getUserId();
-        menuService.getMenu(cookie, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Menu>>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(List<Menu> menus) {
-
-                    }
-                });
-
-    }
 
 {"currentUser":{"roleId":"402887b853efd9bb0153efde441d0004","userId":"ff0d905985564798853e531fe0dc98ac","username":"管理员"},"jsessionid":"D74AE21537ED01727050D290A6C6DD5D","success":true}

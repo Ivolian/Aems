@@ -3,6 +3,8 @@ package com.unicorn.aems.app;
 
 import com.unicorn.aems.base.Provider;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
@@ -24,9 +26,13 @@ public class RetrofitProvider implements Provider<Retrofit> {
     public Retrofit provide() {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
 //            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
-        OkHttpClient okHttpClient = okHttpClientBuilder.build();
+        OkHttpClient okHttpClient = okHttpClientBuilder
+                .connectTimeout(1, TimeUnit.SECONDS)
+                .build();
+
         return new Retrofit.Builder()
                 .client(okHttpClient)
+
                 .baseUrl(BASE_REQUEST_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
