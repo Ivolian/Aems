@@ -1,4 +1,4 @@
-package com.unicorn;
+package com.unicorn.aems.constant;
 
 public class RxBusTag {
 

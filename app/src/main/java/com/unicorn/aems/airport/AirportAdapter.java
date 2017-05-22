@@ -65,7 +65,7 @@ public class AirportAdapter extends IndexableAdapter<Airport> {
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tvAirportName)
+        @BindView(R.id.tvAirport)
         TextView tvAirportName;
 
         public ItemViewHolder(View itemView) {

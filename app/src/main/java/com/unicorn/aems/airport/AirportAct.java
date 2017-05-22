@@ -16,11 +16,11 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
-import com.unicorn.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
+import com.unicorn.aems.constant.RxBusTag;
 import com.unicorn.aems.navigate.RoutePath;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -53,15 +53,18 @@ public class AirportAct extends BaseAct {
         initIndexableLayout();
     }
 
+
+    // ======================== 取消 ========================
+
     private void clickCancel() {
         RxView.clicks(findViewById(R.id.tvCancel))
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> finish());
     }
 
-    /**
-     * 按名称或拼音查询机场
-     */
+
+    // ======================== 按名称或拼音查询机场 ========================
+
     @BindView(R.id.etSearch)
     EditText etSearch;
 
@@ -84,12 +87,12 @@ public class AirportAct extends BaseAct {
         etSearch.setHintTextColor(grey400);
 
         // 查询图标
-        Drawable left = new IconicsDrawable(this)
+        Drawable search = new IconicsDrawable(this)
                 .icon(Ionicons.Icon.ion_ios_search)
                 .colorRes(R.color.colorPrimary)
                 .sizeDp(17);
         etSearch.setCompoundDrawablePadding(ConvertUtils.dp2px(8));
-        etSearch.setCompoundDrawables(left, null, null, null);
+        etSearch.setCompoundDrawables(search, null, null, null);
 
         // 查询
         RxTextView.afterTextChangeEvents(etSearch)
@@ -101,9 +104,9 @@ public class AirportAct extends BaseAct {
                 .subscribe(airports -> airportAdapter.setDatas(airports));
     }
 
-    /**
-     * 机场索引列表
-     */
+
+    // ======================== 机场索引列表 ========================
+
     @BindView(R.id.indexableLayout)
     IndexableLayout indexableLayout;
 
@@ -126,9 +129,7 @@ public class AirportAct extends BaseAct {
                 // indexableAdapter 有个 bug 不得不过滤下
                 .filter(airports -> airports.size() != 0)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(airports -> airportAdapter.setDatas(airports)
-                );
-
+                .subscribe(airports -> airportAdapter.setDatas(airports));
     }
 
 

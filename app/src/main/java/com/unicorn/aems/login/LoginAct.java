@@ -19,7 +19,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.orhanobut.logger.Logger;
-import com.unicorn.RxBusTag;
+import com.unicorn.aems.constant.RxBusTag;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.service.AirportService;
@@ -80,9 +80,8 @@ public class LoginAct extends BaseAct {
     }
 
 
-    /**
-     * 选择机场
-     */
+    // ======================== 选择机场 ========================
+
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
 
@@ -97,14 +96,15 @@ public class LoginAct extends BaseAct {
 
     Airport airportSelected;
 
-    @BindView(R.id.tvAirportName)
-    TextView tvAirportName;
+    @BindView(R.id.tvAirport)
+    TextView tvAirport;
 
     @Subscribe(tags = {@Tag(RxBusTag.AIRPORT_SELECTED)})
     public void airportOnSelected(Airport airport) {
         airportSelected = airport;
-        tvAirportName.setText(airport.getName());
+        tvAirport.setText(airport.getName());
     }
+
 
     /**
      * 用户名密码
@@ -242,13 +242,13 @@ public class LoginAct extends BaseAct {
                 .filter(airport -> airport != null)
                 .subscribe(airport -> {
                     airportSelected = airport;
-                    tvAirportName.setText(airport.getName());
+                    tvAirport.setText(airport.getName());
                 });
     }
 
     private void renderLoginInfo() {
         airportSelected = loginInfo.getAirport();
-        tvAirportName.setText(loginInfo.getAirport().getName());
+        tvAirport.setText(loginInfo.getAirport().getName());
         etAccount.setText(loginInfo.getAccount());
         etPwd.setText(loginInfo.getPwd());
     }
