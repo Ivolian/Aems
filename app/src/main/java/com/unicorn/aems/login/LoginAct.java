@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.jakewharton.rxbinding.view.RxView;
@@ -34,6 +35,7 @@ import com.unicorn.aems.login.ui.UnderLineLinearLayout;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
+import com.unicorn.aems.utils.FingerPrintUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -68,6 +70,7 @@ public class LoginAct extends BaseAct {
         BarUtils.setColor(this, Color.WHITE, 50);
 
         // 好多事件啊 ！！！
+        clickFinger();
         clickAirport();
         focusOrTextChangeAccountAndPwd();
         clickEye();
@@ -76,6 +79,20 @@ public class LoginAct extends BaseAct {
 
         // ...
         getLoginInfo();
+    }
+
+
+    // ======================== 指纹登陆 ========================
+
+    private void clickFinger() {
+        RxView.clicks(findViewById(R.id.tvFinger)).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
+            if (mLoginInfo == null) {
+                ToastUtils.showShort("至少使用密码登录一次");
+                return;
+            }
+            FingerPrintUtils printUtils = new FingerPrintUtils(LoginAct.this, () -> login(mLoginInfo.getAccount(), mLoginInfo.getPwd()));
+            printUtils.authenticate();
+        });
     }
 
 
@@ -202,7 +219,7 @@ public class LoginAct extends BaseAct {
     private void clickLogin() {
         RxView.clicks(btnLogin)
                 .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> login());
+                .subscribe(aVoid -> login(getAccount(), getPwd()));
         // 默认不可点击
         btnLogin.disable();
     }
@@ -262,9 +279,8 @@ public class LoginAct extends BaseAct {
     @Inject
     PushUtils pushUtils;
 
-
-    private void login() {
-        loginService.login(getAccount(), getPwd())
+    private void login(String account, String pwd) {
+        loginService.login(account, pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SessionInfo>() {
@@ -276,8 +292,8 @@ public class LoginAct extends BaseAct {
                     @Override
                     public void onError(Throwable e) {
                         Logger.d("登录成功");
-                        App.sessionInfo = createSessionInfo();
-                        pushUtils.setTags(mLoginInfo,App.sessionInfo);
+                        App.setSessionInfo(createSessionInfo());
+                        pushUtils.setTags(airportSelected, App.getSessionInfo());
                         saveLoginInfo();
                         navigator.navigateTo(RoutePath.MAIN);
                         finish();

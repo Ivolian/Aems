@@ -54,6 +54,13 @@ public class App extends Application {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
     }
 
-    public static SessionInfo sessionInfo;
+    private static SessionInfo sessionInfo;
 
+    public static SessionInfo getSessionInfo() {
+        return sessionInfo;
+    }
+
+    public static void setSessionInfo(SessionInfo sessionInfo) {
+        App.sessionInfo = sessionInfo;
+    }
 }

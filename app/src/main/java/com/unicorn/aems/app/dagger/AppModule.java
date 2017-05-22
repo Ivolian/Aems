@@ -3,12 +3,12 @@ package com.unicorn.aems.app.dagger;
 import android.app.Application;
 import android.content.Context;
 
-import com.unicorn.aems.main.MenuService;
 import com.unicorn.aems.airport.entity.AirportDao;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.RetrofitProvider;
 import com.unicorn.aems.login.LoginService;
 import com.unicorn.aems.login.entity.LoginInfoDao;
+import com.unicorn.aems.main.MenuService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -69,6 +69,5 @@ public class AppModule {
     LoginInfoDao provideLoginInfoDao(DaoSession daoSession) {
         return daoSession.getLoginInfoDao();
     }
-
 
 }

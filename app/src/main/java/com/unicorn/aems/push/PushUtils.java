@@ -1,10 +1,11 @@
 package com.unicorn.aems.push;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.orhanobut.logger.Logger;
+import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.app.dagger.App;
-import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.SessionInfo;
 import com.unicorn.aems.login.entity.UserInfo;
 
@@ -25,10 +26,10 @@ public class PushUtils {
         this.context = context;
     }
 
-    public void setTags(LoginInfo loginInfo, SessionInfo sessionInfo) {
+    public void setTags(@NonNull Airport airportSelected,@NonNull SessionInfo sessionInfo) {
         Set<String> tags = new HashSet<>();
         tags.add("aems");
-        String airportCode = loginInfo.getAirport().getCode();
+        String airportCode = airportSelected.getCode();
         tags.add(airportCode);
         UserInfo userInfo = sessionInfo.getCurrentUser();
         tags.add(airportCode + idToTag(userInfo.getUserId()));

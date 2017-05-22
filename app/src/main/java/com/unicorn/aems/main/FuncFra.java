@@ -50,7 +50,7 @@ public class FuncFra extends BaseFra {
     MenuProvider menuProvider;
 
     private void getMenu() {
-        SessionInfo sessionInfo = App.sessionInfo;
+        SessionInfo sessionInfo = App.getSessionInfo();
         String cookie = "JSESSIONID=" + sessionInfo.getJsessionid();
         String userId = sessionInfo.getCurrentUser().getUserId();
         menuService.getMenu(cookie, userId)
