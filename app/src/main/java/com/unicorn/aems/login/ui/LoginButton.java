@@ -11,11 +11,11 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.unicorn.aems.R;
-import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.aems.utils.DensityUtils;
 
-import javax.inject.Inject;
+import butterknife.BindColor;
+import butterknife.ButterKnife;
 
 public class LoginButton extends AppCompatTextView {
 
@@ -24,15 +24,8 @@ public class LoginButton extends AppCompatTextView {
         init();
     }
 
-    @Inject
-    com.unicorn.aems.utils.ColorUtils colorUtils;
-
-    @Inject
-    DensityUtils densityUtils;
-
     private void init() {
-        AppComponentProvider.provide().inject(this);
-
+        ButterKnife.bind(this);
         // cope text
         setText("登录");
         setGravity(Gravity.CENTER);
@@ -41,11 +34,11 @@ public class LoginButton extends AppCompatTextView {
 
         // cope bg
         GradientDrawable pressed = new GradientDrawable();
-        pressed.setCornerRadius(densityUtils.dp2px(3));
+        pressed.setCornerRadius(ConvertUtils.dp2px(3));
         pressed.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
 
         GradientDrawable unpressed = new GradientDrawable();
-        unpressed.setCornerRadius(densityUtils.dp2px(3));
+        unpressed.setCornerRadius(ConvertUtils.dp2px(3));
         unpressed.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
         StateListDrawable stateListDrawable = new StateListDrawable();
@@ -59,8 +52,11 @@ public class LoginButton extends AppCompatTextView {
         setClickable(true);
     }
 
+    @BindColor(R.color.colorAccent)
+    int colorAccent;
+
     public void disable() {
-        setTextColor(colorUtils.getColor(R.color.colorAccent));
+        setTextColor(colorAccent);
         setClickable(false);
     }
 

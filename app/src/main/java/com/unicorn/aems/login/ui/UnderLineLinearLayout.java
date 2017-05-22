@@ -8,11 +8,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.aems.utils.DensityUtils;
-
-import javax.inject.Inject;
 
 public class UnderLineLinearLayout extends LinearLayout {
 
@@ -22,7 +20,6 @@ public class UnderLineLinearLayout extends LinearLayout {
     }
 
     private void init() {
-        AppComponentProvider.provide().inject(this);
         setWillNotDraw(false);
         initPaint();
     }
@@ -31,11 +28,8 @@ public class UnderLineLinearLayout extends LinearLayout {
     private int colorFocused = ContextCompat.getColor(getContext(), R.color.colorPrimary);
     private int colorUnFocused = ContextCompat.getColor(getContext(), R.color.md_grey_300);
 
-    @Inject
-    DensityUtils densityUtils;
-
     private void initPaint() {
-        paint.setStrokeWidth(densityUtils.dp2px(2f));
+        paint.setStrokeWidth(ConvertUtils.dp2px(2f));
         paint.setColor(colorUnFocused);
     }
 
