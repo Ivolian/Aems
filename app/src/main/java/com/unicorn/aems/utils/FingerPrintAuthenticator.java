@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import rx.Subscription;
 
 
-public class FingerPrintUtils {
+public class FingerPrintAuthenticator {
 
     public interface AuthenticateSuccessListener {
         void onAuthenticateSuccess();
@@ -27,7 +27,7 @@ public class FingerPrintUtils {
     private AuthenticateSuccessListener authenticateSuccessListener;
     private Subscription subscription;
 
-    public FingerPrintUtils(Context context,AuthenticateSuccessListener authenticateSuccessListener) {
+    public FingerPrintAuthenticator(Context context, AuthenticateSuccessListener authenticateSuccessListener) {
         this.context = context;
         this.authenticateSuccessListener = authenticateSuccessListener;
     }
@@ -43,7 +43,7 @@ public class FingerPrintUtils {
                             ToastUtils.showShort(fingerprintAuthenticationResult.getMessage());
                             break;
                         case AUTHENTICATED:
-                            onAuthenticateSuccess();
+                            onAuthenticateSuccessInternal();
                             break;
                     }
                 },
@@ -51,9 +51,9 @@ public class FingerPrintUtils {
         );
     }
 
-    private void onAuthenticateSuccess() {
+    private void onAuthenticateSuccessInternal() {
         dialog.setTitle("指纹验证成功");
-        animationView.setAnimation("finger.json");
+        animationView.setAnimation("fingerprint.json");
         animationView.addAnimatorUpdateListener((animation) -> {
             if (animation.getAnimatedFraction() == 1.0f) {
                 dialog.dismiss();
@@ -81,8 +81,8 @@ public class FingerPrintUtils {
                         subscription.unsubscribe();
                     }
                 })
-                .cancelable(false).show();
-
+                .cancelable(false)
+                .show();
         ButterKnife.bind(this, dialog);
         animationView.addColorFilter(new PorterDuffColorFilter(colorPrimary, PorterDuff.Mode.LIGHTEN));
     }

@@ -35,7 +35,7 @@ import com.unicorn.aems.login.ui.UnderLineLinearLayout;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.unicorn.aems.push.PushUtils;
-import com.unicorn.aems.utils.FingerPrintUtils;
+import com.unicorn.aems.utils.FingerPrintAuthenticator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -90,7 +90,7 @@ public class LoginAct extends BaseAct {
                 ToastUtils.showShort("至少使用密码登录一次");
                 return;
             }
-            FingerPrintUtils printUtils = new FingerPrintUtils(LoginAct.this, () -> login(mLoginInfo.getAccount(), mLoginInfo.getPwd()));
+            FingerPrintAuthenticator printUtils = new FingerPrintAuthenticator(LoginAct.this, () -> login(mLoginInfo.getAccount(), mLoginInfo.getPwd()));
             printUtils.authenticate();
         });
     }
