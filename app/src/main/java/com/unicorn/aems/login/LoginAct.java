@@ -44,6 +44,7 @@ import butterknife.BindView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 @Route(path = RoutePath.LOGIN)
 public class LoginAct extends BaseAct {
@@ -85,8 +86,6 @@ public class LoginAct extends BaseAct {
     @BindView(R.id.llAirport)
     UnderLineLinearLayout llAirport;
 
-    Airport airportSelected;
-
     @Inject
     Navigator navigator;
 
@@ -95,6 +94,8 @@ public class LoginAct extends BaseAct {
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> navigator.navigateTo(RoutePath.AIRPORT));
     }
+
+    Airport airportSelected;
 
     @BindView(R.id.tvAirportName)
     TextView tvAirportName;
@@ -246,6 +247,7 @@ public class LoginAct extends BaseAct {
     }
 
     private void renderLoginInfo() {
+        airportSelected = loginInfo.getAirport();
         tvAirportName.setText(loginInfo.getAirport().getName());
         etAccount.setText(loginInfo.getAccount());
         etPwd.setText(loginInfo.getPwd());
@@ -269,6 +271,7 @@ public class LoginAct extends BaseAct {
     private void login() {
         Logger.d("登录");
         loginService.login(getAccount(), getPwd())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SessionInfo>() {
                     @Override
@@ -282,7 +285,8 @@ public class LoginAct extends BaseAct {
                         sessionInfo = createSessionInfo();
                         saveLoginInfo();
                         setTags();
-                        // todo
+                        navigator.navigateTo(RoutePath.MAIN);
+                        finish();
                     }
 
                     @Override
@@ -306,7 +310,23 @@ public class LoginAct extends BaseAct {
 
     private void saveLoginInfo() {
         LoginInfo loginInfo = new LoginInfo(getAccount(), getPwd(), airportSelected.getId());
-        userService.saveLoginInfo(loginInfo).subscribe(o -> Logger.d("保存登录信息成功"));
+        userService.saveLoginInfo(loginInfo).subscribe(new Subscriber<LoginInfo>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Logger.d("");
+            }
+
+            @Override
+            public void onNext(LoginInfo loginInfo) {
+                Logger.d("");
+
+            }
+        });
     }
 
     private void setTags() {

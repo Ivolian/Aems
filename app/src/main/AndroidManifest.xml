@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".login.LoginAct" />
         <activity android:name=".airport.AirportAct" />
-
+        <activity android:name="com.unicorn.main.MainAct" />
         <!-- User defined. 用户自定义的广播接收器-->
         <receiver
             android:name=".push.PushReceiver"
