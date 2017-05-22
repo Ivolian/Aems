@@ -12,8 +12,6 @@ import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,20 +26,22 @@ public class SplashAct extends BaseAct {
     @Override
     protected void init(Bundle savedInstanceState) {
         requestPermission();
-        initAirports();
     }
 
     private void requestPermission() {
-        Logger.d("请求权限");
         new RxPermissions(this)
                 .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
-                    Logger.d("请求权限" + (granted ? "成功" : "失败"));
                     if (!granted) {
                         ToastUtils.showLong("未授予应用权限");
                     }
+                    initAirportData();
+                    Logger.d("请求权限" + (granted ? "成功" : "失败"));
                 });
     }
+
+
+    // ======================== initAirportData ========================
 
     @Inject
     AirportService airportService;
@@ -49,14 +49,11 @@ public class SplashAct extends BaseAct {
     @Inject
     Navigator navigator;
 
-    private void initAirports() {
-        Logger.d("机场数据初始化");
-        airportService.initAirports()
-                .delay(2, TimeUnit.SECONDS)
+    private void initAirportData() {
+        airportService.initAirportData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> {
-                    boolean success = airports.size() != 0;
-                    Logger.d("机场数据初始化" + (success ? "成功" : "失败"));
+                    Logger.d("机场数据初始化数量:" + airports.size());
                     navigator.navigateTo(RoutePath.LOGIN);
                     finish();
                 });

@@ -48,12 +48,12 @@ public class AirportAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        initTvCancel();
+        clickCancel();
         initEtSearch();
         initIndexableLayout();
     }
 
-    private void initTvCancel() {
+    private void clickCancel() {
         RxView.clicks(findViewById(R.id.tvCancel))
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(aVoid -> finish());

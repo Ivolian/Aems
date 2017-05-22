@@ -148,7 +148,5 @@ public class LoginInfo {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getLoginInfoDao() : null;
     }
-
-
-
+    
 }

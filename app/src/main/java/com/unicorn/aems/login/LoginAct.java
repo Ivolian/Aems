@@ -235,7 +235,7 @@ public class LoginAct extends BaseAct {
                         renderLoginInfo();
                         return Observable.never();
                     } else {
-                        return airportService.defaultAirport();
+                        return airportService.defaultAirportSelected();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

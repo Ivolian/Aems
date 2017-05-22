@@ -29,25 +29,23 @@ public class AirportRepository {
     public Observable<List<Airport>> listByNameOrPinyin(String query) {
         WhereCondition con1 = AirportDao.Properties.Name.like("%" + query + "%");
         WhereCondition con2 = AirportDao.Properties.Pinyin.like("%" + query.toLowerCase() + "%");
-        return airportDao.queryBuilder().whereOr(con1, con2).rx().list();
+        return airportDao.queryBuilder()
+                .whereOr(con1, con2)
+                .rx()
+                .list();
     }
 
-    public Observable<Airport> uniqueByName(String query) {
-        WhereCondition con = AirportDao.Properties.Name.eq(query);
-        return airportDao.queryBuilder().where(con).rx().unique();
-    }
-
-    public Observable<List<Airport>> insertOrReplace(List<Airport> list) {
-        return airportDao.rx().insertOrReplaceInTx(list)
-                .map(airports -> (List<Airport>) airports);
-    }
-
-    public Observable<Airport> first() {
+    public Observable<Airport> firstOrderByName() {
         return airportDao.queryBuilder()
                 .orderAsc(AirportDao.Properties.Name)
                 .limit(1)
                 .rx()
                 .unique();
+    }
+
+    public Observable<List<Airport>> insertOrReplace(List<Airport> list) {
+        return airportDao.rx().insertOrReplaceInTx(list)
+                .map(airports -> (List<Airport>) airports);
     }
 
 }
