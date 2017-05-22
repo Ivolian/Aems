@@ -31,7 +31,6 @@ public class FuncFra extends BaseFra {
 
     @Override
     protected void init() {
-//        BookshelfComponentProvider.provide().inject(this);
 //        initSwipeRefreshLayout();
 //        initRecycleView();
     }
@@ -43,7 +42,6 @@ public class FuncFra extends BaseFra {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 //        swipeRefreshLayout.setRefreshing(true);
-//        loadFirst();
 
         getMenu();
     }
@@ -66,7 +64,7 @@ public class FuncFra extends BaseFra {
 
                     @Override
                     public void onError(Throwable e) {
-                        Menu menu = menuProvider.provide();
+                        List<Menu> menus = menuProvider.provide();
                         ToastUtils.showLong("err");
                     }
 
