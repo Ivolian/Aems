@@ -9,12 +9,11 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import com.unicorn.aems.airport.service.AirportService;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
+import com.unicorn.aems.login.UserService;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 
 import javax.inject.Inject;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 public class SplashAct extends BaseAct {
 
@@ -47,16 +46,16 @@ public class SplashAct extends BaseAct {
     AirportService airportService;
 
     @Inject
+    UserService userService;
+
+    @Inject
     Navigator navigator;
 
     private void initAirportData() {
         airportService.initAirportData()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(airports -> {
-                    Logger.d("机场数据初始化数量:" + airports.size());
-                    navigator.navigateTo(RoutePath.FINGERPRINT);
-//                    finish();
-                });
+                .doOnNext(airports -> Logger.d("机场数据初始化数量:" + airports.size()))
+                .flatMap(airports -> userService.getLoginInfo())
+                .subscribe(loginInfo -> navigator.navigateTo(loginInfo != null ? RoutePath.FINGERPRINT : RoutePath.LOGIN));
     }
 
 }

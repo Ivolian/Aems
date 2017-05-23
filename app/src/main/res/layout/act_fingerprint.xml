@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303344"
+    android:background="@color/fingerprint"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -12,7 +12,7 @@
         android:layout_marginTop="64dp"
         android:text="欢迎回来"
         android:textColor="@color/md_white"
-        android:textSize="30dp" />
+        android:textSize="28dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,22 +22,20 @@
         android:textColor="@color/md_grey_400"
         android:textSize="18dp" />
 
-    <FrameLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="64dp">
+    <com.unicorn.aems.FingerWrapperView
+        android:id="@+id/fingerWrapperView"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:padding="18dp"
+        android:layout_marginTop="96dp">
 
-        <com.unicorn.aems.FingerView
-            android:id="@+id/fingerView"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.airbnb.lottie.LottieAnimationView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/lottieAnimationView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+    </com.unicorn.aems.FingerWrapperView>
 
 </LinearLayout>
 
