@@ -54,8 +54,8 @@ public class SplashAct extends BaseAct {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(airports -> {
                     Logger.d("机场数据初始化数量:" + airports.size());
-                    navigator.navigateTo(RoutePath.LOGIN);
-                    finish();
+                    navigator.navigateTo(RoutePath.FINGERPRINT);
+//                    finish();
                 });
     }
 

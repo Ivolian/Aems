@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.LoginAct" />
+        <activity android:name=".FingerPrintAct" />
         <activity android:name=".airport.AirportAct" />
         <activity android:name=".main.MainAct" />
         <!-- User defined. 用户自定义的广播接收器-->
