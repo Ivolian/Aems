@@ -51,5 +51,10 @@ public static java.lang.String TABLENAME;
 -keep public class com.alibaba.android.arouter.routes.**{*;}
 -keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
 
-
 -ignorewarnings
+
+## MeiZuFingerprint
+#-keep class com.fingerprints.service.** { *; }
+#
+## SmsungFingerprint
+#-keep class com.samsung.android.sdk.** { *; }

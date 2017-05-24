@@ -24,26 +24,23 @@ public class LoginHelper {
     private Airport airport;
     private String account;
     private String pwd;
-    private LoginListener loginListener;
 
-
-    public LoginHelper(Airport airport, String account, String pwd, LoginListener loginListener) {
+    public LoginHelper(Airport airport, String account, String pwd) {
         this.airport = airport;
         this.account = account;
         this.pwd = pwd;
-        this.loginListener = loginListener;
         AppComponentProvider.provide().inject(this);
     }
 
-    public LoginHelper(LoginInfo loginInfo, LoginListener loginListener) {
-        this(loginInfo.getAirport(), loginInfo.getAccount(), loginInfo.getPwd(), loginListener);
+    public LoginHelper(LoginInfo loginInfo) {
+        this(loginInfo.getAirport(), loginInfo.getAccount(), loginInfo.getPwd());
     }
 
 
     @Inject
     LoginService loginService;
 
-    public void login() {
+    public void login(LoginListener loginListener) {
         loginService.login(account, pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

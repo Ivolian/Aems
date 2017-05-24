@@ -27,7 +27,7 @@ public class RetrofitProvider implements Provider<Retrofit> {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
 //            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
         OkHttpClient okHttpClient = okHttpClientBuilder
-                .connectTimeout(1, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
                 .build();
 
         return new Retrofit.Builder()

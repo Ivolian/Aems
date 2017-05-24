@@ -1,6 +1,8 @@
 package com.unicorn.aems.fingerprint;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -101,14 +103,7 @@ public class FingerPrintAct extends BaseAct {
     Navigator navigator;
 
     private void initLoginHelper() {
-        userService.getLoginInfo().subscribe(loginInfo -> {
-                loginHelper = new LoginHelper(loginInfo, () -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
-                    @Override
-                    public void onArrival(Postcard postcard) {
-                        finish();
-                    }
-                }));
-        });
+        userService.getLoginInfo().subscribe(loginInfo -> loginHelper = new LoginHelper(loginInfo));
     }
 
     private void startIdentify() {
@@ -116,20 +111,27 @@ public class FingerPrintAct extends BaseAct {
         fingerprintIdentify.startIdentify(3, new BaseFingerprint.FingerprintIdentifyListener() {
             @Override
             public void onSucceed() {
-                ToastUtils.showShort("指纹验证成功");
+                ToastUtils.showLong("指纹验证成功");
+                Dialog mask = showMask();
                 if (loginHelper != null) {
-                    loginHelper.login();
+                    loginHelper.login(() -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
+                        @Override
+                        public void onArrival(Postcard postcard) {
+                            finish();
+                            mask.dismiss();
+                        }
+                    }));
                 }
             }
 
             @Override
             public void onNotMatch(int availableTimes) {
-                ToastUtils.showShort("指纹验证失败, 还有" + availableTimes + "机会");
+                ToastUtils.showLong("指纹验证失败, 还可尝试" + availableTimes + "次");
             }
 
             @Override
             public void onFailed() {
-                ToastUtils.showShort("指纹验证失败");
+                ToastUtils.showLong("指纹验证失败");
                 navigator.navigateTo(RoutePath.LOGIN, new NavCallback() {
                     @Override
                     public void onArrival(Postcard postcard) {
@@ -138,6 +140,12 @@ public class FingerPrintAct extends BaseAct {
                 });
             }
         });
+    }
+
+    private ProgressDialog showMask() {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.show();
+        return dialog;
     }
 
 }
