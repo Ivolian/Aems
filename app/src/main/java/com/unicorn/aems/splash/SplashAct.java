@@ -3,6 +3,8 @@ package com.unicorn.aems.splash;
 import android.Manifest;
 import android.os.Bundle;
 
+import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.blankj.utilcode.util.ToastUtils;
 import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -27,21 +29,6 @@ public class SplashAct extends BaseAct {
         requestPermission();
     }
 
-    private void requestPermission() {
-        new RxPermissions(this)
-                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(granted -> {
-                    if (!granted) {
-                        ToastUtils.showLong("未授予应用权限");
-                    }
-                    initAirportData();
-                    Logger.d("请求权限" + (granted ? "成功" : "失败"));
-                });
-    }
-
-
-    // ======================== initAirportData ========================
-
     @Inject
     AirportService airportService;
 
@@ -51,11 +38,26 @@ public class SplashAct extends BaseAct {
     @Inject
     Navigator navigator;
 
-    private void initAirportData() {
-        airportService.initAirportData()
+    private void requestPermission() {
+        new RxPermissions(this)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .doOnNext(granted -> Logger.d("请求权限" + (granted ? "成功" : "失败")))
+                .flatMap(granted -> {
+                    if (!granted) {
+                        ToastUtils.showLong("未授予应用权限");
+                    }
+                    return airportService.initAirportData();
+                })
                 .doOnNext(airports -> Logger.d("机场数据初始化数量:" + airports.size()))
                 .flatMap(airports -> userService.getLoginInfo())
-                .subscribe(loginInfo -> navigator.navigateTo(loginInfo != null ? RoutePath.FINGERPRINT : RoutePath.LOGIN));
+                // TODO 加入机型是否支持指纹的功能，以及设置中关闭指纹登录等
+                .subscribe(loginInfo -> navigator.navigateTo(loginInfo != null ? RoutePath.FINGERPRINT : RoutePath.LOGIN, new NavCallback() {
+                            @Override
+                            public void onArrival(Postcard postcard) {
+                                finish();
+                            }
+                        })
+                );
     }
 
 }
