@@ -2,7 +2,7 @@ package com.unicorn.aems.app.dagger;
 
 import android.content.Context;
 
-import com.unicorn.aems.FingerPrintAct;
+import com.unicorn.aems.fingerprint.FingerPrintAct;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
 import com.unicorn.aems.login.LoginHelper;

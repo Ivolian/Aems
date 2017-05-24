@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.jakewharton.rxbinding.view.RxView;
@@ -23,19 +25,14 @@ import com.orhanobut.logger.Logger;
 import com.unicorn.aems.R;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.airport.service.AirportService;
-import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.constant.RxBusTag;
 import com.unicorn.aems.login.entity.LoginInfo;
-import com.unicorn.aems.login.entity.SessionInfo;
-import com.unicorn.aems.login.entity.UserInfo;
 import com.unicorn.aems.login.ui.LoginButton;
 import com.unicorn.aems.login.ui.UnderLineLinearLayout;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
-import com.unicorn.aems.push.PushHelper;
-import com.unicorn.aems.utils.FingerPrintAuthenticator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,9 +40,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 @Route(path = RoutePath.LOGIN)
 public class LoginAct extends BaseAct {
@@ -70,7 +65,6 @@ public class LoginAct extends BaseAct {
         BarUtils.setColor(this, Color.WHITE, 50);
 
         // 好多事件啊 ！！！
-        clickFinger();
         clickAirport();
         focusOrTextChangeAccountAndPwd();
         clickEye();
@@ -80,21 +74,6 @@ public class LoginAct extends BaseAct {
         // ...
         getLoginInfo();
     }
-
-
-    // ======================== 指纹登陆 ========================
-
-    private void clickFinger() {
-        RxView.clicks(findViewById(R.id.tvFinger)).throttleFirst(2, TimeUnit.SECONDS).subscribe(aVoid -> {
-            if (mLoginInfo == null) {
-                ToastUtils.showShort("至少使用密码登录一次");
-                return;
-            }
-            FingerPrintAuthenticator printUtils = new FingerPrintAuthenticator(LoginAct.this, () -> login(mLoginInfo.getAccount(), mLoginInfo.getPwd()));
-            printUtils.authenticate();
-        });
-    }
-
 
     // ======================== 选择机场 ========================
 
@@ -150,6 +129,12 @@ public class LoginAct extends BaseAct {
             enableOrDisableLogin();
             showClear(editText, clear);
         });
+
+        //
+        RxView.touches(underLineLinearLayout)
+                .map(MotionEvent::getAction)
+                .filter(action -> action == MotionEvent.ACTION_DOWN)
+                .subscribe(action -> editText.requestFocus());
     }
 
     private void showClear(EditText editText, View clear) {
@@ -219,7 +204,7 @@ public class LoginAct extends BaseAct {
     private void clickLogin() {
         RxView.clicks(btnLogin)
                 .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(aVoid -> login(getAccount(), getPwd()));
+                .subscribe(aVoid -> login());
         // 默认不可点击
         btnLogin.disable();
     }
@@ -273,60 +258,15 @@ public class LoginAct extends BaseAct {
 
     // ======================== 登录 ========================
 
-    @Inject
-    LoginService loginService;
-
-    @Inject
-    PushHelper pushUtils;
-
-    private void login(String account, String pwd) {
-        loginService.login(account, pwd)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SessionInfo>() {
+    private void login() {
+        LoginHelper loginHelper = new LoginHelper(airportSelected, getAccount(), getPwd(),
+                () -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d("登录成功");
-                        App.setSessionInfo(createSessionInfo());
-                        pushUtils.setTags(airportSelected, App.getSessionInfo());
-                        saveLoginInfo();
-                        navigator.navigateTo(RoutePath.MAIN);
+                    public void onArrival(Postcard postcard) {
                         finish();
                     }
-
-                    @Override
-                    public void onNext(SessionInfo sessionInfo) {
-
-                    }
-                });
-    }
-
-
-    // ======================== 保存用户登录信息 ========================
-
-    private void saveLoginInfo() {
-        userService.saveLoginInfo(getAccount(), getPwd(), airportSelected)
-                .subscribe(loginInfo -> Logger.d("保存登录信息成功"));
-    }
-
-
-    // ======================== 其他 ========================
-
-    private SessionInfo createSessionInfo() {
-        UserInfo currentUser = new UserInfo();
-        currentUser.setRoleId("");
-        currentUser.setUserId("");
-        currentUser.setUsername("");
-        SessionInfo sessionInfo = new SessionInfo();
-        sessionInfo.setCurrentUser(currentUser);
-        sessionInfo.setJsessionid("");
-        sessionInfo.setSuccess(true);
-        return sessionInfo;
+                }));
+        loginHelper.login();
     }
 
     private String getAccount() {

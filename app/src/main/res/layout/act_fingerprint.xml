@@ -22,7 +22,7 @@
         android:textColor="@color/md_grey_400"
         android:textSize="18dp" />
 
-    <com.unicorn.aems.FingerWrapperView
+    <com.unicorn.aems.fingerprint.ui.FingerWrapperView
         android:id="@+id/fingerWrapperView"
         android:layout_width="128dp"
         android:layout_height="128dp"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.unicorn.aems.FingerWrapperView>
+    </com.unicorn.aems.fingerprint.ui.FingerWrapperView>
 
 </LinearLayout>
 

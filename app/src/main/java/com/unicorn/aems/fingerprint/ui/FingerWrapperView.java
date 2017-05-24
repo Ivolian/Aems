@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.fingerprint.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.ConvertUtils;
+import com.unicorn.aems.R;
 
 import butterknife.ButterKnife;
 

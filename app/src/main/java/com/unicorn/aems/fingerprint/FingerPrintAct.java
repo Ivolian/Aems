@@ -1,4 +1,4 @@
-package com.unicorn.aems;
+package com.unicorn.aems.fingerprint;
 
 import android.animation.ValueAnimator;
 import android.graphics.Color;
@@ -13,9 +13,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.orhanobut.logger.Logger;
+import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
+import com.unicorn.aems.fingerprint.ui.FingerWrapperView;
 import com.unicorn.aems.login.LoginHelper;
 import com.unicorn.aems.login.UserService;
 import com.unicorn.aems.navigate.Navigator;
@@ -52,6 +53,9 @@ public class FingerPrintAct extends BaseAct {
         startFingerWrapperAnim();
         startFingerprintAnim();
         initLoginHelper();
+        if (savedInstanceState == null) {
+            startIdentify();
+        }
     }
 
     @BindView(R.id.fingerWrapperView)
@@ -84,12 +88,7 @@ public class FingerPrintAct extends BaseAct {
         animationView.setAnimation("fingerprint2.json");
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(3000);
         animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(animation -> {
-            animationView.setProgress((float) animation.getAnimatedValue());
-            if (animation.getAnimatedFraction() == 1f) {
-                startIdentify();
-            }
-        });
+        animator.addUpdateListener(animation -> animationView.setProgress((float) animation.getAnimatedValue()));
         animator.start();
     }
 
@@ -103,15 +102,12 @@ public class FingerPrintAct extends BaseAct {
 
     private void initLoginHelper() {
         userService.getLoginInfo().subscribe(loginInfo -> {
-            if (loginInfo != null) {
                 loginHelper = new LoginHelper(loginInfo, () -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
                     @Override
                     public void onArrival(Postcard postcard) {
-                        Logger.d("sdfdsf");
                         finish();
                     }
                 }));
-            }
         });
     }
 

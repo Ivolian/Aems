@@ -16,6 +16,8 @@ import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,6 +51,7 @@ public class SplashAct extends BaseAct {
                 })
                 .doOnNext(airports -> Logger.d("机场数据初始化数量:" + airports.size()))
                 .flatMap(airports -> userService.getLoginInfo())
+                .delay(2, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginInfo -> {
                             String routePath = RoutePath.LOGIN;
