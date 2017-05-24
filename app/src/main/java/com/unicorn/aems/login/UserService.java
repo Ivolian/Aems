@@ -25,9 +25,9 @@ public class UserService {
         return loginInfoDao.queryBuilder().rx().unique();
     }
 
-    public Observable<LoginInfo> saveLoginInfo(String account, String pwd, @NonNull Airport airport) {
-        LoginInfo loginInfo = new LoginInfo(account,pwd,airport.getId());
-        return loginInfoDao.rx().insertOrReplace(loginInfo);
+    public Observable<Object> saveLoginInfo(String account, String pwd, @NonNull Airport airport) {
+        LoginInfo loginInfo = new LoginInfo(account, pwd, airport.getId());
+        return loginInfoDao.rx().deleteAll().flatMap(aVoid -> loginInfoDao.rx().insert(loginInfo));
     }
 
 }

@@ -4,6 +4,7 @@ import com.orhanobut.logger.Logger;
 import com.unicorn.aems.airport.entity.Airport;
 import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
+import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.SessionInfo;
 import com.unicorn.aems.login.entity.UserInfo;
 import com.unicorn.aems.push.PushHelper;
@@ -16,14 +17,15 @@ import rx.schedulers.Schedulers;
 
 public class LoginHelper {
 
-    interface LoginListener {
-        public void onLoginSuccess();
+    public interface LoginListener {
+        void onLoginSuccess();
     }
 
     private Airport airport;
     private String account;
     private String pwd;
     private LoginListener loginListener;
+
 
     public LoginHelper(Airport airport, String account, String pwd, LoginListener loginListener) {
         this.airport = airport;
@@ -32,6 +34,11 @@ public class LoginHelper {
         this.loginListener = loginListener;
         AppComponentProvider.provide().inject(this);
     }
+
+    public LoginHelper(LoginInfo loginInfo, LoginListener loginListener) {
+        this(loginInfo.getAirport(), loginInfo.getAccount(), loginInfo.getPwd(), loginListener);
+    }
+
 
     @Inject
     LoginService loginService;

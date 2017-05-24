@@ -8,20 +8,25 @@ import android.os.Bundle;
 import android.view.animation.LinearInterpolator;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.mtramin.rxfingerprint.RxFingerprint;
 import com.orhanobut.logger.Logger;
+import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.login.LoginHelper;
+import com.unicorn.aems.login.UserService;
+import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify;
+import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint;
 
 import javax.inject.Inject;
 
 import butterknife.BindColor;
 import butterknife.BindView;
-import rx.Subscription;
 
 import static android.animation.ValueAnimator.INFINITE;
 
@@ -29,18 +34,24 @@ import static android.animation.ValueAnimator.INFINITE;
 public class FingerPrintAct extends BaseAct {
 
     @Override
+    protected void inject() {
+        AppComponentProvider.provide().inject(this);
+    }
+
+    @Override
     protected int layoutResId() {
         return R.layout.act_fingerprint;
     }
 
-    @BindColor(R.color.fingerprint)
-    int fingerprintColor;
+    @BindColor(R.color.colorFingerprint)
+    int colorFingerprint;
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        BarUtils.setColor(this, fingerprintColor, 50);
+        BarUtils.setColor(this, colorFingerprint, 50);
         startFingerWrapperAnim();
-        showFingerprintAnim();
+        startFingerprintAnim();
+        initLoginHelper();
     }
 
     @BindView(R.id.fingerWrapperView)
@@ -67,44 +78,70 @@ public class FingerPrintAct extends BaseAct {
     @BindView(R.id.animationView)
     LottieAnimationView animationView;
 
-    private void showFingerprintAnim() {
+    private void startFingerprintAnim() {
         // 设置颜色
         animationView.addColorFilter(new PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN));
         animationView.setAnimation("fingerprint2.json");
-        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(5000);
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(3000);
         animator.setInterpolator(new LinearInterpolator());
         animator.addUpdateListener(animation -> {
             animationView.setProgress((float) animation.getAnimatedValue());
             if (animation.getAnimatedFraction() == 1f) {
-                onFingerPrintAnimFinish();
+                startIdentify();
             }
         });
         animator.start();
     }
 
-    Subscription subscription;
-
     @Inject
+    UserService userService;
+
     LoginHelper loginHelper;
 
-    private void onFingerPrintAnimFinish() {
-        // TODO cancel
-        subscription = RxFingerprint.authenticate(this).subscribe(fingerprintAuthenticationResult -> {
-                    switch (fingerprintAuthenticationResult.getResult()) {
-                        case FAILED:
-                            ToastUtils.showShort("指纹验证失败");
-                            break;
-                        case HELP:
-                            ToastUtils.showShort(fingerprintAuthenticationResult.getMessage());
-                            break;
-                        case AUTHENTICATED:
-                            ToastUtils.showShort("指纹验证成功");
-                            loginHelper.login();
-                            break;
+    @Inject
+    Navigator navigator;
+
+    private void initLoginHelper() {
+        userService.getLoginInfo().subscribe(loginInfo -> {
+            if (loginInfo != null) {
+                loginHelper = new LoginHelper(loginInfo, () -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
+                    @Override
+                    public void onArrival(Postcard postcard) {
+                        Logger.d("sdfdsf");
+                        finish();
                     }
-                },
-                Logger::d
-        );
+                }));
+            }
+        });
+    }
+
+    private void startIdentify() {
+        FingerprintIdentify fingerprintIdentify = new FingerprintIdentify(this);
+        fingerprintIdentify.startIdentify(3, new BaseFingerprint.FingerprintIdentifyListener() {
+            @Override
+            public void onSucceed() {
+                ToastUtils.showShort("指纹验证成功");
+                if (loginHelper != null) {
+                    loginHelper.login();
+                }
+            }
+
+            @Override
+            public void onNotMatch(int availableTimes) {
+                ToastUtils.showShort("指纹验证失败, 还有" + availableTimes + "机会");
+            }
+
+            @Override
+            public void onFailed() {
+                ToastUtils.showShort("指纹验证失败");
+                navigator.navigateTo(RoutePath.LOGIN, new NavCallback() {
+                    @Override
+                    public void onArrival(Postcard postcard) {
+                        finish();
+                    }
+                });
+            }
+        });
     }
 
 }

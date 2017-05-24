@@ -2,6 +2,7 @@ package com.unicorn.aems.app.dagger;
 
 import android.content.Context;
 
+import com.unicorn.aems.FingerPrintAct;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
 import com.unicorn.aems.login.LoginHelper;
@@ -23,6 +24,7 @@ public interface AppComponent {
     void inject(LoginAct o);
     void inject(AirportAct o);
     void inject(LoginHelper o);
+    void inject(FingerPrintAct o);
 
     void inject(FuncFra o);
 
