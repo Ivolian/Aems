@@ -34,7 +34,7 @@ import com.unicorn.aems.login.ui.LoginButton;
 import com.unicorn.aems.login.ui.UnderLineLinearLayout;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
-import com.unicorn.aems.push.PushUtils;
+import com.unicorn.aems.push.PushHelper;
 import com.unicorn.aems.utils.FingerPrintAuthenticator;
 
 import java.util.concurrent.TimeUnit;
@@ -277,7 +277,7 @@ public class LoginAct extends BaseAct {
     LoginService loginService;
 
     @Inject
-    PushUtils pushUtils;
+    PushHelper pushUtils;
 
     private void login(String account, String pwd) {
         loginService.login(account, pwd)

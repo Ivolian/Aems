@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
+import com.unicorn.aems.login.LoginHelper;
 import com.unicorn.aems.main.FuncFra;
 import com.unicorn.aems.splash.SplashAct;
 
@@ -21,6 +22,7 @@ public interface AppComponent {
     void inject(SplashAct o);
     void inject(LoginAct o);
     void inject(AirportAct o);
+    void inject(LoginHelper o);
 
     void inject(FuncFra o);
 

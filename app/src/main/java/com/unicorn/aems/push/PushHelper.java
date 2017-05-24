@@ -14,12 +14,12 @@ import java.util.Set;
 import javax.inject.Inject;
 
 @App
-public class PushUtils {
+public class PushHelper {
 
     private Context context;
 
     @Inject
-    public PushUtils(Context context) {
+    public PushHelper(Context context) {
         this.context = context;
     }
 
