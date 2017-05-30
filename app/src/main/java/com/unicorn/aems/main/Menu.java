@@ -1,8 +1,9 @@
 package com.unicorn.aems.main;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Menu {
+public class Menu implements Serializable{
 
     private String objectId;
 

@@ -6,7 +6,7 @@ import com.unicorn.aems.fingerprint.FingerPrintAct;
 import com.unicorn.aems.airport.AirportAct;
 import com.unicorn.aems.login.LoginAct;
 import com.unicorn.aems.login.LoginHelper;
-import com.unicorn.aems.main.FuncFra;
+import com.unicorn.aems.main.func.FuncFra;
 import com.unicorn.aems.splash.SplashAct;
 
 import dagger.Component;
