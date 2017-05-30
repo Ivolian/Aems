@@ -1,4 +1,4 @@
-package com.unicorn.aems.main.func;
+package com.unicorn.aems.func;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

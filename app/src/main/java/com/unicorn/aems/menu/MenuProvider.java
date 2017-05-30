@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.unicorn.aems.app.dagger.App;
 import com.unicorn.aems.base.Provider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,8 +18,8 @@ public class MenuProvider implements Provider<List<Menu>> {
     }
 
     @Override
-    public List<Menu> provide() {
-        return new Gson().fromJson(getMenuString(), new TypeToken<List<Menu>>() {}.getType());
+    public ArrayList<Menu> provide() {
+        return new Gson().fromJson(getMenuString(), new TypeToken<ArrayList<Menu>>() {}.getType());
     }
 
     private String getMenuString() {

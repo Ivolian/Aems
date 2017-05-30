@@ -1,4 +1,4 @@
-package com.unicorn.aems.main.func;
+package com.unicorn.aems.func;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.unicorn.aems.constant.Key;
 import com.unicorn.aems.menu.Menu;
-import com.unicorn.aems.main.SimpleFra;
 
 import java.util.List;
 
@@ -22,12 +21,17 @@ public class FuncPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        SimpleFra simpleFra = new SimpleFra();
-        Bundle bundle = new Bundle();
-        bundle.putString(Key.TEXT, menus.get(position).getName());
-        simpleFra.setArguments(bundle);
-        return simpleFra;
+    return   getSimpleFra(position);
     }
+
+    private Fragment getSimpleFra(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Key.MENUS, menus.get(position).getChildList());
+        Fragment fra = new SimpleFra();
+        fra.setArguments(bundle);
+        return fra;
+    }
+
 
     @Override
     public int getCount() {

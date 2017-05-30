@@ -1,14 +1,15 @@
 package com.unicorn.aems.menu;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Menu {
+public class Menu implements Serializable {
 
     private String objectId;
 
     private String name;
 
-    private List<Menu> childList;
+    private ArrayList<Menu> childList;
 
     public String getObjectId() {
         return objectId;
@@ -26,11 +27,11 @@ public class Menu {
         this.name = name;
     }
 
-    public List<Menu> getChildList() {
+    public ArrayList<Menu> getChildList() {
         return childList;
     }
 
-    public void setChildList(List<Menu> childList) {
+    public void setChildList(ArrayList<Menu> childList) {
         this.childList = childList;
     }
 }

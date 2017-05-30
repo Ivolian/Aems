@@ -1,4 +1,4 @@
-package com.unicorn.aems.main;
+package com.unicorn.aems.main.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
