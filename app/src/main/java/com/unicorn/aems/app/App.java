@@ -9,7 +9,6 @@ import com.blankj.utilcode.util.Utils;
 import com.orhanobut.logger.Logger;
 import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
-import com.unicorn.aems.login.entity.SessionInfo;
 
 
 public class App extends Application {
@@ -52,13 +51,7 @@ public class App extends Application {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
     }
 
-    private static SessionInfo sessionInfo;
+    public static Global global = new Global();
 
-    public static SessionInfo getSessionInfo() {
-        return sessionInfo;
-    }
 
-    public static void setSessionInfo(SessionInfo sessionInfo) {
-        App.sessionInfo = sessionInfo;
-    }
 }

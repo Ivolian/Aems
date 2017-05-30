@@ -70,7 +70,7 @@ public class LoginHelper {
     }
 
     private void saveSessionInfo(SessionInfo sessionInfo) {
-        App.setSessionInfo(sessionInfo);
+        App.global.sessionInfo = sessionInfo;
     }
 
     @Inject
