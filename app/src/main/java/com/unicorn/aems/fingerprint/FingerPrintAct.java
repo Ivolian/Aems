@@ -1,8 +1,6 @@
 package com.unicorn.aems.fingerprint;
 
 import android.animation.ValueAnimator;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -15,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseAct;
@@ -112,7 +111,7 @@ public class FingerPrintAct extends BaseAct {
             @Override
             public void onSucceed() {
                 ToastUtils.showLong("指纹验证成功");
-                Dialog mask = showMask();
+                KProgressHUD mask = showMask().show();
                 if (loginHelper != null) {
                     loginHelper.login(() -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
                         @Override
@@ -142,10 +141,12 @@ public class FingerPrintAct extends BaseAct {
         });
     }
 
-    private ProgressDialog showMask() {
-        ProgressDialog dialog = new ProgressDialog(this);
-        dialog.show();
-        return dialog;
+    private KProgressHUD showMask() {
+      return
+               KProgressHUD.create(this)
+                      .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                      .setDimAmount(0.5f);
+
     }
 
 }

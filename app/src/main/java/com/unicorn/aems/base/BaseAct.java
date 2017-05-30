@@ -11,7 +11,11 @@ import me.yokeyword.fragmentation.SupportActivity;
 
 public abstract class BaseAct extends SupportActivity {
 
-    protected  int layoutResId() {return -1;};
+    final private int NO_LAYOUT = -1;
+
+    protected int layoutResId() {
+        return NO_LAYOUT;
+    }
 
     protected boolean useRxBus() {
         return false;
@@ -21,7 +25,7 @@ public abstract class BaseAct extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Dart.inject(this);
-        if (layoutResId() != -1) {
+        if (layoutResId() != NO_LAYOUT) {
             setContentView(layoutResId());
         }
         ButterKnife.bind(this);
@@ -45,8 +49,7 @@ public abstract class BaseAct extends SupportActivity {
     }
 
     protected void init(Bundle savedInstanceState) {
-        //
+        // 初始化工作
     }
-
 
 }
