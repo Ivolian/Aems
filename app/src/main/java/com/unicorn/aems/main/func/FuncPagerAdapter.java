@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.unicorn.aems.constant.Key;
-import com.unicorn.aems.main.Menu;
+import com.unicorn.aems.menu.Menu;
 import com.unicorn.aems.main.SimpleFra;
 
 import java.util.List;

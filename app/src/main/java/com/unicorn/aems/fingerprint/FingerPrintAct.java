@@ -101,8 +101,23 @@ public class FingerPrintAct extends BaseAct {
     @Inject
     Navigator navigator;
 
+    KProgressHUD mask;
+
     private void initLoginHelper() {
-        userService.getLoginInfo().subscribe(loginInfo -> loginHelper = new LoginHelper(loginInfo));
+        userService.getLoginInfo().subscribe(loginInfo -> loginHelper = new LoginHelper(loginInfo, new LoginHelper.LoginListener() {
+            @Override
+            public void onLoginSuccess() {
+                if (mask != null) {
+                    mask.dismiss();
+                }
+                navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
+                    @Override
+                    public void onArrival(Postcard postcard) {
+                        finish();
+                    }
+                });
+            }
+        }));
     }
 
     private void startIdentify() {
@@ -111,15 +126,9 @@ public class FingerPrintAct extends BaseAct {
             @Override
             public void onSucceed() {
                 ToastUtils.showLong("指纹验证成功");
-                KProgressHUD mask = showMask().show();
+                mask = showMask().show();
                 if (loginHelper != null) {
-                    loginHelper.login(() -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
-                        @Override
-                        public void onArrival(Postcard postcard) {
-                            finish();
-                            mask.dismiss();
-                        }
-                    }));
+                    loginHelper.login();
                 }
             }
 

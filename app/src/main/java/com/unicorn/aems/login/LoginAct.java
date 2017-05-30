@@ -259,13 +259,14 @@ public class LoginAct extends BaseAct {
     // ======================== 登录 ========================
 
     private void login() {
-        LoginHelper loginHelper = new LoginHelper(airportSelected, getAccount(), getPwd());
-        loginHelper.login(() -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
+        LoginHelper loginHelper = new LoginHelper(airportSelected, getAccount(), getPwd(),
+                () -> navigator.navigateTo(RoutePath.MAIN, new NavCallback() {
             @Override
             public void onArrival(Postcard postcard) {
                 finish();
             }
         }));
+        loginHelper.login();
     }
 
     private String getAccount() {

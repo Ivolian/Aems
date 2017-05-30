@@ -4,25 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.base.BaseFra;
-import com.unicorn.aems.login.entity.SessionInfo;
-import com.unicorn.aems.main.Menu;
-import com.unicorn.aems.main.MenuProvider;
-import com.unicorn.aems.main.MenuService;
-
-import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class FuncFra extends BaseFra {
     @Override
@@ -49,57 +37,18 @@ public class FuncFra extends BaseFra {
     @BindView(R.id.tab)
     SlidingTabLayout tab;
 
-    @Inject
-    MenuService menuService;
+
 
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 //        swipeRefreshLayout.setRefreshing(true);
 
-        getMenu();
+        viewPager.setAdapter(new FuncPagerAdapter(getChildFragmentManager(),App.global.menus));
+        tab.setViewPager(viewPager);
     }
 
-    @Inject
-    MenuProvider menuProvider;
 
-    private void getMenu() {
-        SessionInfo sessionInfo = App.global.sessionInfo;
-        String cookie = "JSESSIONID=" + sessionInfo.getJsessionid();
-        String userId = sessionInfo.getCurrentUser().getUserId();
-        menuService.getMenu(cookie, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Menu>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        List<Menu> menus = menuProvider.provide();
-                        ToastUtils.showLong("err");
-
-                        viewPager.setAdapter(new FuncPagerAdapter(getChildFragmentManager(),menus));
-                        tab.setViewPager(viewPager);
-//                        coordinatorTabLayout.setTitle("功能");
-//                        coordinatorTabLayout.setImageArray(new int[]{
-//                                R.drawable.i1,
-//                                R.drawable.i2,
-//                                R.drawable.i3,
-//                                R.drawable.i4,
-//                        });
-//                        coordinatorTabLayout.setupWithViewPager(viewPager);
-                    }
-
-                    @Override
-                    public void onNext(List<Menu> menus) {
-
-                    }
-                });
-
-    }
 
 
 
