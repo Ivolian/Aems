@@ -1,8 +1,11 @@
 package com.unicorn.aems.main;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.unicorn.aems.constant.Key;
 
 class MainPagerAdapter extends FragmentPagerAdapter {
 
@@ -12,12 +15,30 @@ class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new FuncFra();
+        SimpleFra simpleFra = new SimpleFra();
+        Bundle bundle = new Bundle();
+        switch (position) {
+            case 0:
+                bundle.putString(Key.TEXT, "功能");
+                simpleFra.setArguments(bundle);
+                return simpleFra;
+            case 1:
+                bundle.putString(Key.TEXT, "策略");
+                simpleFra.setArguments(bundle);
+                return simpleFra;
+            case 2:
+                bundle.putString(Key.TEXT, "个人");
+                simpleFra.setArguments(bundle);
+                return simpleFra;
+            default:
+                return null;
+        }
+
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
 }
