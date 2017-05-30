@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.flyco.tablayout.SlidingTabLayout;
 import com.unicorn.aems.R;
 import com.unicorn.aems.app.App;
 import com.unicorn.aems.app.dagger.AppComponentProvider;
@@ -19,7 +20,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import cn.hugeterry.coordinatortablayout.CoordinatorTabLayout;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -46,8 +46,8 @@ public class FuncFra extends BaseFra {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    @BindView(R.id.coordinatorTabLayout)
-    CoordinatorTabLayout coordinatorTabLayout;
+    @BindView(R.id.tab)
+    SlidingTabLayout tab;
 
     @Inject
     MenuService menuService;
@@ -82,14 +82,15 @@ public class FuncFra extends BaseFra {
                         ToastUtils.showLong("err");
 
                         viewPager.setAdapter(new FuncPagerAdapter(getChildFragmentManager(),menus));
-                        coordinatorTabLayout.setTitle("功能");
-                        coordinatorTabLayout.setImageArray(new int[]{
-                                R.drawable.i1,
-                                R.drawable.i2,
-                                R.drawable.i3,
-                                R.drawable.i4,
-                        });
-                        coordinatorTabLayout.setupWithViewPager(viewPager);
+                        tab.setViewPager(viewPager);
+//                        coordinatorTabLayout.setTitle("功能");
+//                        coordinatorTabLayout.setImageArray(new int[]{
+//                                R.drawable.i1,
+//                                R.drawable.i2,
+//                                R.drawable.i3,
+//                                R.drawable.i4,
+//                        });
+//                        coordinatorTabLayout.setupWithViewPager(viewPager);
                     }
 
                     @Override

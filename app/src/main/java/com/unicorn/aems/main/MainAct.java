@@ -2,9 +2,11 @@ package com.unicorn.aems.main;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.blankj.utilcode.util.BarUtils;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
@@ -29,6 +31,7 @@ public class MainAct extends BaseAct {
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        BarUtils.setColor(this, ContextCompat.getColor(this,R.color.colorPrimary), 50);
         initViewPager();
         initTab();
     }
@@ -52,7 +55,7 @@ public class MainAct extends BaseAct {
         navigationController.setupWithViewPager(viewPager);
     }
 
-    @BindColor(R.color.md_grey_300)
+    @BindColor(R.color.md_grey_400)
     int defaultColor;
 
     @BindColor(R.color.colorPrimary)
