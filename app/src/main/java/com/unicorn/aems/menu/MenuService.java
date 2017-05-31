@@ -1,6 +1,6 @@
 package com.unicorn.aems.menu;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -10,6 +10,6 @@ import rx.Observable;
 public interface MenuService {
 
     @GET("api/v1/appService/menu/user/{userId}")
-    Observable<List<Menu>> getMenu(@Header("Cookie") String cookie, @Path("userId") String userId);
+    Observable<ArrayList<Menu>> getMenu(@Header("Cookie") String cookie, @Path("userId") String userId);
 
 }

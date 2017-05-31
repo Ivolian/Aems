@@ -34,7 +34,6 @@
             app:tl_indicator_gravity="BOTTOM"
             app:tl_indicator_height="2dp"
             app:tl_indicator_width="80dp"
-            app:tl_tab_space_equal="true"
             app:tl_textSelectColor="@color/colorPrimary"
             app:tl_textUnselectColor="@color/md_grey_500"
             app:tl_textsize="14dp" />

@@ -12,7 +12,7 @@ import com.unicorn.aems.menu.MenuProvider;
 import com.unicorn.aems.menu.MenuService;
 import com.unicorn.aems.push.PushHelper;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -59,7 +59,7 @@ public class LoginHelper {
 
                     @Override
                     public void onNext(SessionInfo sessionInfo) {
-
+                        onLoginSuccessInternal(sessionInfo);
                     }
                 });
     }
@@ -111,7 +111,7 @@ public class LoginHelper {
         menuService.getMenu(cookie, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Menu>>() {
+                .subscribe(new Subscriber<ArrayList<Menu>>() {
                     @Override
                     public void onCompleted() {
 
@@ -124,8 +124,9 @@ public class LoginHelper {
                     }
 
                     @Override
-                    public void onNext(List<Menu> menus) {
-
+                    public void onNext(ArrayList<Menu> menus) {
+                        App.global.menus = menus;
+                        loginListener.onLoginSuccess();
                     }
                 });
     }

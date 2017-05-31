@@ -19,7 +19,7 @@ public class RetrofitProvider implements Provider<Retrofit> {
 
     @Inject
     RetrofitProvider() {
-        BASE_REQUEST_URL = "http://192.168.7.71:8008/aems/";
+        BASE_REQUEST_URL = "http://192.168.7.207:8000/aems/";
     }
 
     @Override
@@ -27,7 +27,7 @@ public class RetrofitProvider implements Provider<Retrofit> {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
 //            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
         OkHttpClient okHttpClient = okHttpClientBuilder
-                .connectTimeout(1, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
                 .build();
 
         return new Retrofit.Builder()
