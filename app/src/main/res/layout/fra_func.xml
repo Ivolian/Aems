@@ -4,14 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="功能"
-        android:textColor="@color/md_white"
-        android:textSize="18dp" />
+        android:src="@drawable/logo2" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
