@@ -48,9 +48,10 @@ public class MainAct extends BaseAct {
 
     private void initTab() {
         NavigationController navigationController = tab.custom()
+                .addItem(newItem(Ionicons.Icon.ion_home, "首页"))
                 .addItem(newItem(Ionicons.Icon.ion_ios_pie, "功能"))
                 .addItem(newItem(Ionicons.Icon.ion_ios_pulse_strong, "策略"))
-                .addItem(newItem(Ionicons.Icon.ion_ios_person, "个人"))
+                .addItem(newItem(Ionicons.Icon.ion_ios_person, "其他"))
                 .build();
         navigationController.setupWithViewPager(viewPager);
     }

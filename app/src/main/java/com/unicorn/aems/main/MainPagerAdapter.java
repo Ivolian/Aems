@@ -18,6 +18,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 0:
             case 1:
             case 2:
+            case 3:
                 return new FuncFra();
             default:
                 return null;
@@ -26,7 +27,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
 }

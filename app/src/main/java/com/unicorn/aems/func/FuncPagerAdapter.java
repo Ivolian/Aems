@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.unicorn.aems.app.App;
 import com.unicorn.aems.constant.Key;
 import com.unicorn.aems.menu.Menu;
 
@@ -14,9 +15,9 @@ public class FuncPagerAdapter extends FragmentPagerAdapter {
 
     private List<Menu> menus;
 
-    public FuncPagerAdapter(FragmentManager fm, List<Menu> menus) {
+    public FuncPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.menus = menus;
+        this.menus = App.global.menus;
     }
 
     @Override

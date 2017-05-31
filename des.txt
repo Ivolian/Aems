@@ -26,3 +26,5 @@ http://blog.csdn.net/leehong2005/article/details/7299471。
 
 9. 图表种类:
 柱状图 线形图  饼图 线柱混合图 仪表盘
+
+专项报告 异常数据
