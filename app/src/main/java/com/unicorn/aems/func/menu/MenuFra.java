@@ -27,10 +27,11 @@ public class MenuFra extends BaseFra {
 
     @Override
     protected void init() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(menuAdapter);
         menuAdapter.setNewData(menuSectionEntities());
+        recyclerView.addItemDecoration(new SpaceItemDecoration(20));
     }
 
     private List<MenuSectionEntity> menuSectionEntities() {
@@ -43,7 +44,6 @@ public class MenuFra extends BaseFra {
         }
         return menuSectionEntities;
     }
-
 
     private ArrayList<Menu> menus(){
         return (ArrayList<Menu>)getArguments().getSerializable(Key.MENUS);
