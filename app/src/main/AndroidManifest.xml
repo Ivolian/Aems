@@ -24,6 +24,7 @@
         <activity android:name=".fingerprint.FingerPrintAct" />
         <activity android:name=".airport.AirportAct" />
         <activity android:name=".main.MainAct" />
+        <activity android:name=".chart.CustomMenuAct" />
         <!-- User defined. 用户自定义的广播接收器-->
         <receiver
             android:name=".push.PushReceiver"

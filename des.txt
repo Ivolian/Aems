@@ -25,6 +25,14 @@ http://blog.csdn.net/leehong2005/article/details/7299471。
 8. textCursorDrawable 华为6.0 无效，只能勉强把光标颜色设置为字体颜色。
 
 9. 图表种类:
-柱状图 线形图  饼图 线柱混合图 仪表盘
+柱状图 饼图 线柱混合图
+
+// 仪表盘 线形图
 
 专项报告 异常数据
+
+// 展示页面
+http://192.168.7.207:8000/aems/api/v1/appService/appCustomMenu/a19a31af310b4248bdf4ffca85731722
+
+更新
+打开附件
