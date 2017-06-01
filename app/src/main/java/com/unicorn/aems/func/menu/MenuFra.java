@@ -1,4 +1,4 @@
-package com.unicorn.aems.func;
+package com.unicorn.aems.func.menu;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import com.unicorn.aems.constant.Key;
 import com.unicorn.aems.menu.Menu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -26,19 +27,26 @@ public class MenuFra extends BaseFra {
 
     @Override
     protected void init() {
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(menuAdapter);
-        menuAdapter.setNewData(menus());
+        menuAdapter.setNewData(menuSectionEntities());
     }
 
-
+    private List<MenuSectionEntity> menuSectionEntities() {
+        List<MenuSectionEntity> menuSectionEntities = new ArrayList<>();
+        for (Menu menu : menus()) {
+            menuSectionEntities.add(new MenuSectionEntity(true, menu.getName()));
+            for (Menu child : menu.getChildList()) {
+                menuSectionEntities.add(new MenuSectionEntity(child));
+            }
+        }
+        return menuSectionEntities;
+    }
 
 
     private ArrayList<Menu> menus(){
         return (ArrayList<Menu>)getArguments().getSerializable(Key.MENUS);
     }
-
 
 }
