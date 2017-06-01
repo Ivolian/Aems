@@ -14,7 +14,6 @@ import com.unicorn.aems.base.BaseAct;
 import com.unicorn.aems.login.UserService;
 import com.unicorn.aems.navigate.Navigator;
 import com.unicorn.aems.navigate.RoutePath;
-import com.wei.android.lib.fingerprintidentify.FingerprintIdentify;
 
 import java.util.concurrent.TimeUnit;
 
@@ -51,14 +50,14 @@ public class SplashAct extends BaseAct {
                 })
                 .doOnNext(airports -> Logger.d("机场数据初始化数量:" + airports.size()))
                 .flatMap(airports -> userService.getLoginInfo())
-                .delay(2, TimeUnit.SECONDS)
+                .delay(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginInfo -> {
                             String routePath = RoutePath.LOGIN;
-                            FingerprintIdentify identify = new FingerprintIdentify(this);
-                            if (identify.isFingerprintEnable() && loginInfo != null) {
-                                routePath = RoutePath.FINGERPRINT;
-                            }
+//                            FingerprintIdentify identify = new FingerprintIdentify(this);
+//                            if (identify.isFingerprintEnable() && loginInfo != null) {
+//                                routePath = RoutePath.FINGERPRINT;
+//                            }
                             navigator.navigateTo(routePath, new NavCallback() {
                                 @Override
                                 public void onArrival(Postcard postcard) {

@@ -23,7 +23,7 @@ public class PushHelper {
         this.context = context;
     }
 
-    public void setTags(@NonNull Airport airportSelected,@NonNull SessionInfo sessionInfo) {
+    public void setTags(@NonNull Airport airportSelected, @NonNull SessionInfo sessionInfo) {
         Set<String> tags = new HashSet<>();
         tags.add("aems");
         String airportCode = airportSelected.getCode();

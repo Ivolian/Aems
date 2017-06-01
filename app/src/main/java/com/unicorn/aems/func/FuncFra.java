@@ -1,7 +1,5 @@
 package com.unicorn.aems.func;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
@@ -30,8 +28,7 @@ public class FuncFra extends BaseFra {
     ViewPager viewPager;
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    protected void init() {
         viewPager.setAdapter(new FuncPagerAdapter(getChildFragmentManager()));
         tab.setViewPager(viewPager);
     }

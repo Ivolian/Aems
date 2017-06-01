@@ -22,13 +22,13 @@ public class FuncPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-    return   getSimpleFra(position);
+        return createMenuFra(position);
     }
 
-    private Fragment getSimpleFra(int position) {
+    private Fragment createMenuFra(int position) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Key.MENUS, menus.get(position).getChildList());
-        Fragment fra = new SimpleFra();
+        Fragment fra = new MenuFra();
         fra.setArguments(bundle);
         return fra;
     }
@@ -43,4 +43,5 @@ public class FuncPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return menus.get(position).getName();
     }
+
 }

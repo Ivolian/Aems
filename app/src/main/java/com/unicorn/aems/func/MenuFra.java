@@ -9,48 +9,34 @@ import com.unicorn.aems.constant.Key;
 import com.unicorn.aems.menu.Menu;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
-public class SimpleFra extends BaseFra {
+public class MenuFra extends BaseFra {
 
     @Override
     protected int layoutResId() {
-        return R.layout.fra_simple;
+        return R.layout.fra_menu;
     }
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    SimpleAdapter simpleAdapter = new SimpleAdapter();
+    MenuAdapter menuAdapter = new MenuAdapter();
 
     @Override
     protected void init() {
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(simpleAdapter);
-        simpleAdapter.setNewData(getMenusEntitys());
-    }
-
-    private List<MenuEntity> getMenusEntitys(){
-        ArrayList<Menu> menus = getMenus();
-
-        List<MenuEntity> entities = new ArrayList<>();
-        for (Menu menu:menus){
-            MenuEntity header = new MenuEntity(true,menu.getName());
-            entities.add(header);
-            for (Menu child:menu.getChildList()){
-                MenuEntity entity = new MenuEntity(child);
-                entities.add(entity);
-            }
-        }
-        return entities;
+        recyclerView.setAdapter(menuAdapter);
+        menuAdapter.setNewData(menus());
     }
 
 
-    private ArrayList<Menu> getMenus(){
+
+
+    private ArrayList<Menu> menus(){
         return (ArrayList<Menu>)getArguments().getSerializable(Key.MENUS);
     }
 
