@@ -1,4 +1,4 @@
-package com.unicorn.aems.menu;
+package com.unicorn.aems.func.menu;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

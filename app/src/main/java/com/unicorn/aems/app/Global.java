@@ -1,7 +1,7 @@
 package com.unicorn.aems.app;
 
 import com.unicorn.aems.login.entity.SessionInfo;
-import com.unicorn.aems.menu.Menu;
+import com.unicorn.aems.func.menu.Menu;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,6 @@
 package com.unicorn.aems.func.menu;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
-import com.unicorn.aems.menu.Menu;
 
 public class MenuSectionEntity extends SectionEntity<Menu> {
 

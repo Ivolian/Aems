@@ -8,7 +8,7 @@ import com.unicorn.aems.airport.entity.DaoSession;
 import com.unicorn.aems.app.RetrofitProvider;
 import com.unicorn.aems.login.LoginService;
 import com.unicorn.aems.login.entity.LoginInfoDao;
-import com.unicorn.aems.menu.MenuService;
+import com.unicorn.aems.func.menu.MenuService;
 
 import dagger.Module;
 import dagger.Provides;

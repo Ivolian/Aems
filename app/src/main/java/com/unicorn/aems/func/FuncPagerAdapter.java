@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.unicorn.aems.app.App;
 import com.unicorn.aems.constant.Key;
 import com.unicorn.aems.func.menu.MenuFra;
-import com.unicorn.aems.menu.Menu;
+import com.unicorn.aems.func.menu.Menu;
 
 import java.util.List;
 

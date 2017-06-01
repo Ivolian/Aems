@@ -7,9 +7,9 @@ import com.unicorn.aems.app.dagger.AppComponentProvider;
 import com.unicorn.aems.login.entity.LoginInfo;
 import com.unicorn.aems.login.entity.SessionInfo;
 import com.unicorn.aems.login.entity.UserInfo;
-import com.unicorn.aems.menu.Menu;
-import com.unicorn.aems.menu.MenuProvider;
-import com.unicorn.aems.menu.MenuService;
+import com.unicorn.aems.func.menu.Menu;
+import com.unicorn.aems.func.menu.MenuProvider;
+import com.unicorn.aems.func.menu.MenuService;
 import com.unicorn.aems.push.PushHelper;
 
 import java.util.ArrayList;

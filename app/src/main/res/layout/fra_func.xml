@@ -31,8 +31,8 @@
             app:tl_indicator_height="2dp"
             app:tl_indicator_width="80dp"
             app:tl_textSelectColor="@color/colorPrimary"
-            app:tl_textUnselectColor="@color/md_grey_500"
-            app:tl_textsize="14dp" />
+            app:tl_textUnselectColor="@color/md_black"
+            app:tl_textsize="16dp" />
 
         <View
             android:layout_width="match_parent"

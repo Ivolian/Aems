@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import com.unicorn.aems.R;
 import com.unicorn.aems.base.BaseFra;
 import com.unicorn.aems.constant.Key;
-import com.unicorn.aems.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class MenuFra extends BaseFra {
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(menuAdapter);
         menuAdapter.setNewData(menuSectionEntities());
-        recyclerView.addItemDecoration(new SpaceItemDecoration(20));
+        recyclerView.addItemDecoration(new MenuItemDecoration(menuAdapter));
     }
 
     private List<MenuSectionEntity> menuSectionEntities() {

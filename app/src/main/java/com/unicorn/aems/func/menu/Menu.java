@@ -1,4 +1,4 @@
-package com.unicorn.aems.menu;
+package com.unicorn.aems.func.menu;
 
 import java.io.Serializable;
 import java.util.ArrayList;
